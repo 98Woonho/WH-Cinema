@@ -15,8 +15,7 @@ class Search extends Component {
   }
 
   componentDidMount() {
-    const queryObj = queryString.parse(window.location.search)
-    this.search(queryObj.title)
+    
   }
 
   search = async (title) => {
