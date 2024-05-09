@@ -5,9 +5,8 @@ const db = require('./config/db.js')
 const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
-app.get('/search/:title', (req, res) => {
-    const title = req.params.title
-    db.query(`select * from movie where title like '%${title}%'`, (err, data) => {
+app.get('/movie', (req, res) => {
+    db.query(`select * from movie`, (err, data) => {
         if (!err) {
             res.send(data)
         } else {
@@ -16,10 +15,11 @@ app.get('/search/:title', (req, res) => {
     })
 })
 
-app.post('/movie', (req, res) => {
-    const {title, genre, posters, releaseDate, runtime, plot, rating} = req.body
-
-    db.query(`insert into movie values('${title}', '${genre}', '${posters}', '${releaseDate}', ${runtime}, '${plot}', '${rating}')`, (err, data) => {
+app.get('/movie/:currentDate/:sixtyDaysAgoDate', (req, res) => {
+    const currentDate = req.params.currentDate
+    console.log(currentDate)
+    const sixtyDaysAgoDate = req.params.sixtyDaysAgoDate
+    db.query(`select * from movie where releaseDate <= '${currentDate}' AND releaseDate >= '${sixtyDaysAgoDate}'`, (err, data) => {
         if (!err) {
             res.send(data)
         } else {

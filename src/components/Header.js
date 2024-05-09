@@ -24,7 +24,7 @@ class Header extends Component{
 
   render(){
     return(
-      <div id='search-tab'>
+      <div id='header'>
          <input type='text' placeholder='검색어입력' onChange={this.wordChange}/>
          <button onClick={this.searchMovie}>검색</button>
          <a href='/dailyBoxOffice'>일별 박스오피스</a>

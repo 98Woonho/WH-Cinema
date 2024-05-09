@@ -20,32 +20,32 @@ class Home extends Component {
   }
 
   movieUpdate = async () => {
-    await axios.get(`https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do`)
-      .then(res => {
-        console.log(res.data);
-
-        const html = res.data;
-        const $ = cheerio.load(html);
-
-        const reservationRate = [];
-        $('.tbl_comm tbody tr').each((element) => {
-          const rate = $(element).find('.tar').first().text().trim();
-          reservationRate.push(rate);
-        });
-
-        console.log(reservationRate);
-      })
-      .catch(err => {
-        console.log(err)
-      })
-
-    // await axios.get(`http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=FPWJ81L14L7X38342790&releaseDts=20240308&ratedYn=y&releaseDte=20240508&listCount=500`)
+    // await axios.get(`https://www.kobis.or.kr/kobis/business/stat/boxs/findRealTicketList.do`)
     //   .then(res => {
-    //     console.log(res)
+    //     console.log(res.data);
+
+    //     const html = res.data;
+    //     const $ = cheerio.load(html);
+
+    //     const reservationRate = [];
+    //     $('.tbl_comm tbody tr').each((element) => {
+    //       const rate = $(element).find('.tar').first().text().trim();
+    //       reservationRate.push(rate);
+    //     });
+
+    //     console.log(reservationRate);
     //   })
     //   .catch(err => {
     //     console.log(err)
     //   })
+
+    await axios.get(`http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=FPWJ81L14L7X38342790&releaseDts=20240308&ratedYn=y&releaseDte=20240508&listCount=500`)
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   render() {

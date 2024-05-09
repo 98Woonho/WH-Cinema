@@ -4,7 +4,6 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 import Movie from './components/movie';
-import DailyBoxOffice from './components/DailyBoxOffice';
 
 class App extends Component{
   constructor(props){
@@ -20,7 +19,6 @@ class App extends Component{
               <Routes>
                   <Route path='/' element={<Home/>}/>
                   <Route path='/movie' element={<Movie/>}/>
-                  <Route path='/dailyBoxOffice' element={<DailyBoxOffice/>}/>
               </Routes>
           </BrowserRouter>
       </div>

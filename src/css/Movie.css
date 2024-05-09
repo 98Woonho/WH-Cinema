@@ -1,16 +1,30 @@
-#movie {
-    display:inline-block;
-    width:200px;
-    height:400px;
-    background-color: cadetblue;
-    margin-right:10px;
+#movieList {
+    width:1200px;
+    height:auto;
+    background-color: antiquewhite;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 80px;
 }
-#movie > #title {
-    width:200px;
-    height:50px;
-    background-color: chartreuse;
+
+.movie {
+    width: 240px;
+    background-color: aqua;
 }
-#movie img {
-    width:200px;
-    height:350px;
+
+.movie a {
+    display: inline-block;
+    width: 100%;
+}
+
+.title {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.poster {
+    width: 100%;
 }
