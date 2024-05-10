@@ -1,20 +1,12 @@
-import { Component } from 'react'
-import '../css/movie.css'
-import axios from 'axios'
+import { useState, useEffect } from 'react';
+import '../css/Movie.css';
+import axios from 'axios';
 
-class Search extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      movieList: []
-    }
-  }
+function Movie() {
+  const [movieList, setMovieList] = useState([]);
+  const [num, setNum] = useState(0);
 
-  componentDidMount() {
-    this.movieList()
-  }
-
-  currentMovieList = async () => {
+  const currentMovieList = async () => {
     const currentDate = new Date();
 
     // 현재 날짜를 '00000000' 형태로 변환
@@ -28,58 +20,61 @@ class Search extends Component {
 
     await axios.get(`/movie/${newCurrentDate}/${newSixtyDaysAgoDate}`)
       .then(res => {
-        console.log(res)
+        console.log(res);
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
       })
-  }
+  };
 
-  movieList = async () => {
-    await axios.get(`/movie`)
+  const handleNum = () => {
+    setNum(num + 1);
+  };
+
+  useEffect(() => {
+    axios.get(`/movie`)
       .then(res => {
-        this.setState({
-          movieList: res.data
-        })
+        setMovieList(res.data);
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
       })
-  }
-  render() {
-    const { movieList } = this.state
+  }, []);
 
-    movieList.forEach(movie => {
-      movie.releaseDate = movie.releaseDate.substring(0, 4) + "." + movie.releaseDate.substring(4, 6) + "." + movie.releaseDate.substring(6);
-    })
+  
 
-    const movieMap = movieList.map(
-      (data) =>
-        <div className='movie'>
-          <a href='/'>
-            <img className='poster' src={data.posters} />
-          </a>
-          <div className='title'>
-            {data.title}
-          </div>
-          <div className="releaseDate">
-            {data.releaseDate} 개봉
-          </div>
-          {/* <div id="plot" dangerouslySetInnerHTML={{ __html: data.plot }} /> */}
-        </div>
-    )
+  movieList.forEach(movie => {
+    movie.releaseDate = movie.releaseDate.substring(0, 4) + '.' + movie.releaseDate.substring(4, 6) + '.' + movie.releaseDate.substring(6);
+  });
 
-    return (
-      <div id="main">
-        <div id="menu">
-          <button onClick={this.currentMovieList}>현재 상영작</button>
-          <button>상영 예정작</button>
+  const movieMap = movieList.map(
+    (data) =>
+      <div className='movie'>
+        <a href='/'>
+          <img className='poster' src={data.posters} alt='영화 포스터' />
+        </a>
+        <div className='title'>
+          {data.title}
         </div>
-        <div id='movieList'>
-          {movieMap}
+        <div className="releaseDate">
+          {data.releaseDate} 개봉
         </div>
+        {/* <div id="plot" dangerouslySetInnerHTML={{ __html: data.plot }} /> */}
       </div>
-    )
-  }
+  );
+
+  return (
+    <div id="main">
+      <div id="menu">
+        <button onClick={currentMovieList}>현재 상영작</button>
+        <button onClick={handleNum}>상영 예정작</button>
+      </div>
+      <div id='movieList'>
+        {movieMap}
+      </div>
+    </div>
+  );
+
 }
-export default Search;
+
+export default Movie;
