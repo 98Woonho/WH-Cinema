@@ -8,26 +8,25 @@ app.use(bodyParser.json())
 app.get('/movie', (req, res) => {
     db.query(`select * from movie`, (err, data) => {
         if (!err) {
-            res.send(data)
+            res.send(data);
         } else {
-            res.send(err)
+            res.send(err);
         }
     })
 })
 
-app.get('/movie/:currentDate/:sixtyDaysAgoDate', (req, res) => {
-    const currentDate = req.params.currentDate
-    console.log(currentDate)
-    const sixtyDaysAgoDate = req.params.sixtyDaysAgoDate
-    db.query(`select * from movie where releaseDate <= '${currentDate}' AND releaseDate >= '${sixtyDaysAgoDate}'`, (err, data) => {
+app.get('/movie/:date1/:date2', (req, res) => {
+    const date1 = req.params.date1;
+    const date2 = req.params.date2;
+    db.query(`select * from movie where releasedate <= '${date1}' AND releasedate >= '${date2}'`, (err, data) => {
         if (!err) {
-            res.send(data)
+            res.send(data);
         } else {
-            res.send(err)
+            res.send(err);
         }
     })
 })
 
 app.listen(port,()=>{
-    console.log(`Server Started ${port}`)
+    console.log(`Server Started ${port}`);
 })
