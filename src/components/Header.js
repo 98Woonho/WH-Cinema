@@ -7,6 +7,7 @@ function Header() {
   return(
     <div id='header'>
        <a href='/movie'>영화</a>
+       <a href='/ticketing'>예매</a>
     </div>
   )
 }

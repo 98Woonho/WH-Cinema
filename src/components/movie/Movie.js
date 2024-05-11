@@ -1,7 +1,7 @@
 // 영화 목록
 
 import { useState, useEffect } from 'react';
-import '../../css/Movie.css';
+import '../../css/movie/Movie.css';
 import axios from 'axios';
 
 function Movie() {
@@ -62,7 +62,29 @@ function Movie() {
 
       axios.get(`/movie/${newSixtyDaysLaterDate}/${newTomorrowDate}`)
         .then(res => {
-          setMovieList(res.data);
+          const movieList = res.data;
+
+          // 상영예정작 리스트에 D-day를 추가
+          movieList.forEach(movie => {
+            const releaseDate = movie.releaseDate;
+
+            // 주어진 날짜 문자열을 Date 객체로 변환
+            const givenDate = new Date(releaseDate.replace(/-/g, '/'));
+
+            // 현재 날짜
+            const currentDate = new Date();
+
+            // 남은 날짜 계산
+            const timeDiff = Math.abs(currentDate.getTime() - givenDate.getTime());
+            const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+            // "D-n" 형식으로 남은 날짜 표시
+            const result = "D-" + diffDays;
+
+            movie.Dday = result;
+          })
+
+          setMovieList(movieList);
         })
         .catch(err => {
           console.log(err);
@@ -82,7 +104,7 @@ function Movie() {
             {data.title}
           </div>
           <div>
-            {data.releaseDate} 개봉
+            {data.releaseDate} 개봉  {data.Dday}
           </div>
         </div>
     );

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import '../../css/Detail.css';
+import '../../css//movie/Detail.css';
 import axios from 'axios';
 
 function Detail() {
@@ -38,7 +38,7 @@ function Detail() {
                             <li>배우 : {movie.actor}</li>
                             <li>장르 : {movie.genre} / {movie.nation}</li>
                         </ul>
-                        <button className='reservation-btn'>예매하기</button>
+                        <button className='ticketing-btn'>예매하기</button>
                     </div>
                 </div>
             </div>
