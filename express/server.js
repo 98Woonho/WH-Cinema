@@ -1,9 +1,9 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 const port = 4000
-const db = require('./config/db.js')
-const bodyParser = require('body-parser')
-app.use(bodyParser.json())
+const db = require('./config/db.js');
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
 
 app.get('/movie', (req, res) => {
     db.query(`select * from movie`, (err, data) => {
@@ -13,7 +13,18 @@ app.get('/movie', (req, res) => {
             res.send(err);
         }
     })
-})
+});
+
+app.get('/movie/:title', (req, res) => {
+    const title = req.params.title;
+    db.query(`select * from movie where title = '${title}'`, (err, data) => {
+        if (!err) {
+            res.send(data);
+        } else {
+            res.send(err);
+        }
+    })
+});
 
 app.get('/movie/:date1/:date2', (req, res) => {
     const date1 = req.params.date1;
@@ -25,8 +36,8 @@ app.get('/movie/:date1/:date2', (req, res) => {
             res.send(err);
         }
     })
-})
+});
 
 app.listen(port,()=>{
     console.log(`Server Started ${port}`);
-})
+});

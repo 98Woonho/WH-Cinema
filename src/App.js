@@ -3,7 +3,7 @@ import './App.css'
 import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
-import Movie from './components/Movie';
+import MovieRouter from './components/movie/MovieRouter';
 
 class App extends Component{
   constructor(props){
@@ -18,7 +18,7 @@ class App extends Component{
               <Header/>
               <Routes>
                   <Route path='/' element={<Home/>}/>
-                  <Route path='/movie' element={<Movie/>}/>
+                  <Route path='/movie/*' element={<MovieRouter/>}/>
               </Routes>
           </BrowserRouter>
       </div>

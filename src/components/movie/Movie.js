@@ -1,5 +1,7 @@
+// 영화 목록
+
 import { useState, useEffect } from 'react';
-import '../css/Movie.css';
+import '../../css/Movie.css';
 import axios from 'axios';
 
 function Movie() {
@@ -7,10 +9,12 @@ function Movie() {
   const [movieList, setMovieList] = useState([]);
   const [num, setNum] = useState(0); // 현재상영작과 상영예정작을 가져오는 동작을 구분하기 위한 변수
 
+  // 현재상영작 버튼 클릭 함수
   const currentMovieList = () => {
     setNum(0);
   }
 
+  // 상영예정작 버튼 클릭 함수
   const scheduledMovieList = () => {
     setNum(1);
   };
@@ -67,13 +71,13 @@ function Movie() {
     const newMovieMap = movieList.map(
       data =>
         <div className='movie'>
-          <a href='/'>
+          <a href={`/movie/detail?title=${data.title}`}>
             <img className='poster' src={data.posters} alt='영화 포스터' />
           </a>
           <div className='title'>
             {data.title}
           </div>
-          <div className="releaseDate">
+          <div className='releaseDate'>
             {data.releaseDate} 개봉
           </div>
           {/* <div id="plot" dangerouslySetInnerHTML={{ __html: data.plot }} /> */}
