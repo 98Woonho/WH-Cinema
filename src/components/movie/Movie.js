@@ -22,6 +22,10 @@ function Movie() {
   // /movie 경로로 접속하면 현재상영작을 먼저 보여줌.
   // 현재상영작, 상영예정작 버튼을 누를 때 마다 그에 맞는 영화 목록을 movieList에 set
   useEffect(() => {
+    // axios.get(`http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=FPWJ81L14L7X38342790&ratedYn=y&listCount=500&title=챌린저스`)
+    //   .then(res => {
+    //     console.log(res.data.Data[0].Result[0])
+    //   })
     if (num === 0) {
       const currentDate = new Date();
 
@@ -72,22 +76,21 @@ function Movie() {
       data =>
         <div className='movie'>
           <a href={`/movie/detail?title=${data.title}`}>
-            <img className='poster' src={data.posters} alt='영화 포스터' />
+            <img src={data.posters} alt='영화 포스터' />
           </a>
           <div className='title'>
             {data.title}
           </div>
-          <div className='releaseDate'>
+          <div>
             {data.releaseDate} 개봉
           </div>
-          {/* <div id="plot" dangerouslySetInnerHTML={{ __html: data.plot }} /> */}
         </div>
     );
     setMovieMap(newMovieMap);
   }, [movieList])
 
   return (
-    <div id="main">
+    <div>
       <div id="menu">
         <button onClick={currentMovieList}>현재 상영작</button>
         <button onClick={scheduledMovieList}>상영 예정작</button>

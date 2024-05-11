@@ -18,14 +18,14 @@
     width: 100%;
 }
 
+.movie img {
+    width: 100%;
+    height: 340px;
+}
+
 .title {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-}
-
-.poster {
-    width: 100%;
-    height: 340px;
 }
