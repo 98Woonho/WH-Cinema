@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import '../../css//movie/Detail.css';
+import '../../css/movie/Detail.css';
 import axios from 'axios';
 
 function Detail() {
