@@ -13,6 +13,7 @@ function Detail() {
     useEffect(() => {
         axios.get(`/movie/${query.get('title')}`)
             .then(res => {
+                console.log(res);
                 setStillcuts(res.data[0].stillcuts.split('|'));
                 setMovie(res.data[0]);
             })
