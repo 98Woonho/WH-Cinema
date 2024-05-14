@@ -17,10 +17,13 @@ function Certification() {
             },
             async function (res) {
                 if (res.success) {
+                    // 통합인증 정보 가져오기
                     const certificationInfo = await axios.post('/user/certification', { imp_uid: res.imp_uid }, { headers: { 'Content-Type': 'application/json' } });
 
+                    // 통합인증 정보로 가입되어 있는 유저 찾기
                     await axios.get('/user', { name: certificationInfo.name, birthday: certificationInfo.birthday, phone: certificationInfo.phone })
                         .then(res => {
+                            // 가입되어 있는 유저가 없으면 회원가입 페이지로 이동
                             if (res.data.length === 0) {
                                 const state = {
                                     certificationInfo: {
@@ -30,6 +33,7 @@ function Certification() {
                                     }
                                 }
                                 navigate('/user/join', { state });
+                            // 가입되어 있는 유저가 있으면 문구 출력 후 로그인 페이지로 이동
                             } else {
                                 alert('이미 해당 정보로 계정이 존재 합니다. 로그인 화면으로 이동합니다.');
                                 navigate('/user/login');
