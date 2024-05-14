@@ -7,6 +7,17 @@ const db = require('../config/db.js');
 
 require('dotenv').config();
 
+router.get('/', (req, res) => {
+  const { name, birthday, phone } = req.body;
+  db.query(`select * from user where name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
+    if (!err) {
+      res.send(data)
+    } else {
+      res.send(err)
+    }
+  })
+})
+
 router.post('/login', (res) => {
   const accessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
   const refreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
