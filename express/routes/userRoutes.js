@@ -24,7 +24,6 @@ router.post('/login', (req, res) => {
   const refreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
 
   // 받은 요청에서 db의 데이터를 가져온다 (로그인정보)
-  const { userId, 
   const nickname = 'JY';
   const profile = 'images';
   let token = '';
@@ -54,13 +53,13 @@ router.post('/join', (req, res) => {
   db.query(`select * from user where userId='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length != 0) {
-        res.send('FAILURE_DUPLICATE_USERID');
+        res.status(409).json({ error: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.'});
       } else {
         const hashedPassword = bcrypt.hashSync(password, 10);
         const role = 'USER';
         db.query(`insert into user values('${userId}', '${hashedPassword}', '${name}', '${birthday}', '${phone}', '${role}')`, (err, data) => {
           if (!err) {
-            res.send('SUCCESS');
+            res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
           } else {
             res.send(err);
           }

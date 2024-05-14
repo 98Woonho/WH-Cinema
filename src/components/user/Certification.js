@@ -26,7 +26,6 @@ function Certification() {
                     // 통합인증 정보로 가입되어 있는 유저 찾기
                     await axios.get('/user', { params : { name: name, birthday: birthday, phone: phone }})
                         .then(res => {
-                            console.log(res);
                             // 가입되어 있는 유저가 없으면 회원가입 페이지로 이동
                             if (res.data.length === 0) {
                                 const state = {

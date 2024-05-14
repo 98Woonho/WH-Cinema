@@ -48,21 +48,15 @@ function Join() {
 
         axios.post('/user/join', userObj)
         .then(res => {
-            if(!res.data.errno) {
-                switch(res.data) {
-                    case 'FAILURE_DUPLICATE_USERID':
-                        alert('이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.');
-                        break;
-                    case 'SUCCESS':
-                        alert('회원가입이 완료 되었습니다.');
-                        navigate('/user/login');
-                        break;
-                    default:
-                }
-            } 
+            alert(res.data.message);
+            navigate('/user/login');
         })
         .catch(err => {
-            alert('알 수 없는 이유로 회원가입에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+            if (err.response.status === 409) {
+                alert(err.response.data.error);
+            } else {
+                alert('알 수 없는 이유로 회원가입에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+            }
         })
     }
 
