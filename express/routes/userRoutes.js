@@ -4,11 +4,12 @@ const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db.js');
+const bcrypt = require('bcrypt')
 
 require('dotenv').config();
 
 router.get('/', (req, res) => {
-  const { name, birthday, phone } = req.body;
+  const { name, birthday, phone } = req.query;
   db.query(`select * from user where name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
     if (!err) {
       res.send(data)
@@ -18,11 +19,12 @@ router.get('/', (req, res) => {
   })
 })
 
-router.post('/login', (res) => {
+router.post('/login', (req, res) => {
   const accessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
   const refreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
 
   // 받은 요청에서 db의 데이터를 가져온다 (로그인정보)
+  const { userId, 
   const nickname = 'JY';
   const profile = 'images';
   let token = '';
@@ -33,7 +35,7 @@ router.post('/login', (res) => {
       nickname: nickname,
       profile: profile,
     },
-    key,
+    accessTokenSecretKey,
     {
       expiresIn: '15m', // 15분후 만료
       issuer: '토큰발급자',
@@ -46,6 +48,29 @@ router.post('/login', (res) => {
     token: token,
   });
 });
+
+router.post('/join', (req, res) => {
+  const { userId, password, name, birthday, phone } = req.body;
+  db.query(`select * from user where userId='${userId}'`, (err, data) => {
+    if (!err) {
+      if (data.length != 0) {
+        res.send('FAILURE_DUPLICATE_USERID');
+      } else {
+        const hashedPassword = bcrypt.hashSync(password, 10);
+        const role = 'USER';
+        db.query(`insert into user values('${userId}', '${hashedPassword}', '${name}', '${birthday}', '${phone}', '${role}')`, (err, data) => {
+          if (!err) {
+            res.send('SUCCESS');
+          } else {
+            res.send(err);
+          }
+        })
+      }
+    } else {
+      res.send(err);
+    }
+  })
+})
 
 router.post('/certification', async (req, res) => {
   const { imp_uid } = req.body;

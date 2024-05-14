@@ -1,66 +1,68 @@
 import '../../css/user/Join.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function Join() {
+    const location = useLocation();
     const navigate = useNavigate();
-    const [id, setId] = useState('')
-    const [password, setPassword] = useState('')
+    const [userId, setuserId] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleId = (e) => {
-        setId(e.target.value)
+    const { certificationInfo } = location.state;
+    const { name, birthday, phone } = certificationInfo;
+
+    const handleuserId = (e) => {
+        setuserId(e.target.value);
     }
 
     const handlePassword = (e) => {
-        setPassword(e.target.value)
+        setPassword(e.target.value);
     }
 
     const join = () => {
-        const idRegex = /^[a-z0-9]+$/
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/
+        const userIdRegex = /^[a-z0-9]+$/;
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 
-        if (id === '') {
-            alert('아이디를 입력해 주세요.')
-            return
+        if (userId === '') {
+            alert('아이디를 입력해 주세요.');
+            return;
         }
 
-        if (id.match(idRegex) === null) {
-            alert('올바른 아이디를 입력해 주세요.')
-            return
+        if (userId.match(userIdRegex) === null) {
+            alert('올바른 아이디를 입력해 주세요.');
+            return;
         }
 
         if (password === '') {
-            alert('비밀번호를 입력해 주세요.')
-            return
+            alert('비밀번호를 입력해 주세요.');
+            return;
         }
 
         if (password.match(passwordRegex) === null) {
-            alert('올바른 비밀번호를 입력해 주세요.')
-            return
+            alert('올바른 비밀번호를 입력해 주세요.');
+            return;
         }
 
-        const userObj = {id:id, password:password}
+        const userObj = {userId:userId, password:password, name:name, birthday:birthday, phone:phone};
 
         axios.post('/user/join', userObj)
         .then(res => {
             if(!res.data.errno) {
                 switch(res.data) {
-                    case 'DUPLICATE_ID':
-                        alert('이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.')
+                    case 'FAILURE_DUPLICATE_USERID':
+                        alert('이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.');
                         break;
-    
                     case 'SUCCESS':
-                        alert('회원가입이 완료 되었습니다.')
-                        navigate('/user/login')
+                        alert('회원가입이 완료 되었습니다.');
+                        navigate('/user/login');
                         break;
-    
                     default:
                 }
             } 
         })
         .catch(err => {
-            alert('알 수 없는 이유로 회원가입에 실패 하였습니다. 잠시 후 다시 시도해 주세요.')
+            alert('알 수 없는 이유로 회원가입에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
         })
     }
 
@@ -69,7 +71,7 @@ function Join() {
             <h2>회원가입</h2>
             <div>
                 <label>아이디 : </label>
-                <input type='text' name='id' value={id} onChange={handleId} />
+                <input type='text' name='userId' value={userId} onChange={handleuserId} />
             </div>
             <div>
                 <label>비밀번호 : </label>

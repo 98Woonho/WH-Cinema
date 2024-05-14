@@ -5,11 +5,11 @@ import axios from 'axios';
 
 function Login() {
     const navigate = useNavigate();
-    const [id, setId] = useState('')
+    const [userId, setuserId] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleId = (e) => {
-        setId(e.target.value)
+    const handleuserId = (e) => {
+        setuserId(e.target.value)
     }
 
     const handlePassword = (e) => {
@@ -17,7 +17,7 @@ function Login() {
     }
 
     const login = () => {
-        const userObj = {id:id, password:password}
+        const userObj = {userId:userId, password:password}
         axios.post('/user/login', userObj)
         .then(res => {
             if(!res.data.errno) {
@@ -46,7 +46,7 @@ function Login() {
             <h2>로그인</h2>
             <div>
                 <label>아이디 : </label>
-                <input type='text' name='id' value={id} onChange={handleId} />
+                <input type='text' name='userId' value={userId} onChange={handleuserId} />
             </div>
             <div>
                 <label>비밀번호 : </label>
