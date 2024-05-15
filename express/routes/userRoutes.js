@@ -1,51 +1,57 @@
-const auth = require('../middlewares/authMiddleware.js');
-const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 const db = require('../config/db.js');
-const bcrypt = require('bcrypt')
-
-require('dotenv').config();
+const bcrypt = require('bcrypt');
+const tokenUtils = require('../../src/utils/tokenUtils.js');
 
 router.get('/', (req, res) => {
   const { name, birthday, phone } = req.query;
   db.query(`select * from user where name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
     if (!err) {
-      res.send(data)
+      res.send(data);
     } else {
-      res.send(err)
+      res.send(err);
+    }
+  })
+})
+
+router.get('/token', (req, res) => {
+  const { userId } = req.query;
+  db.query(`select token from token where userId = '${userId}'`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
     }
   })
 })
 
 router.post('/login', (req, res) => {
-  const accessTokenSecretKey = process.env.ACCESS_TOKEN_SECRET_KEY;
-  const refreshTokenSecretKey = process.env.REFRESH_TOKEN_SECRET_KEY;
+  const { userId, password } = req.body;
 
-  // 받은 요청에서 db의 데이터를 가져온다 (로그인정보)
-  const nickname = 'JY';
-  const profile = 'images';
-  let token = '';
-  // jwt.sign(payload, secretOrPrivateKey, [options, callback])
-  token = jwt.sign(
-    {
-      type: 'JWT',
-      nickname: nickname,
-      profile: profile,
-    },
-    accessTokenSecretKey,
-    {
-      expiresIn: '15m', // 15분후 만료
-      issuer: '토큰발급자',
+  db.query(`select * from user where userId='${userId}'`, (err, data) => {
+    if (!err) {
+      if (data.length == 0 || !bcrypt.compareSync(password, data[0].password)) {
+        res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
+      } else {
+        const accessToken = tokenUtils.makeAccessToken({userId: userId});
+        const refreshToken = tokenUtils.makeRefreshToken();
+
+        res.cookie("authorization", `Bearer ${accessToken}`);
+
+        db.query(`insert into token values('${userId}', '${refreshToken}') ON DUPLICATE KEY UPDATE token='${refreshToken}'`, (err, data) => {
+          if (!err) {
+            res.status(200).send({userId, accessToken, refreshToken});
+          } else {
+            res.send(err);
+          }
+        })
+      }
+    } else {
+      res.send(err);
     }
-  );
-  // response
-  return res.status(200).json({
-    code: 200,
-    message: 'token is created',
-    token: token,
-  });
+  })
 });
 
 router.post('/join', (req, res) => {
@@ -53,7 +59,7 @@ router.post('/join', (req, res) => {
   db.query(`select * from user where userId='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length != 0) {
-        res.status(409).json({ error: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.'});
+        res.status(409).json({ error: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.' });
       } else {
         const hashedPassword = bcrypt.hashSync(password, 10);
         const role = 'USER';

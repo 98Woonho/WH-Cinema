@@ -5,11 +5,11 @@ import axios from 'axios';
 
 function Login() {
     const navigate = useNavigate();
-    const [userId, setuserId] = useState('')
+    const [userId, setUserId] = useState('')
     const [password, setPassword] = useState('')
 
     const handleuserId = (e) => {
-        setuserId(e.target.value)
+        setUserId(e.target.value)
     }
 
     const handlePassword = (e) => {
@@ -17,31 +17,24 @@ function Login() {
     }
 
     const login = () => {
-        const userObj = {userId:userId, password:password}
+        const userObj = { userId: userId, password: password };
         axios.post('/user/login', userObj)
-        .then(res => {
-            if(!res.data.errno) {
-                switch(res.data) {
-                    case 'FAILURE':
-                        alert('아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.')
-                        break;
-    
-                    case 'SUCCESS':
-                        navigate('/')
-                        break;
-    
-                    default:
+            .then(res => {
+                const { accessToken, refreshToken, userId } = res.data;
+                
+
+                navigate('/');
+            })
+            .catch(err => {
+                if (err.response.status === 400) {
+                    alert(err.response.data.error);
+                } else {
+                    alert('알 수 없는 이유로 로그인에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
                 }
-            } else {
-                alert('서버가 예상치 못한 응답을 반환 하였습니다. 잠시 후 다시 시도해 주세요.')
-            }
-        })
-        .catch(err => {
-            alert('알 수 없는 이유로 로그인에 실패 하였습니다. 잠시 후 다시 시도해 주세요.')
-        })
+            })
     }
 
-    return(
+    return (
         <div id='login'>
             <h2>로그인</h2>
             <div>
