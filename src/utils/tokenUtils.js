@@ -33,10 +33,10 @@ exports.makeRefreshToken = () => {
 
 // refresh token 유효성 검사
 exports.refreshVerify = async (token, userId) => {
-
     await axios.get('/user/token', { params: { userId: userId } })
         .then(res => {
-            console.log('refreshVerify response : ' + res);
+            const { token } = res.data;
+            jwt.verify(token, REFRESH_TOKEN_SECRET)
         })
         .catch(err => {
             console.log(err);
@@ -46,7 +46,7 @@ exports.refreshVerify = async (token, userId) => {
 // access token 유효성 검사
 exports.verify = (token) => {
     try {
-        const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET_KEY);
+        const decoded = jwt.verify(token, ACCESS_TOKEN_SECRET);
         return {
             ok: true,
             id: decoded.id
