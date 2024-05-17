@@ -50,7 +50,7 @@ DROP TABLE `movie_project_db`.`user`;
 
 
 INSERT INTO `movie_project_db`.`user`(`userId`,`password`,`name`,`birthday`,`phone`, `role`)
-VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150');
+VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150', 'USER');
 
 CREATE TABLE `movie_project_db`.`token` (
 	userId VARCHAR(100) PRIMARY KEY,
