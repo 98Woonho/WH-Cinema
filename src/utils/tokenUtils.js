@@ -11,7 +11,7 @@ exports.makeAccessToken = (Object) => {
     const accessToken = jwt.sign(
         Object,
         ACCESS_TOKEN_SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: '1m' }
     );
     console.log('accessToken : ' + accessToken);
     return accessToken;

@@ -16,6 +16,14 @@ router.get('/', (req, res) => {
   })
 })
 
+router.get('/verify', (req, res) => {
+  const { token } = req.query;
+
+  const result = tokenUtils.verify(token);
+
+  res.send(result);
+})
+
 router.get('/token', (req, res) => {
   const { userId } = req.query;
   db.query(`select token from token where userId = '${userId}'`, (err, data) => {

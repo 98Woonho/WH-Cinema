@@ -1,27 +1,35 @@
 // 홈페이지
 
-import { Component } from 'react'
-// import axios from 'axios'
+import { useState, useEffect } from 'react';
+import { Cookies } from "react-cookie";
+import axios from 'axios';
 
 // cheerio : html/xml을 파싱하고 쉽게 조작하게 해주는 js 라이브러리
 // import cheerio from 'cheerio'
-import '../css/Home.css'
+import '../css/Home.css';
+
+function Home() {
+  const cookies = new Cookies();
+
+  useEffect(() => {
+    const token = cookies.get('authorization').split('Bearer ')[1];
+    
+    axios.get('/user/verify', { params : { token : token }})
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.log(err);
+    })
 
 
-class Home extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-    }
-  }
+  });
 
-  render() {
-    return (
-      <div id='home'>
-        홈
-      </div>
-    )
-  }
+  return (
+    <div id='home'>
+      홈
+    </div>
+  )
 }
 
 
