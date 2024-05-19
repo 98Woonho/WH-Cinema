@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -6,9 +6,35 @@ import Footer from './components/Footer';
 import Home from './components/Home';
 import MovieRouter from './components/movie/MovieRouter';
 import UserRouter from './components/user/UserRouter';
+import { Cookies } from "react-cookie";
+import axios from 'axios';
 
 function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const cookies = new Cookies();
+
     useEffect(() => {
+        const authorizationCookie = cookies.get('authorization');
+  
+        if (authorizationCookie) {
+          const accessToken = cookies.get('authorization').split('Bearer ')[1];
+    
+          axios.get('/user/verify', { params: { token: accessToken } })
+            .then(res => {
+              if (res.data.ok === true) {
+                setIsAuthenticated(true);
+              } else {
+                setIsAuthenticated(false);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        }
+    }, [cookies]);
+
+    useEffect(() => {
+
         const script1 = document.createElement('script');
         script1.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
         script1.async = true;
@@ -28,7 +54,7 @@ function App() {
     return (
         <div id='App'>
             <BrowserRouter>
-                <Header />
+                <Header isAuthenticated={isAuthenticated} />
                 <Routes>
                     <Route path='/' element={<Home />} />
                     <Route path='/user/*' element={<UserRouter />} />
