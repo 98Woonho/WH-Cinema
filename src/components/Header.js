@@ -12,21 +12,23 @@ function Header() {
   useEffect(() => {
     const authorizationCookie = cookies.get('authorization');
 
-    const accessToken = cookies.get('authorization').split('Bearer ')[1];
+    if (authorizationCookie) {
+      const accessToken = cookies.get('authorization').split('Bearer ')[1];
 
-    axios.get('/user/verify', { params: { token: accessToken } })
-      .then(res => {
-        console.log(res.data.ok);
-        if (res.data.ok == true) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  });
+      axios.get('/user/verify', { params: { token: accessToken } })
+        .then(res => {
+          if (res.data.ok === true) {
+            console.log(isAuthenticated);
+            setIsAuthenticated(true);
+          } else {
+            setIsAuthenticated(false);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  }, [cookies]);
 
   return (
     <div id='header'>
