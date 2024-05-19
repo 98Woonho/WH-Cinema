@@ -5,19 +5,24 @@ import axios from 'axios';
 
 function Login() {
     const navigate = useNavigate();
-    const [userId, setUserId] = useState('')
-    const [password, setPassword] = useState('')
+    const [userId, setUserId] = useState('');
+    const [password, setPassword] = useState('');
+    const [rememberMe, setRememberMe] = useState(false);
 
     const handleuserId = (e) => {
-        setUserId(e.target.value)
+        setUserId(e.target.value);
     }
 
     const handlePassword = (e) => {
-        setPassword(e.target.value)
+        setPassword(e.target.value);
+    }
+
+    const handleRememberMe = (e) => {
+        setRememberMe(e.target.checked);
     }
 
     const login = () => {
-        const userObj = { userId: userId, password: password };
+        const userObj = { userId: userId, password: password, rememberMe: rememberMe };
         axios.post('/user/login', userObj)
             .then(res => {
                 const { accessToken, refreshToken, userId } = res.data;
@@ -42,6 +47,10 @@ function Login() {
             <div>
                 <label>비밀번호 : </label>
                 <input type='password' name='password' value={password} onChange={handlePassword} />
+            </div>
+            <div>
+                <input type="checkbox" onChange={handleRememberMe}/>
+                <span>로그인 유지</span>
             </div>
             <div>
                 <p id='warning'></p>

@@ -36,7 +36,7 @@ router.get('/token', (req, res) => {
 })
 
 router.post('/login', (req, res) => {
-  const { userId, password } = req.body;
+  const { userId, password, rememberMe } = req.body;
 
   db.query(`select * from user where userId='${userId}'`, (err, data) => {
     if (!err) {
@@ -44,7 +44,7 @@ router.post('/login', (req, res) => {
         res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
       } else {
         const accessToken = tokenUtils.makeAccessToken({userId: userId});
-        const refreshToken = tokenUtils.makeRefreshToken();
+        const refreshToken = rememberMe ? tokenUtils.makeRefreshToken('1d') : tokenUtils.makeRefreshToken('1h');
 
         res.cookie("authorization", `Bearer ${accessToken}`);
 

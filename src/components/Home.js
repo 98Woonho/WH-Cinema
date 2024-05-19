@@ -9,21 +9,6 @@ import axios from 'axios';
 import '../css/Home.css';
 
 function Home() {
-  const cookies = new Cookies();
-
-  useEffect(() => {
-    const token = cookies.get('authorization').split('Bearer ')[1];
-    
-    axios.get('/user/verify', { params : { token : token }})
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-
-
-  });
 
   return (
     <div id='home'>

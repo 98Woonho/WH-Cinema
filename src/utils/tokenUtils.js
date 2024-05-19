@@ -18,13 +18,13 @@ exports.makeAccessToken = (Object) => {
 };
 
 // refreshToken 발급 함수
-exports.makeRefreshToken = () => {
+exports.makeRefreshToken = (expiresIn) => {
     const refreshToken = jwt.sign(
         {},
         REFRESH_TOKEN_SECRET,
         {
             algorithm: "HS256",
-            expiresIn: '7 days'
+            expiresIn: expiresIn
         }
     );
     console.log('refresh token : ' + refreshToken);
