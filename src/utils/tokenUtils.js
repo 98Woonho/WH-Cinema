@@ -13,7 +13,6 @@ exports.makeAccessToken = (Object) => {
         ACCESS_TOKEN_SECRET,
         { expiresIn: '1m' }
     );
-    console.log('accessToken : ' + accessToken);
     return accessToken;
 };
 
@@ -27,20 +26,23 @@ exports.makeRefreshToken = (expiresIn) => {
             expiresIn: expiresIn
         }
     );
-    console.log('refresh token : ' + refreshToken);
     return refreshToken;
 };
 
 // refresh token 유효성 검사
-exports.refreshVerify = async (token, userId) => {
-    await axios.get('/user/token', { params: { userId: userId } })
-        .then(res => {
-            const { token } = res.data;
-            jwt.verify(token, REFRESH_TOKEN_SECRET)
-        })
-        .catch(err => {
-            console.log(err);
-        });
+exports.refreshVerify = (token) => {
+    try {
+        const decoded = jwt.verify(token, REFRESH_TOKEN_SECRET);
+        return {
+            ok: true,
+            id: decoded.id
+        };
+    } catch (error) {
+        return {
+            ok: false,
+            message: error.message,
+        };
+    }
 };
 
 // access token 유효성 검사

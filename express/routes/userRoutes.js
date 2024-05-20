@@ -16,19 +16,19 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/verify', (req, res) => {
-  const { token } = req.query;
+router.get('/refreshVerify', (req, res) => {
+  const { refreshToken } = req.query;
 
-  const result = tokenUtils.verify(token);
+  const result = tokenUtils.refreshVerify(refreshToken);
 
   res.send(result);
 })
 
-router.get('/token', (req, res) => {
+router.get('/refreshToken', (req, res) => {
   const { userId } = req.query;
   db.query(`select token from token where userId = '${userId}'`, (err, data) => {
     if (!err) {
-      res.send(data);
+      res.send(data[0].token);
     } else {
       res.send(err);
     }
@@ -43,14 +43,14 @@ router.post('/login', (req, res) => {
       if (data.length == 0 || !bcrypt.compareSync(password, data[0].password)) {
         res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
       } else {
-        const accessToken = tokenUtils.makeAccessToken({userId: userId});
+        const accessToken = tokenUtils.makeAccessToken({ userId: userId });
         const refreshToken = rememberMe ? tokenUtils.makeRefreshToken('1d') : tokenUtils.makeRefreshToken('1h');
 
         res.cookie("authorization", `Bearer ${accessToken}`);
 
         db.query(`insert into token values('${userId}', '${refreshToken}') ON DUPLICATE KEY UPDATE token='${refreshToken}'`, (err, data) => {
           if (!err) {
-            res.status(200).send({userId, accessToken, refreshToken});
+            res.status(200).send({ userId, accessToken, refreshToken });
           } else {
             res.send(err);
           }

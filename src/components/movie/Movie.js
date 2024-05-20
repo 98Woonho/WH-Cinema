@@ -8,6 +8,7 @@ function Movie() {
   const [movieMap, setMovieMap] = useState(null);
   const [movieList, setMovieList] = useState([]);
   const [num, setNum] = useState(0); // 현재상영작과 상영예정작을 가져오는 동작을 구분하기 위한 변수
+  console.log(num);
 
   // 현재상영작 버튼 클릭 함수
   const currentMovieList = () => {
