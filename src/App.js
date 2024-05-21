@@ -16,32 +16,50 @@ function App() {
   console.log(isAuthenticated);
 
   useEffect(() => {
-    const authorizationCookie = cookies.get('authorization');
+    const authorizationCookie = cookies.get('authorization'); // authorization 쿠키 가져오기
 
-    if (authorizationCookie) {
-      const accessToken = cookies.get('authorization').split('Bearer ')[1];
-      const decodedToken = jwtDecode(accessToken);
-      const userId = decodedToken.userId;
+    console.log(authorizationCookie);
 
+    if (authorizationCookie) { // 쿠키가 있을 때
+      const accessToken = cookies.get('authorization').split('Bearer ')[1]; // 쿠키에서 accessToken 가져오기
+      console.log(accessToken);
+
+      axios.get('/user/accessVerify', {params: { accessToken: accessToken }})
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+      const decodedToken = jwtDecode(accessToken); // accessToken을 decode해서 payload 정보 가져오기
+      const userId = decodedToken.userId; // payload에 있는 userId
+
+      console.log(userId);
+
+      // user의 refreshToken 가져오기
       axios.get('/user/refreshToken', { params: { userId: userId } })
         .then(res => {
           const refreshToken = res.data;
 
-          axios.get('/user/refreshVerify', { params: { refreshToken: refreshToken }})
-           .then(res => {
-             if (res.data.ok === true) {
-              setIsAuthenticated(true);
-             } else {
-              setIsAuthenticated(false);
-             }
-           })
-           .catch(err => {
-            console.log(err);
-           })
+          // refreshToken 검증
+          axios.get('/user/refreshVerify', { params: { refreshToken: refreshToken } })
+            .then(res => {
+              if (res.data.ok === true) { // ok
+                setIsAuthenticated(true);
+              } else { // 만료
+                setIsAuthenticated(false);
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            })
         })
         .catch(err => {
           console.log(err);
         })
+    } else {
+      
     }
 
     const script1 = document.createElement('script');
@@ -63,7 +81,7 @@ function App() {
   return (
     <div id='App'>
       <BrowserRouter>
-        <Header isAuthenticated={isAuthenticated}/>
+        <Header isAuthenticated={isAuthenticated} />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/user/*' element={<UserRouter />} />

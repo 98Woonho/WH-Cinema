@@ -25,7 +25,6 @@ function Login() {
         const userObj = { userId: userId, password: password, rememberMe: rememberMe };
         axios.post('/user/login', userObj)
             .then(res => {
-                const { accessToken, refreshToken, userId } = res.data;
                 navigate(-1);
             })
             .catch(err => {

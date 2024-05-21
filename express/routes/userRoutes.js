@@ -16,6 +16,18 @@ router.get('/', (req, res) => {
   })
 })
 
+router.get('/test', (req, res) => {
+  res.json({refreshToken: req.cookies});
+})
+
+router.get('/accessVerify', (req, res) => {
+  const { accessToken } = req.query;
+
+  const result = tokenUtils.verify(accessToken);
+
+  res.send(result);
+})
+
 router.get('/refreshVerify', (req, res) => {
   const { refreshToken } = req.query;
 
@@ -44,13 +56,14 @@ router.post('/login', (req, res) => {
         res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
       } else {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
-        const refreshToken = rememberMe ? tokenUtils.makeRefreshToken('1d') : tokenUtils.makeRefreshToken('1h');
+        const refreshToken = rememberMe ? tokenUtils.makeRefreshToken('7d') : tokenUtils.makeRefreshToken('1d');
 
-        res.cookie("authorization", `Bearer ${accessToken}`);
+        res.cookie("authorization", `Bearer ${accessToken}`); // 33인 이유 : 쿠키 만료 기간에 9시간 오차가 있어서 9시간 추가
+        res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true });
 
         db.query(`insert into token values('${userId}', '${refreshToken}') ON DUPLICATE KEY UPDATE token='${refreshToken}'`, (err, data) => {
           if (!err) {
-            res.status(200).send({ userId, accessToken, refreshToken });
+            res.status(200).send();
           } else {
             res.send(err);
           }
