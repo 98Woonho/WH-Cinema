@@ -1,6 +1,5 @@
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
-const axios = require('axios');
 const jwt = require('jsonwebtoken');
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
@@ -17,9 +16,9 @@ exports.makeAccessToken = (Object) => {
 };
 
 // refreshToken 발급 함수
-exports.makeRefreshToken = (expiresIn) => {
+exports.makeRefreshToken = (Object, expiresIn) => {
     const refreshToken = jwt.sign(
-        {},
+        Object,
         REFRESH_TOKEN_SECRET,
         {
             algorithm: "HS256",

@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require('../config/db.js');
 const bcrypt = require('bcrypt');
 const tokenUtils = require('../../src/utils/tokenUtils.js');
+const jwt = require('jsonwebtoken');
 
 router.get('/', (req, res) => {
   const { name, birthday, phone } = req.query;
@@ -16,8 +17,61 @@ router.get('/', (req, res) => {
   })
 })
 
-router.get('/test', (req, res) => {
-  res.json({refreshToken: req.cookies});
+router.get('/verify', (req, res) => {
+  const cookies = req.cookies;
+
+  const accessToken = cookies.access.split('Bearer ')[1];
+  const refreshToken = cookies.refresh.split('Bearer ')[1];
+  const accessVerifyResult = tokenUtils.verify(accessToken);
+
+  if (!cookies.refresh) { // refresh cookie가 없을 때 (refreshToken이 만료 되었을 때)
+    res.status(401).send();
+  } else { // refresh cookie가 있을 때
+    if (!cookies.access) { // access cookie가 없을 때 (accessToken이 만료 되었을 때)
+
+    } else {
+
+    }
+  }
+
+  // 1-1 . accessToken이 만료 되었을 때
+  if (!accessVerifyResult.ok) {
+    console.log("accessToken 만료 됨!!");
+
+    // 2. accessToken의 payload에 있는 userId를 가져와서, db에서 해당 유저의 refreshToken을 가져옴.
+
+    const decodedToken = jwt.decode(accessToken); // accessToken을 decode해서 payload 정보 가져오기
+    const userId = decodedToken.userId; // payload에 있는 userId
+
+    // 3. 쿠키에 있는 refreshToken을 가져와서 db에 있는 refreshToken이랑 비교 함.
+    db.query(`select token from token where userId = '${userId}'`, (err, data) => {
+      if (!err) {
+        const dbRefreshToken = data[0].token;
+
+        if (refreshToken === dbRefreshToken) { // 3-1. 같다! 그러면 refreshToken의 유효성 검증을 함.
+          console.log("refreshToken 같음!!");
+          const refreshVerifyResult = tokenUtils.refreshVerify(refreshToken);
+          if (!refreshVerifyResult.ok) { // 4. refreshToken이 만료 되었을 때 로그아웃 처리
+            console.log("refreshToken 만료 됨!!");
+            res.status(401).send();
+          } else { // 5. refreshToken이 유효하면 accessToken을 재발급 후 쿠키에 저장
+            console.log("refreshToken 만료 안 됨!!");
+            const newAccessToken = tokenUtils.makeAccessToken({ userId: userId });
+            res.cookie('access', `Bearer ${newAccessToken}`, { maxAge: 60 * 1000 });
+            res.send();
+          }
+        } else { // 3-2. 다르다? 로그아웃 처리 
+          console.log("refreshToken 다름!!");
+          res.status(401).send();
+        }
+      } else { // db에서 refreshToken 가져오는데 오류가 발생
+        res.send(err);
+      }
+    })
+  } else { // 1-2. accessToken이 만료 되지 않았을 때
+    console.log("accessToken 만료 안 됨!!");
+    res.send();
+  }
 })
 
 router.get('/accessVerify', (req, res) => {
@@ -56,10 +110,10 @@ router.post('/login', (req, res) => {
         res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
       } else {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
-        const refreshToken = rememberMe ? tokenUtils.makeRefreshToken('7d') : tokenUtils.makeRefreshToken('1d');
+        const refreshToken = rememberMe ? tokenUtils.makeRefreshToken({ userId: userId }, '7d') : tokenUtils.makeRefreshToken({ userId: userId }, '1d');
 
-        res.cookie("authorization", `Bearer ${accessToken}`); // 33인 이유 : 쿠키 만료 기간에 9시간 오차가 있어서 9시간 추가
-        res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true });
+        res.cookie("access", `Bearer ${accessToken}`,  { maxAge: 60 * 1000 });
+        res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true, maxAge: rememberMe ?  7 * 3600 * 1000 : 1 * 3600 * 1000});
 
         db.query(`insert into token values('${userId}', '${refreshToken}') ON DUPLICATE KEY UPDATE token='${refreshToken}'`, (err, data) => {
           if (!err) {

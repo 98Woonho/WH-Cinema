@@ -25,7 +25,7 @@ function Login() {
         const userObj = { userId: userId, password: password, rememberMe: rememberMe };
         axios.post('/user/login', userObj)
             .then(res => {
-                navigate(-1);
+                navigate('/');
             })
             .catch(err => {
                 if (err.response.status === 400) {
