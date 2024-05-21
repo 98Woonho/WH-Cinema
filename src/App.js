@@ -18,9 +18,18 @@ function App() {
   useEffect(() => {
     const authorizationCookie = cookies.get('authorization'); // authorization 쿠키 가져오기
 
-    console.log(authorizationCookie);
-
     if (authorizationCookie) { // 쿠키가 있을 때
+
+      // 1. accessToken이 만료 되지 않았을 때 (그냥 그대로)
+      // 2. accessToken이 만료 되었을 때
+      // 2-1. 쿠키에 있는 refreshToken을 가져와서 db에 있는 refreshToken이랑 비교 함.
+      // 2-2. 다르다? 경고문 출력 후 로그아웃 처리
+      // 2-3. 같다! 그러면 refreshToken의 유효성 검사를 함.
+      // 2-4. 만료 되었으면 로그아웃 처리.
+      // 2-5. 유효하면 accessToken을 재발급.
+
+      
+
       const accessToken = cookies.get('authorization').split('Bearer ')[1]; // 쿠키에서 accessToken 가져오기
       console.log(accessToken);
 
