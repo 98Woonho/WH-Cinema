@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
+import Ticketing from './components/Ticketing';
 import MovieRouter from './components/movie/MovieRouter';
 import UserRouter from './components/user/UserRouter';
 import axios from 'axios';
@@ -78,6 +79,7 @@ function App() {
         <Header isAuthenticated={isAuthenticated} />
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/ticketing' element={<Ticketing />} />
           <Route path='/user/*' element={<UserRouter />} />
           <Route path='/movie/*' element={<MovieRouter />} />
         </Routes>
