@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -8,6 +10,28 @@ import MovieRouter from './components/movie/MovieRouter';
 import UserRouter from './components/user/UserRouter';
 import axios from 'axios';
 
+const GlobalStyle = createGlobalStyle`
+${reset}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+`;
+
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -15,17 +39,18 @@ function App() {
     // accessToken, refreshToken 검증
     axios.get('/user/verify', { withCredentials: true })
       .then(res => {
-        
+        setIsAuthenticated(true);
       })
       .catch(err => {
         if (err.response.status === 401) {
-          axios.post('/user/logout')
-          .then(res => {
-            console.log(res);
-          })
-          .catch(err => {
-            console.log(err);
-          })
+          setIsAuthenticated(false);
+          // axios.post('/user/logout')
+          // .then(res => {
+          //   console.log(res);
+          // })
+          // .catch(err => {
+          //   console.log(err);
+          // })
         }
       })
 
@@ -47,7 +72,9 @@ function App() {
 
   return (
     <div id='App'>
+      <GlobalStyle />
       <BrowserRouter>
+
         <Header isAuthenticated={isAuthenticated} />
         <Routes>
           <Route path='/' element={<Home />} />

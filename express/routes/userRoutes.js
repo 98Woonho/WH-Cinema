@@ -20,23 +20,18 @@ router.get('/', (req, res) => {
 router.get('/verify', (req, res) => {
   const cookies = req.cookies;
 
+  if (!cookies.refresh || !cookies.access) { // refresh cookie || access cookie가 없을 때 (쿠키가 만료 되어서 사라졌거나, 강제로 쿠키를 삭제한 경우)
+    res.status(401).send();
+    return;
+  } 
+
   const accessToken = cookies.access.split('Bearer ')[1];
   const refreshToken = cookies.refresh.split('Bearer ')[1];
   const accessVerifyResult = tokenUtils.verify(accessToken);
 
-  if (!cookies.refresh) { // refresh cookie가 없을 때 (refreshToken이 만료 되었을 때)
-    res.status(401).send();
-  } else { // refresh cookie가 있을 때
-    if (!cookies.access) { // access cookie가 없을 때 (accessToken이 만료 되었을 때)
-
-    } else {
-
-    }
-  }
-
   // 1-1 . accessToken이 만료 되었을 때
   if (!accessVerifyResult.ok) {
-    console.log("accessToken 만료 됨!!");
+    // console.log("accessToken 만료 됨!!");
 
     // 2. accessToken의 payload에 있는 userId를 가져와서, db에서 해당 유저의 refreshToken을 가져옴.
 
@@ -49,19 +44,19 @@ router.get('/verify', (req, res) => {
         const dbRefreshToken = data[0].token;
 
         if (refreshToken === dbRefreshToken) { // 3-1. 같다! 그러면 refreshToken의 유효성 검증을 함.
-          console.log("refreshToken 같음!!");
+          // console.log("refreshToken 같음!!");
           const refreshVerifyResult = tokenUtils.refreshVerify(refreshToken);
           if (!refreshVerifyResult.ok) { // 4. refreshToken이 만료 되었을 때 로그아웃 처리
-            console.log("refreshToken 만료 됨!!");
+            // console.log("refreshToken 만료 됨!!");
             res.status(401).send();
           } else { // 5. refreshToken이 유효하면 accessToken을 재발급 후 쿠키에 저장
-            console.log("refreshToken 만료 안 됨!!");
+            // console.log("refreshToken 만료 안 됨!!");
             const newAccessToken = tokenUtils.makeAccessToken({ userId: userId });
-            res.cookie('access', `Bearer ${newAccessToken}`, { maxAge: 60 * 1000 });
-            res.send();
+            res.cookie('access', `Bearer ${newAccessToken}`, { maxAge: 7 * 24 * 3600 * 1000 });
+            res.status(200).send();
           }
         } else { // 3-2. 다르다? 로그아웃 처리 
-          console.log("refreshToken 다름!!");
+          // console.log("refreshToken 다름!!");
           res.status(401).send();
         }
       } else { // db에서 refreshToken 가져오는데 오류가 발생
@@ -69,8 +64,8 @@ router.get('/verify', (req, res) => {
       }
     })
   } else { // 1-2. accessToken이 만료 되지 않았을 때
-    console.log("accessToken 만료 안 됨!!");
-    res.send();
+    // console.log("accessToken 만료 안 됨!!");
+    res.status(200).send();
   }
 })
 
@@ -112,8 +107,8 @@ router.post('/login', (req, res) => {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
         const refreshToken = rememberMe ? tokenUtils.makeRefreshToken({ userId: userId }, '7d') : tokenUtils.makeRefreshToken({ userId: userId }, '1d');
 
-        res.cookie("access", `Bearer ${accessToken}`,  { maxAge: 60 * 1000 });
-        res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true, maxAge: rememberMe ?  7 * 3600 * 1000 : 1 * 3600 * 1000});
+        res.cookie("access", `Bearer ${accessToken}`,  { httpOnly: true, maxAge: 7 * 24 * 3600 * 1000});
+        res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true, maxAge: rememberMe ?  7 * 24 * 3600 * 1000 : 24 * 3600 * 1000});
 
         db.query(`insert into token values('${userId}', '${refreshToken}') ON DUPLICATE KEY UPDATE token='${refreshToken}'`, (err, data) => {
           if (!err) {
@@ -150,6 +145,13 @@ router.post('/join', (req, res) => {
       res.send(err);
     }
   })
+})
+
+// 로그아웃 시 jwt 쿠키 삭제
+router.get('/logout', (req, res) => {
+  res.clearCookie('access', { httpOnly: true});
+  res.clearCookie('refresh', { httpOnly: true});
+  res.status(200).send();
 })
 
 router.post('/certification', async (req, res) => {
