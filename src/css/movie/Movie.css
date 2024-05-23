@@ -1,4 +1,4 @@
-.movie-list {
+.movie-container {
     width:1200px;
     height:auto;
     background-color: antiquewhite;
@@ -23,7 +23,7 @@
     height: 340px;
 }
 
-.title {
+.movie-container .title {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;

@@ -129,7 +129,7 @@ function Movie() {
             {data.title}
           </div>
           <div>
-            {data.releaseDate} 개봉  {data.Dday}
+            {data.releaseDate} 개봉 {data.Dday}
           </div>
         </div>
     );
@@ -138,11 +138,11 @@ function Movie() {
 
   return (
     <div id='main'>
-      <div id="menu">
+      <div>
         <button onClick={currentMovieList}>현재 상영작</button>
         <button onClick={scheduledMovieList}>상영 예정작</button>
       </div>
-      <div id='movieList'>
+      <div className='movie-container'>
         {movieMap}
       </div>
     </div>

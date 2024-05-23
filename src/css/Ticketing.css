@@ -6,27 +6,89 @@
     flex-direction: row;
 }
 
-.box {
+.section {
     border: 1px solid black;
     width: 100%;
+    padding: 1rem;
 }
 
-.box1 {
+.theater-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.movie-section {
     width: 300px;
 }
 
-.ticketing-container .movie-list li  {
+.region-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.name-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.ticketing-container ul li  {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.rating-icon {
+.ticketing-container ul li .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rating-icon-all {
     display: inline-block;
     border-radius: 5px;
-    width: 30px;
+    min-width: 30px;
     height: 30px;
     background-color: rgb(104, 248, 99);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.rating-icon-12 {
+    display: inline-block;
+    border-radius: 5px;
+    min-width: 30px;
+    height: 30px;
+    background-color: rgb(246, 238, 121);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.rating-icon-15 {
+    display: inline-block;
+    border-radius: 5px;
+    min-width: 30px;
+    height: 30px;
+    background-color: rgb(255, 204, 85);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.rating-icon-19 {
+    display: inline-block;
+    border-radius: 5px;
+    min-width: 30px;
+    height: 30px;
+    background-color: rgb(255, 89, 89);
     color: white;
     font-size: 18px;
     font-weight: 600;
