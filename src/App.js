@@ -75,7 +75,6 @@ function App() {
     <div id='App'>
       <GlobalStyle />
       <BrowserRouter>
-
         <Header isAuthenticated={isAuthenticated} />
         <Routes>
           <Route path='/' element={<Home />} />

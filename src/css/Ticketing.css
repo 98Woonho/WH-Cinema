@@ -1,0 +1,40 @@
+.ticketing-container {
+    margin-top: 5rem;
+    background-color: aliceblue;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.box {
+    border: 1px solid black;
+    width: 100%;
+}
+
+.box1 {
+    width: 300px;
+}
+
+.ticketing-container .movie-list li  {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.rating-icon {
+    display: inline-block;
+    border-radius: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: rgb(104, 248, 99);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.rating {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

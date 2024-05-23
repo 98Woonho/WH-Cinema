@@ -26,7 +26,7 @@ router.get('/:title', (req, res) => {
 router.get('/:date1/:date2', (req, res) => {
     const date1 = req.params.date1;
     const date2 = req.params.date2;
-    db.query(`select * from movie where releasedate <= '${date1}' AND releasedate >= '${date2}'`, (err, data) => {
+    db.query(`select * from movie where release_date <= '${date1}' AND release_date >= '${date2}'`, (err, data) => {
         if (!err) {
             res.send(data);
         } else {

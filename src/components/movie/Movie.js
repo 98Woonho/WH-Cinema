@@ -54,7 +54,6 @@ function Movie() {
 
       // 내일 날짜에서 YYYY-MM-DD를 가져옴
       const newTomorrowDate = tomorrowDate.toISOString().slice(0, 10);
-      console.log(newTomorrowDate);
 
       // 내일 날짜로부터 60일 후 날짜를 계산
       const sixtyDaysLaterDate = new Date(tomorrowDate.getTime() + (60 * 24 * 60 * 60 * 1000));
@@ -68,14 +67,14 @@ function Movie() {
 
           // 상영예정작 영화리스트를 날짜순으로 오름차순 정렬
           const sortedMovieList = movieList.sort((a, b) => {
-            const dateA = new Date(a.releaseDate);
-            const dateB = new Date(b.releaseDate);
+            const dateA = new Date(a.release_date);
+            const dateB = new Date(b.release_date);
             return dateA - dateB;
           });
 
           // 상영예정작 리스트에 D-day를 추가
           sortedMovieList.forEach(movie => {
-            const releaseDate = movie.releaseDate;
+            const releaseDate = movie.release_date;
 
             // 주어진 날짜 문자열을 Date 객체로 변환
             const givenDate = new Date(releaseDate);
@@ -106,7 +105,7 @@ function Movie() {
     
     // movieList의 개봉일 형태 변경
     movieList.forEach(movie => {
-      const releaseDate = movie.releaseDate;
+      const releaseDate = movie.release_date;
 
       const date = new Date(releaseDate);
 
@@ -138,7 +137,7 @@ function Movie() {
   }, [movieList])
 
   return (
-    <div>
+    <div id='main'>
       <div id="menu">
         <button onClick={currentMovieList}>현재 상영작</button>
         <button onClick={scheduledMovieList}>상영 예정작</button>

@@ -39,7 +39,7 @@ function Detail() {
                             <li>배우 : {movie.actor}</li>
                             <li>장르 : {movie.genre} / {movie.nation}</li>
                         </ul>
-                        <button className='ticketing-btn'>예매하기</button>
+                        <a className='ticketing' href='/ticketing'>예매하기</a>
                     </div>
                 </div>
             </div>

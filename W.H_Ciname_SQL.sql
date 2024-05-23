@@ -1,4 +1,4 @@
-INSERT INTO `movie_project_db`.`movie` (`title`,`genre`,`posters`,`releaseDate`,`runtime`,`plot`,`rating`, `director`,`actor`,`nation`,`stillcuts`)
+INSERT INTO `movie_project_db`.`movie` (`title`,`genre`,`posters`,`release_date`,`runtime`,`plot`,`rating`, `director`,`actor`,`nation`,`stillcuts`)
 VALUES ('범죄도시4', '액션, 범죄', 'http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPK021860.jpg', '2024-04-24', 109, '신종 마약 사건 3년 뒤,<br>괴물형사 \'마석도\'(마동석)와 서울 광수대는<br>배달앱을 이용한 마약 판매 사건을 수사하던 중<br>수배 중인 앱 개발자가 필리핀에서 사망한 사건이<br>대규모 온라인 불법 도박 조직과 연관되어 있음을 알아낸다.<br><br>필리핀에 거점을 두고 납치, 감금, 폭행, 살인 등으로<br>대한민국 온라인 불법 도박 시장을 장악한<br>특수부대 용병 출신의 빌런 \'백창기\'(김무열)와<br>한국에서 더 큰 판을 짜고 있는 IT업계 천재 CEO \'장동철\'(이동휘).<br><br>\'마석도\'는 더 커진 판을 잡기 위해<br>\'장이수\'(박지환)에게 뜻밖의 협력을 제안하고<br>광역수사대는 물론,<br>사이버수사대까지 합류해 범죄를 소탕하기 시작하는데...<br><br><strong>나쁜 놈 잡는데 국경도 영역도 제한 없다!<br>업그레이드 소탕 작전! 거침없이 싹 쓸어버린다!</strong>', '15세이상관람가', '허명행', '마동석, 김무열, 이동휘, 박지환', '한국','http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840308.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840309.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840310.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840311.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840312.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840313.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840314.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840315.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840316.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840317.jpg'),
 ('혹성탈출-새로운 시대', '액션, SF', 'https://file.koreafilm.or.kr/thm/02/99/18/39/tn_DPF029167.jpg', '2024-05-08', 145, '<strong>인류의 시대는 끝났고, 세상의 주인이 바뀌었다!</strong><br><br>진화한 유인원과 퇴화된 인간들이 살아가는 땅.<br>유인원 리더 \'프록시무스\'는 완전한 군림을 위해<br>인간들을 사냥하며 자신의 제국을 건설한다.<br><br>한편, 또 다른 유인원 \'노아\'는 우연히<br>숨겨진 과거의 이야기와 \'시저\'의 가르침을 듣게 되고,<br>의문의 한 인간 소녀와 함께 자유를 향한 여정을 시작하게 되는데...<br><br><strong>美 버라이어티 선정 2024년 최고의 기대작<br>아바타: 물의 길  제작진 x  메이즈 러너  웨스 볼 감독<br>5월 8일, 압도적 비주얼 스펙터클을 경험하라!</strong>', '12세이상관람가','웨스 볼','오웬 티그, 프레이아 앨런, 케빈 두런드, 피터 마콘, 윌리엄 H.머시', '미국','http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842159.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842160.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842161.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842146.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842147.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842148.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842149.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842150.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842151.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842152.jpg'),
 ('악마와의 토크쇼', '호러', 'http://file.koreafilm.or.kr/thm/02/99/18/41/tn_DPF029242.jpg','2024-05-08', 93, '<strong>\<핼러윈 특집 생방송 \'올빼미 쇼\'\> - 오늘의 큐시트<br><br>1부 출연자 - 영매 VS. 영능력자 사냥꾼</strong><br><br>"기적의 사나이라 불리는 영매<br>초자연 현상의 실체를 밝히는<br>마술사 출신 회의론자. 과연 진실은?"<br><br>(*중간 광고 후 2부 시작*)<br><br><strong>2부  출연자 - 악마에게 빙의된 소녀 & [악마와의 대화] 저술한 초심리학자<br><br>"사탄교회 집단자살에서 유일하게 살아남은 소녀,<br>악마에게 빙의됐다는 것이 사실인지 현장 검증!"<br><br>1977년 핼러윈 전날 밤, 시청률을 위해서라면<br>일단 틀고 보는 방송국 놈들 때문에<br>누구도 예상하지 못한 방송사고 발생!<br>그리고 마침내 미국 전역을 충격에 빠트렸던 그날 밤의 생방송<br>\'악마와의 토크쇼\' 녹화영상이 최근에 발견됐는데...<br><br>47년간 숨겨진, 절대 생중계돼서는 안 될<br>최악의 토크쇼가 마침내 공개된다.<br>그동안 공개되지 않은 비하인드 영상과 함께!', '15세이상관람가','캐머런 케언즈, 콜린 케언즈','데이빗 다스트말치안, 잉그리트 토렐리, 로라 고든, 조지나 헤이그, 페이샬 바지, 이안 블리스, 리스 오테리', '오스트레일리아','http://file.koreafilm.or.kr/thm/01/copy/00/66/16/tn_DST834571.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/16/tn_DST834572.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/93/tn_DST842842.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/93/tn_DST842843.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/93/tn_DST842844.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/93/tn_DST842845.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/93/tn_DST842846.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/93/tn_DST842847.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/94/tn_DST842939.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/94/tn_DST842940.jpg'),
@@ -31,14 +31,14 @@ VALUES ('범죄도시4', '액션, 범죄', 'http://file.koreafilm.or.kr/thm/02/9
 ('정욕','드라마, 로맨스, 멜로','http://file.koreafilm.or.kr/thm/02/99/18/42/tn_DPF029299.jpg','2024-05-29',134,'사회적인 연결의 중요성을 믿는 검사 \'히로키\'는<br>유튜버가 되기 위해 등교를 거부하는 아들로 골머리를 앓는다.<br><br>타인과의 연결을 거부하던 \'나쓰키\'는<br>동창생 \'요시미치\'의 귀향 소식을 듣고<br>학창 시절 기억을 떠올리며<br>마음이 흔들리기 시작한다.<br><br>\'다이야\'는 대학교 댄스 동아리 활동으로 주목받고 있지만<br>스스로를 구제 불능이라 부르며<br>이성과의 만남을 거절하는데,<br>이성 관계에 트라우마가 있는 \'야에코\'는<br>\'다이야\'에게 알 수 없는 이끌림을 느낀다.<br><br>다른 장소, 다른 삶을 사는 이들은<br>누구도 예상치 못한 이유로 서로 얽히게 되는데...<br><br>"\'후지와라 사토루\'가 물을 틀어둔 채로 수도꼭지를 훔쳤다"<br>15년 전 지방 신문에 보도된 작은 신문 기사 한 줄.<br>그리고 그 기사 속 숨겨진 이면이 모두의 일상을 뒤흔든다.<br><br>서로 다른 삶, 서로 다른 욕망, 그리고 다가오는 일상의 파문<br>바른 욕망이란 무엇인가.','15세이상관람가','기시 요시유키','이나가키 고로, 아라가키 유이, 이소무라 하야토, 사토 간타, 히가시노 아야카','일본','http://file.koreafilm.or.kr/thm/01/copy/00/66/96/tn_DST843487.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/96/tn_DST843488.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/96/tn_DST843489.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/96/tn_DST843490.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/96/tn_DST843491.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/96/tn_DST843492.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/14/tn_DST834293.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/14/tn_DST834294.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/14/tn_DST834295.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/96/tn_DST843486.jpg'),
 ('찬란한 내일로','드라마','http://file.koreafilm.or.kr/thm/02/99/18/41/tn_DPF029254.jpg','2024-05-29',96,'명망 있는 영화감독 \'조반니\'는 5년 만에 새 영화 촬영에 들어간다.<br>그러나 명작 탄생을 기대하던 제작자는 파산 직전에,<br>40년을 함께한 아내마저 날벼락 같은 이혼 선언으로 그를 혼란에 빠트린다.<br>급변하는 세상에서 사랑해 온 모든 것들이<br>위태롭다고 느끼는 조반니. 하지만 불행하기만 한 인생은 없다!<br>한치 앞도 알 수 없는 모두에게<br>거장 감독이 선사하는 유쾌한 시네마틱 인생찬가!','12세이상관람가','난니 모레티','난니 모레티,마거리타 부이, 실비오 올랜도, 마티유 아말릭','이탈리아, 프랑스','http://file.koreafilm.or.kr/thm/01/copy/00/66/05/tn_DST833393.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/05/tn_DST833394.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/05/tn_DST833395.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/05/tn_DST833396.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/91/tn_DST842601.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/91/tn_DST842602.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/91/tn_DST842603.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/91/tn_DST842604.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/91/tn_DST842605.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/91/tn_DST842606.jpg'),
 ('바커스: 슈퍼스타가 될 거야','애니메이션','http://file.koreafilm.or.kr/thm/02/99/18/40/tn_DPF029192.jpg','2024-06-01',85,'"나는 슈퍼스타가 될 거야!"<br><br>슈퍼스타를 꿈 꿔왔던 \'로지\'와 친구들은<br>유명해지기 위해 다양한 종류의 영상들을<br>인터넷에 올리지만 반응이 좋지는 않다.<br>그러던 중 우연히 옆집에 이사를 온 슈퍼스타 \'캣\'을 만나게 되고<br>\'로지\'의 꿈을 알게 된 \'캣\'은 함께 무대에 오를 것을 제안한다.<br>단 조건은 그 동안 함께한 친구들을 버리고<br>\'로지\'만 무대에 오르는 것<br><br>거부할 수 없는 \'캣\'의 제안에 \'로지\'의 선택은?','전체관람가','표도르 드미트리예프','박시윤, 김소희, 임하진, 서정익, 정해은','러시아','http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840575.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840576.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840577.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840578.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840579.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840580.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840581.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840582.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840583.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840584.jpg');
-;
+
 
 
 CREATE TABLE `movie_project_db`.`movie` (
 	title VARCHAR(255) PRIMARY KEY,
     genre VARCHAR(255),
     posters VARCHAR(1000),
-    releaseDate VARCHAR(255),
+    release_date DATE,
     runtime INT,
     plot VARCHAR(1000),
     rating VARCHAR(255),
@@ -50,7 +50,7 @@ CREATE TABLE `movie_project_db`.`movie` (
 
 
 CREATE TABLE `movie_project_db`.`user` (
-	userId VARCHAR(100) PRIMARY KEY,
+	user_id VARCHAR(100) PRIMARY KEY,
     password VARCHAR(1000),
     name VARCHAR(100),
     birthday VARCHAR(100),
@@ -61,10 +61,52 @@ CREATE TABLE `movie_project_db`.`user` (
 DROP TABLE `movie_project_db`.`user`;
 
 
-INSERT INTO `movie_project_db`.`user`(`userId`,`password`,`name`,`birthday`,`phone`, `role`)
+INSERT INTO `movie_project_db`.`user`(`user_id`,`password`,`name`,`birthday`,`phone`, `role`)
 VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150', 'USER');
 
 CREATE TABLE `movie_project_db`.`token` (
-	userId VARCHAR(100) PRIMARY KEY,
+	user_id VARCHAR(100) PRIMARY KEY,
     token VARCHAR(5000)
 );
+
+CREATE TABLE `movie_project_db`.`theater` (
+	name VARCHAR(255) PRIMARY KEY,
+    region VARCHAR(255)
+);
+
+CREATE TABLE `movie_project_db`.`screen_hall` (
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255),
+    theater_name VARCHAR(255),
+    FOREIGN KEY (theater_name) REFERENCES theater(name)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE `movie_project_db`.`screen_info` (
+	id BIGINt PRIMARY KEY AUTO_INCREMENT,
+    time VARCHAR(255),
+    date DATE,
+    screen_hall_id BIGINT,
+    FOREIGN KEY (screen_hall_id) REFERENCES `screen_hall` (id)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE
+); 
+
+INSERT INTO `movie_project_db`.`theater` (name, region)
+VALUES('대구 프리미엄', '대구'),
+('대구', '대구'),
+('대구 연경', '대구'),
+('경기 광주', '경기'),
+('김포', '경기'),
+('동두천', '경기');
+
+INSERT INTO `movie_project_db`.`screen_hall` (name, theater_name)
+VALUES('1관', '대구 프리미엄');
+
+INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id)
+VALUES ('13:00', '2024-05-24', 3),
+('15:00', '2024-05-24', 3),
+('17:00', '2024-05-24', 3),
+('19:00', '2024-05-24', 3),
+('21:00', '2024-05-24', 3);
