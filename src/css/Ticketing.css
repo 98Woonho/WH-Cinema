@@ -42,6 +42,19 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    gap: 1rem;
+    
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+}
+
+.ticketing-container ul li.selected {
+    background-color: rgb(83, 83, 83);
+
+}
+
+.ticketing-container ul li.selected .title {
+    color: white;
 }
 
 .ticketing-container ul li .title {
@@ -50,53 +63,30 @@
     text-overflow: ellipsis;
 }
 
-.rating-icon-all {
-    display: inline-block;
+.rating-icon-all, .rating-icon-12, .rating-icon-15, .rating-icon-19 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 5px;
     min-width: 30px;
     height: 30px;
-    background-color: rgb(104, 248, 99);
     color: white;
     font-size: 18px;
     font-weight: 600;
+}
+
+.rating-icon-all {
+    background-color: rgb(104, 248, 99);
 }
 
 .rating-icon-12 {
-    display: inline-block;
-    border-radius: 5px;
-    min-width: 30px;
-    height: 30px;
     background-color: rgb(246, 238, 121);
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
 }
 
 .rating-icon-15 {
-    display: inline-block;
-    border-radius: 5px;
-    min-width: 30px;
-    height: 30px;
     background-color: rgb(255, 204, 85);
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
 }
 
 .rating-icon-19 {
-    display: inline-block;
-    border-radius: 5px;
-    min-width: 30px;
-    height: 30px;
     background-color: rgb(255, 89, 89);
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.rating {
-    position: relative;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }

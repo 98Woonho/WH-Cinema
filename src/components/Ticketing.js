@@ -9,6 +9,7 @@ function Ticketing() {
     const [theaterNameMap, setTheaterNameMap] = useState(null);
     const [theaterList, setTheaterList] = useState([]);
     const [regionMap, setRegionMap] = useState(null);
+    const [selectedMovieTitle, setSelectedMovieTitle] = useState(null);
 
     const handleRegion = (region) => {
 
@@ -25,6 +26,10 @@ function Ticketing() {
 
     const handleName = () => {
 
+    }
+
+    const handleTitle = (title) => {
+        setSelectedMovieTitle(title);
     }
 
     useEffect(() => {
@@ -47,16 +52,15 @@ function Ticketing() {
 
     useEffect(() => {
         const MovieMap = movieList.map(movie =>
-            <li>
-                <span className={movie.rating === '전체관람가' ? 'rating-icon-all' : movie.rating === '12세이상관람가' ? 'rating-icon-12' : movie.rating === '15세이상관람가' ? 'rating-icon-15' : 'rating-icon-19'}>
-                    <p className='rating'>{movie.rating === '전체관람가' ? 'All' : movie.rating === '12세이상관람가' ? '12' : movie.rating === '15세이상관람가' ? '15' : '19'}</p>
+            <li onClick={() => handleTitle(movie.title)} className={selectedMovieTitle === movie.title ? 'selected' : ''}>
+                <span className={movie.rating === '전체관람가' ? 'rating-icon-all' : movie.rating === '12세이상관람가' ? 'rating-icon-12' : movie.rating === '15세이상관람가' ? 'rating-icon-15' : 'rating-icon-19'}>{movie.rating === '전체관람가' ? 'All' : movie.rating === '12세이상관람가' ? '12' : movie.rating === '15세이상관람가' ? '15' : '19'}
                 </span>
                 <span className='title'>{movie.title}</span>
             </li>
         );
 
         setMovieMap(MovieMap);
-    }, [movieList]);
+    }, [movieList, selectedMovieTitle]);
 
     useEffect(() => {
         // 첫 렌더링 시, 초기 영화관 리스트 출력을 위한 코드
