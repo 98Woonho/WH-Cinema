@@ -4,11 +4,11 @@
 
     display: flex;
     flex-direction: row;
+    justify-content: stretch;
 }
 
 .section {
     border: 1px solid black;
-    width: 100%;
     padding: 1rem;
 }
 
@@ -77,6 +77,31 @@
     text-overflow: ellipsis;
 }
 
+.date-time-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+
+    width: 500px;
+}
+
+.screen-time-container {
+    width: 100%;
+    border: 1px solid black;
+}
+
+.date {
+    height: 100px;
+    border: 1px solid black;
+    border-radius: 5px;
+
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
 .rating-icon-all, .rating-icon-12, .rating-icon-15, .rating-icon-19 {
     display: flex;
     justify-content: center;
@@ -103,4 +128,12 @@
 
 .rating-icon-19 {
     background-color: rgb(255, 89, 89);
+}
+
+.blue {
+    color: blue;
+}
+
+.red {
+    color: red;
 }

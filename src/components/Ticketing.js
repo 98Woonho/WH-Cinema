@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import '../css/Ticketing.css';
 import axios from 'axios';
-import userEvent from '@testing-library/user-event';
+
+// react-slick
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 
 function Ticketing() {
@@ -12,6 +16,8 @@ function Ticketing() {
     const [regionMap, setRegionMap] = useState(null);
     const [selectedMovieTitle, setSelectedMovieTitle] = useState(null);
     const [selectedRegion, setSelectedRegion] = useState(null);
+    const [dateList, setDateList] = useState([]);
+    const [dateMap, setDateMap] = useState(null);
 
     const handleRegion = (region) => {
         setSelectedRegion(region);
@@ -21,13 +27,13 @@ function Ticketing() {
 
         // mapping 후 set
         const filteredTheaterNameMap = filteredTheaterNameList.map(filteredTheaterName =>
-            <button onClick={handleName}>{filteredTheaterName}</button>
+            <button onClick={handleTheaterName}>{filteredTheaterName}</button>
         )
 
         setTheaterNameMap(filteredTheaterNameMap);
     }
 
-    const handleName = () => {
+    const handleTheaterName = () => {
 
     }
 
@@ -51,6 +57,19 @@ function Ticketing() {
             .catch(err => {
                 console.log(err);
             })
+
+        // 오늘 날짜 
+        const today = new Date();
+        // 오늘 기준 30일 뒤 날짜
+        const dateInMonth = new Date(today.getTime() + (30 * 24 * 3600 * 1000));
+
+        const dateList = [];
+
+        while (today <= dateInMonth) {
+            dateList.push(new Date(today));
+            today.setDate(today.getDate() + 1);
+        }
+        setDateList(dateList);
     }, []);
 
     useEffect(() => {
@@ -78,7 +97,7 @@ function Ticketing() {
 
         // mapping 후 set
         const theaterNameMap = theaterNameList.map(theaterName =>
-            <button onClick={handleName}>{theaterName}</button>
+            <button onClick={handleTheaterName}>{theaterName}</button>
         )
 
         setTheaterNameMap(theaterNameMap);
@@ -105,6 +124,28 @@ function Ticketing() {
         setRegionMap(regionMap);
     }, [selectedRegion])
 
+    useEffect(() => {
+        const today = new Date();
+
+        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+
+        const dateMap = dateList.map(date =>
+            <button className='date'>
+                <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
+                <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'month'}>{date.toISOString().slice(8, 10)}</p>
+                <p>{today.toISOString().slice(0, 10) === date.toISOString().slice(0, 10) ? '오늘' : daysOfWeek[date.getDay()]}</p>
+            </button>
+        )
+
+        setDateMap(dateMap);
+    }, [dateList]);
+
+    // slick setting
+    const settings = {
+        slidesToShow: 8,
+        slidesToScroll: 8
+    }
+
     return (
         <div id='main'>
             <div className="ticketing-container">
@@ -121,8 +162,14 @@ function Ticketing() {
                         {theaterNameMap}
                     </div>
                 </div>
-                <div className="section">날짜</div>
-                <div className="section">상영관, 상영시간</div>
+                <div className="section date-time-section">
+                    <Slider {...settings}>
+                        {dateMap}
+                    </Slider>
+                    <div className="screen-time-container">
+                        상영시간
+                    </div>
+                </div>
             </div>
         </div>
     )
