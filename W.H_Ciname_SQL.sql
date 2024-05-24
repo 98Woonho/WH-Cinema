@@ -78,6 +78,7 @@ CREATE TABLE `movie_project_db`.`screen_hall` (
 	id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255),
     theater_name VARCHAR(255),
+    seat_count INT,
     FOREIGN KEY (theater_name) REFERENCES theater(name)
     ON DELETE CASCADE
     ON UPDATE CASCADE
@@ -101,8 +102,8 @@ VALUES('대구 프리미엄', '대구'),
 ('김포', '경기'),
 ('동두천', '경기');
 
-INSERT INTO `movie_project_db`.`screen_hall` (name, theater_name)
-VALUES('1관', '대구 프리미엄');
+INSERT INTO `movie_project_db`.`screen_hall` (name, theater_name, seat_count)
+VALUES('1관', '대구 프리미엄', 60);
 
 INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id)
 VALUES ('13:00', '2024-05-24', 1),

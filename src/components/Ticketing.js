@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../css/Ticketing.css';
 import axios from 'axios';
+import userEvent from '@testing-library/user-event';
 
 
 function Ticketing() {
@@ -10,15 +11,17 @@ function Ticketing() {
     const [theaterList, setTheaterList] = useState([]);
     const [regionMap, setRegionMap] = useState(null);
     const [selectedMovieTitle, setSelectedMovieTitle] = useState(null);
+    const [selectedRegion, setSelectedRegion] = useState(null);
 
     const handleRegion = (region) => {
+        setSelectedRegion(region);
 
         // theaterList에서 매개변수로 전달받은 region에 해당하는 값으로 filter 후 name 값으로만 mapping
         const filteredTheaterNameList = theaterList.filter(theater => theater.region === region).map(theater => theater.name);
 
         // mapping 후 set
         const filteredTheaterNameMap = filteredTheaterNameList.map(filteredTheaterName =>
-            <button onClick={handleName} className='name'>{filteredTheaterName}</button>
+            <button onClick={handleName}>{filteredTheaterName}</button>
         )
 
         setTheaterNameMap(filteredTheaterNameMap);
@@ -75,19 +78,32 @@ function Ticketing() {
 
         // mapping 후 set
         const theaterNameMap = theaterNameList.map(theaterName =>
-            <button onClick={handleName} className='name'>{theaterName}</button>
+            <button onClick={handleName}>{theaterName}</button>
         )
 
         setTheaterNameMap(theaterNameMap);
 
+        setSelectedRegion(uniqueRegions[0]);
+
         // 맵 생성 후 set
         const regionMap = uniqueRegions.map(region =>
             // onClick = { () => 함수명(매개변수) } --> 함수에 매개변수를 담아서 click 이벤트를 발생시키고 싶을 때 위 형태로 작성해야함.
-            <button onClick={() => handleRegion(region)} className='region'>{region}</button>
+            <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
         )
 
         setRegionMap(regionMap);
     }, [theaterList])
+
+    useEffect(() => {
+        const uniqueRegions = [...new Set(theaterList.map(theater => theater.region))];
+
+        const regionMap = uniqueRegions.map(region =>
+            // onClick = { () => 함수명(매개변수) } --> 함수에 매개변수를 담아서 click 이벤트를 발생시키고 싶을 때 위 형태로 작성해야함.
+            <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
+        )
+
+        setRegionMap(regionMap);
+    }, [selectedRegion])
 
     return (
         <div id='main'>

@@ -15,7 +15,6 @@
 .theater-section {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
 }
 
 .movie-section {
@@ -27,7 +26,17 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2rem;
+}
+
+.region-container button {
+    padding: 1rem 0.5rem;
+    width: 100%;
+    text-align: right;
+}
+
+.region-container button.selected {
+    background-color: rgb(66, 66, 66);
+    color: white;
 }
 
 .name-container {
@@ -35,7 +44,12 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 2rem;
+}
+
+.name-container button {
+    padding: 1rem 0.5rem;
+    width: 100%;
+    text-align: left;
 }
 
 .ticketing-container ul li  {
