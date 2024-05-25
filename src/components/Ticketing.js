@@ -164,21 +164,26 @@ function Ticketing() {
 
     useEffect(() => {
         console.log(screenInfoList);
-        const screenInfoMap = screenInfoList.map(screenInfo =>
-            <div>
-                <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
-                <div class='screen-time-container'>
-                    {screenInfo.time.split('|').map(time => (
-                        <div className='screen-time-box'>
-                            <p className='screen-time'>{time}</p>
-                            <p>{screenInfo.seat_count}</p>
-                        </div>
-                    ))}
+        if (screenInfoList.length === 0) {
+            setScreenInfoMap(<div className='screen-info-warning'>
+                <p>영화, 극장, 날짜를 선택해 주세요</p>
+            </div>);
+        } else {
+            const screenInfoMap = screenInfoList.map(screenInfo =>
+                <div>
+                    <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
+                    <div class='screen-time-container'>
+                        {screenInfo.time.split('|').map(time => (
+                            <div className='screen-time-box'>
+                                <p className='screen-time'>{time}</p>
+                                <p>{screenInfo.seat_count}</p>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        )
-
-        setScreenInfoMap(screenInfoMap);
+            )
+            setScreenInfoMap(screenInfoMap);
+        }
 
     }, [screenInfoList])
 
