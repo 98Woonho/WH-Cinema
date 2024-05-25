@@ -6,12 +6,12 @@ import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Simulate } from 'react-dom/test-utils';
 
 
 function Ticketing() {
     const [movieMap, setMovieMap] = useState(null);
     const [movieList, setMovieList] = useState([]);
+    const [theaterNameList, setTheaterNameList] = useState([]);
     const [theaterNameMap, setTheaterNameMap] = useState(null);
     const [theaterList, setTheaterList] = useState([]);
     const [regionMap, setRegionMap] = useState(null);
@@ -29,6 +29,8 @@ function Ticketing() {
 
         // theaterList에서 매개변수로 전달받은 region에 해당하는 값으로 filter 후 name 값으로만 mapping
         const filteredTheaterNameList = theaterList.filter(theater => theater.region === region).map(theater => theater.name);
+
+        setTheaterNameList(filteredTheaterNameList);
 
         // mapping 후 set
         const filteredTheaterNameMap = filteredTheaterNameList.map(name =>
@@ -105,6 +107,8 @@ function Ticketing() {
         // 중복 제거한 지역 리스트의 0번 째 지역의 영화관 이름 리스트 생성
         const theaterNameList = theaterList.filter(theater => theater.region === uniqueRegions[0]).map(theater => theater.name);
 
+        setTheaterNameList(theaterNameList)
+
         // mapping 후 set
         const theaterNameMap = theaterNameList.map(name =>
             <button onClick={() => handleTheaterName(name)}>{name}</button>
@@ -135,18 +139,46 @@ function Ticketing() {
     }, [selectedRegion])
 
     useEffect(() => {
+        const theaterNameMap = theaterNameList.map(name =>
+            <button className={selectedTheaterName === name ? 'selected' : ''} onClick={() => handleTheaterName(name)}>{name}</button>
+        )
+
+        setTheaterNameMap(theaterNameMap);
+    }, [selectedTheaterName])
+
+    useEffect(() => {
         const today = new Date();
 
         const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
-        const dateMap = dateList.map(date =>
-            <button className='date' onClick={() => handleDate(date)}>
-                <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
-                <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'month'}>{date.toISOString().slice(8, 10)}</p>
-                <p>{today.toISOString().slice(0, 10) === date.toISOString().slice(0, 10) ? '오늘' : daysOfWeek[date.getDay()]}</p>
-            </button>
-        )
+        const dateMap = dateList.map(date => {
+            date = new Date(date.getTime() + 9 * 3600 * 1000);
+            return (
+                <button className={selectedDate === date.toISOString().slice(0, 10) ? 'date selected' : 'date'} onClick={() => handleDate(date)}>
+                    <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
+                    <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'day'}>{date.getDate()}</p>
+                    <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
+                </button>
+            )
+        })
+        setDateMap(dateMap);
+    }, [selectedDate])
 
+    useEffect(() => {
+        const today = new Date();
+
+        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+
+        const dateMap = dateList.map(date => {
+            date = new Date(date.getTime() + 9 * 3600 * 1000);
+            return (
+                <button className='date' onClick={() => handleDate(date)}>
+                    <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
+                    <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'month'}>{date.getDate()}</p>
+                    <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
+                </button>
+            )
+        })
         setDateMap(dateMap);
     }, [dateList]);
 
@@ -163,7 +195,6 @@ function Ticketing() {
     }, [selectedMovieTitle, selectedDate, selectedTheaterName])
 
     useEffect(() => {
-        console.log(screenInfoList);
         if (screenInfoList.length === 0) {
             setScreenInfoMap(<div className='screen-info-warning'>
                 <p>영화, 극장, 날짜를 선택해 주세요</p>
@@ -190,7 +221,8 @@ function Ticketing() {
     // slick setting
     const settings = {
         slidesToShow: 8,
-        slidesToScroll: 8
+        slidesToScroll: 8,
+        infinite: false
     }
 
     return (

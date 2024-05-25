@@ -58,12 +58,6 @@ CREATE TABLE `movie_project_db`.`user` (
     role VARCHAR(100)
 );
 
-DROP TABLE `movie_project_db`.`user`;
-
-
-INSERT INTO `movie_project_db`.`user`(`user_id`,`password`,`name`,`birthday`,`phone`, `role`)
-VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150', 'USER');
-
 CREATE TABLE `movie_project_db`.`token` (
 	user_id VARCHAR(100) PRIMARY KEY,
     token VARCHAR(5000)
@@ -95,6 +89,11 @@ CREATE TABLE `movie_project_db`.`screen_info` (
 	ON DELETE CASCADE
     ON UPDATE CASCADE
 ); 
+
+CREATE TABLE `movie_project_db`.`ticketing` ();
+
+INSERT INTO `movie_project_db`.`user`(`user_id`,`password`,`name`,`birthday`,`phone`, `role`)
+VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150', 'USER');
 
 INSERT INTO `movie_project_db`.`theater` (name, region)
 VALUES('대구 프리미엄', '대구'),

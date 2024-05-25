@@ -52,6 +52,11 @@
     text-align: left;
 }
 
+.name-container button.selected {
+    background-color: rgb(66, 66, 66);
+    color: white;
+}
+
 .ticketing-container ul li  {
     display: flex;
     flex-direction: row;
@@ -64,7 +69,6 @@
 
 .ticketing-container ul li.selected {
     background-color: rgb(83, 83, 83);
-
 }
 
 .ticketing-container ul li.selected .title {
@@ -111,10 +115,6 @@
     padding: 0.5rem 0;
 }
 
-.screen-time {
-
-}
-
 .date {
     height: 100px;
     border: 1px solid black;
@@ -125,6 +125,10 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
+}
+
+.date.selected {
+    background-color: rgb(83, 83, 83);
 }
 
 .rating-icon-all, .rating-icon-12, .rating-icon-15, .rating-icon-19 {
