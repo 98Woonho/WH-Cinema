@@ -89,7 +89,9 @@ CREATE TABLE `movie_project_db`.`screen_info` (
     time VARCHAR(255),
     date DATE,
     screen_hall_id BIGINT,
-    FOREIGN KEY (screen_hall_id) REFERENCES `screen_hall` (id)
+    movie_title VARCHAR(255),
+    FOREIGN KEY (screen_hall_id) REFERENCES `screen_hall` (id),
+    FOREIGN KEY (movie_title) REFERENCES `movie` (title)
 	ON DELETE CASCADE
     ON UPDATE CASCADE
 ); 
@@ -103,11 +105,9 @@ VALUES('대구 프리미엄', '대구'),
 ('동두천', '경기');
 
 INSERT INTO `movie_project_db`.`screen_hall` (name, theater_name, seat_count)
-VALUES('1관', '대구 프리미엄', 60);
+VALUES('1관', '대구 프리미엄', 60),
+	  ('2관', 138, '대구 프리미엄');
 
-INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id)
-VALUES ('13:00', '2024-05-24', 1),
-('15:00', '2024-05-24', 1),
-('17:00', '2024-05-24', 1),
-('19:00', '2024-05-24', 1),
-('21:00', '2024-05-24', 1);
+INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id, movie_title)
+VALUES ('13:00|15:00|17:00|19:00|21:00', '2024-05-25', 1, '도뷔시'),
+('14:50', '2024-05-25', 2, '도뷔시');

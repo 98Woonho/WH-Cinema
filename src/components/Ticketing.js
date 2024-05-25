@@ -6,6 +6,7 @@ import axios from 'axios';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Simulate } from 'react-dom/test-utils';
 
 
 function Ticketing() {
@@ -16,8 +17,12 @@ function Ticketing() {
     const [regionMap, setRegionMap] = useState(null);
     const [selectedMovieTitle, setSelectedMovieTitle] = useState(null);
     const [selectedRegion, setSelectedRegion] = useState(null);
+    const [selectedTheaterName, setSelectedTheaterName] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
     const [dateList, setDateList] = useState([]);
     const [dateMap, setDateMap] = useState(null);
+    const [screenInfoList, setScreenInfoList] = useState([]);
+    const [screenInfoMap, setScreenInfoMap] = useState(null);
 
     const handleRegion = (region) => {
         setSelectedRegion(region);
@@ -26,15 +31,19 @@ function Ticketing() {
         const filteredTheaterNameList = theaterList.filter(theater => theater.region === region).map(theater => theater.name);
 
         // mapping 후 set
-        const filteredTheaterNameMap = filteredTheaterNameList.map(filteredTheaterName =>
-            <button onClick={handleTheaterName}>{filteredTheaterName}</button>
+        const filteredTheaterNameMap = filteredTheaterNameList.map(name =>
+            <button onClick={() => handleTheaterName(name)}>{name}</button>
         )
 
         setTheaterNameMap(filteredTheaterNameMap);
     }
 
-    const handleTheaterName = () => {
+    const handleDate = (date) => {
+        setSelectedDate(date.toISOString().slice(0, 10));
+    }
 
+    const handleTheaterName = (name) => {
+        setSelectedTheaterName(name);
     }
 
     const handleTitle = (title) => {
@@ -44,6 +53,7 @@ function Ticketing() {
     useEffect(() => {
         axios.get('/movie')
             .then(res => {
+                // 2024-05-25 - 현재 상영중인 영화만 일단 가져오기(미구현)
                 setMovieList(res.data);
             })
             .catch(err => {
@@ -96,8 +106,8 @@ function Ticketing() {
         const theaterNameList = theaterList.filter(theater => theater.region === uniqueRegions[0]).map(theater => theater.name);
 
         // mapping 후 set
-        const theaterNameMap = theaterNameList.map(theaterName =>
-            <button onClick={handleTheaterName}>{theaterName}</button>
+        const theaterNameMap = theaterNameList.map(name =>
+            <button onClick={() => handleTheaterName(name)}>{name}</button>
         )
 
         setTheaterNameMap(theaterNameMap);
@@ -130,7 +140,7 @@ function Ticketing() {
         const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
         const dateMap = dateList.map(date =>
-            <button className='date'>
+            <button className='date' onClick={() => handleDate(date)}>
                 <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
                 <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'month'}>{date.toISOString().slice(8, 10)}</p>
                 <p>{today.toISOString().slice(0, 10) === date.toISOString().slice(0, 10) ? '오늘' : daysOfWeek[date.getDay()]}</p>
@@ -139,6 +149,38 @@ function Ticketing() {
 
         setDateMap(dateMap);
     }, [dateList]);
+
+    useEffect(() => {
+        if (selectedMovieTitle !== null && selectedDate !== null && selectedTheaterName !== null) {
+            axios.get(`/theater/screenInfo/${selectedMovieTitle}/${selectedDate}/${selectedTheaterName}`)
+                .then(res => {
+                    setScreenInfoList(res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }, [selectedMovieTitle, selectedDate, selectedTheaterName])
+
+    useEffect(() => {
+        console.log(screenInfoList);
+        const screenInfoMap = screenInfoList.map(screenInfo =>
+            <div>
+                <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
+                <div class='screen-time-container'>
+                    {screenInfo.time.split('|').map(time => (
+                        <div className='screen-time-box'>
+                            <p className='screen-time'>{time}</p>
+                            <p>{screenInfo.seat_count}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )
+
+        setScreenInfoMap(screenInfoMap);
+
+    }, [screenInfoList])
 
     // slick setting
     const settings = {
@@ -162,12 +204,12 @@ function Ticketing() {
                         {theaterNameMap}
                     </div>
                 </div>
-                <div className="section date-time-section">
+                <div className="section screen-info-section">
                     <Slider {...settings}>
                         {dateMap}
                     </Slider>
-                    <div className="screen-time-container">
-                        상영시간
+                    <div className="screen-info-container">
+                        {screenInfoMap}
                     </div>
                 </div>
             </div>
