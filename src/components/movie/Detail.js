@@ -23,7 +23,7 @@ function Detail() {
     }, []);
 
     return (
-        <div id='main'>
+        <div id='detailMain' className='main'>
             <div className='detail'>
                 <img src={movie.posters} alt='영화 포스터' />
                 <div>

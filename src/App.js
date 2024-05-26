@@ -31,6 +31,11 @@ a {
   text-decoration: none;
   color: inherit;
 }
+
+.main {
+  display: flex;
+  flex-direction: column;
+}
 `;
 
 function App() {

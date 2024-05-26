@@ -79,7 +79,7 @@ CREATE TABLE `movie_project_db`.`screen_hall` (
 );
 
 CREATE TABLE `movie_project_db`.`screen_info` (
-	id BIGINt PRIMARY KEY AUTO_INCREMENT,
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
     time VARCHAR(255),
     date DATE,
     screen_hall_id BIGINT,
@@ -90,7 +90,18 @@ CREATE TABLE `movie_project_db`.`screen_info` (
     ON UPDATE CASCADE
 ); 
 
-CREATE TABLE `movie_project_db`.`ticketing` ();
+CREATE TABLE `movie_project_db`.`ticketing` (
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+	theater_name VARCHAR(255), 
+	screen_hall_name VARCHAR(255),
+	movie_title VARCHAR(255), 
+	screen_time VARCHAR(255),
+    seat VARCHAR(255),
+    FOREIGN KEY (theater_name) REFERENCES `theater` (name),
+    FOREIGN KEY (movie_title) REFERENCES `movie` (title)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+ );
 
 INSERT INTO `movie_project_db`.`user`(`user_id`,`password`,`name`,`birthday`,`phone`, `role`)
 VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150', 'USER');
@@ -108,5 +119,11 @@ VALUES('1관', '대구 프리미엄', 60),
 	  ('2관', 138, '대구 프리미엄');
 
 INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id, movie_title)
-VALUES ('13:00|15:00|17:00|19:00|21:00', '2024-05-25', 1, '도뷔시'),
-('14:50', '2024-05-25', 2, '도뷔시');
+VALUES ('13:00|15:00|17:00|19:00|21:00', '2024-05-25', 1, '도뷔시');
+
+INSERT INTO `movie_project_db`.`ticketing` (theater_name, screen_hall_name, movie_title, screen_time, seat)
+VALUES ('대구 프리미엄', '1관', '도뷔시', '15:00', '1A, 2A'),
+('대구 프리미엄', '1관', '도뷔시', '19:00', '3A, 4A'),
+('대구 프리미엄', '2관', '도뷔시', '14:50', '5A, 6A'),
+('대구 프리미엄', '1관', '도뷔시', '13:00', '7A, 8A'),
+('대구 프리미엄', '1관', '도뷔시', '13:00', '1A, 2A');

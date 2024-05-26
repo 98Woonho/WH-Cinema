@@ -13,9 +13,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/screenInfo/:title/:date/:theaterName', (req, res) => {
-    const title = req.params.title;
-    const date = req.params.date;
-    const theaterName = req.params.theaterName;
+    const { title, date, theaterName } = req.params;
     db.query(`SELECT si.time AS time,
                      si.date AS date,
                      si.movie_title AS title,
@@ -24,7 +22,8 @@ router.get('/screenInfo/:title/:date/:theaterName', (req, res) => {
                      sh.seat_count AS seat_count
               FROM screen_info si
               JOIN screen_hall sh ON sh.id = si.screen_hall_id
-              WHERE si.movie_title = '${title}' AND si.date = '${date}' AND sh.theater_name = '${theaterName}'`, (err, data) => {
+              WHERE si.movie_title = '${title}' AND si.date = '${date}' AND sh.theater_name = '${theaterName}'
+              ORDER BY sh.name ASC`, (err, data) => {
         if (!err) {
             res.status(200).send(data);
         } else {

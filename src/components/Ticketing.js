@@ -23,6 +23,8 @@ function Ticketing() {
     const [dateMap, setDateMap] = useState(null);
     const [screenInfoList, setScreenInfoList] = useState([]);
     const [screenInfoMap, setScreenInfoMap] = useState(null);
+    const [reservedSeatCountList, setReservedSeatCountList] = useState([]);
+    const [step, setStep] = useState(0);
 
     const handleRegion = (region) => {
         setSelectedRegion(region);
@@ -174,7 +176,7 @@ function Ticketing() {
             return (
                 <button className='date' onClick={() => handleDate(date)}>
                     <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
-                    <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'month'}>{date.getDate()}</p>
+                    <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'day'}>{date.getDate()}</p>
                     <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
                 </button>
             )
@@ -195,6 +197,38 @@ function Ticketing() {
     }, [selectedMovieTitle, selectedDate, selectedTheaterName])
 
     useEffect(() => {
+        const createReservedSeatCountList = async () => {
+            const reservedSeatCountList = [];
+
+            for (const screenInfo of screenInfoList) {
+                for (const time of screenInfo.time.split('|')) {
+                    try {
+                        const res = await axios.get(`/ticketing/${screenInfo.title}/${screenInfo.theater_name}/${screenInfo.screen_hall_name}/${time}`);
+                        let reservedSeatCount = 0;
+
+                        if (res.data.length === 0) {
+                            reservedSeatCountList.push(0);
+                        } else {
+                            res.data.forEach(data => {
+                                reservedSeatCount += data.seat.split(',').length;
+                            });
+                            reservedSeatCountList.push(reservedSeatCount);
+                        }
+                    } catch (err) {
+                        console.error(err);
+                    }
+                }
+            }
+
+            setReservedSeatCountList(reservedSeatCountList);
+        };
+
+        createReservedSeatCountList();
+    }, [screenInfoList])
+
+    useEffect(() => {
+        let idx = -1;
+        reservedSeatCountList[0] = 60;
         if (screenInfoList.length === 0) {
             setScreenInfoMap(<div className='screen-info-warning'>
                 <p>영화, 극장, 날짜를 선택해 주세요</p>
@@ -204,19 +238,19 @@ function Ticketing() {
                 <div>
                     <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
                     <div class='screen-time-container'>
-                        {screenInfo.time.split('|').map(time => (
-                            <div className='screen-time-box'>
+                        {screenInfo.time.split('|').map(time => {
+                            return (<button className={screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-box' : 'screen-time-box'}>
                                 <p className='screen-time'>{time}</p>
-                                <p>{screenInfo.seat_count}</p>
-                            </div>
-                        ))}
+                                <p className={screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? 'red' : ''}>{screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? '매진' : screenInfo.seat_count - reservedSeatCountList[idx] + ' / ' + screenInfo.seat_count}</p>
+                            </button>)
+                        })}
                     </div>
                 </div>
+
             )
             setScreenInfoMap(screenInfoMap);
         }
-
-    }, [screenInfoList])
+    }, [reservedSeatCountList])
 
     // slick setting
     const settings = {
@@ -226,8 +260,8 @@ function Ticketing() {
     }
 
     return (
-        <div id='main'>
-            <div className="ticketing-container">
+        <div id='ticketingMain' className='main'>
+            <div className="option-container">
                 <div className="section movie-section">
                     <ul>
                         {movieMap}
@@ -249,6 +283,9 @@ function Ticketing() {
                         {screenInfoMap}
                     </div>
                 </div>
+            </div>
+            <div className="confirm-container">
+                
             </div>
         </div>
     )

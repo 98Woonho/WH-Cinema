@@ -1,4 +1,4 @@
-.ticketing-container {
+.option-container {
     margin-top: 5rem;
     background-color: aliceblue;
 
@@ -57,7 +57,7 @@
     color: white;
 }
 
-.ticketing-container ul li  {
+.option-container ul li  {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -67,15 +67,15 @@
     margin-bottom: 0.5rem;
 }
 
-.ticketing-container ul li.selected {
+.option-container ul li.selected {
     background-color: rgb(83, 83, 83);
 }
 
-.ticketing-container ul li.selected .title {
+.option-container ul li.selected .title {
     color: white;
 }
 
-.ticketing-container ul li .title {
+.option-container ul li .title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -114,6 +114,11 @@
     margin: 0.5rem;
     padding: 0.5rem 0;
 }
+
+.screen-time-box.full-reservation {
+    opacity: 0.5;
+    cursor: default;
+} 
 
 .date {
     height: 100px;
@@ -165,4 +170,10 @@
 
 .red {
     color: red;
+}
+
+.confirm-container {
+    height: 250px;
+    border: 1px solid black;
+    background-color: bisque;
 }
