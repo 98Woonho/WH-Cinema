@@ -24,7 +24,11 @@ function Ticketing() {
     const [screenInfoList, setScreenInfoList] = useState([]);
     const [screenInfoMap, setScreenInfoMap] = useState(null);
     const [reservedSeatCountList, setReservedSeatCountList] = useState([]);
+    const [moviePoster, setMoviePoster] = useState(null);
+    const [screenTime, setScreenTime] = useState(null);
+    const [screenHallName, setScreenHallName] = useState(null);
     const [step, setStep] = useState(0);
+    
 
     const handleRegion = (region) => {
         setSelectedRegion(region);
@@ -42,6 +46,11 @@ function Ticketing() {
         setTheaterNameMap(filteredTheaterNameMap);
     }
 
+    const handleScreenTimeAndHall = (time, hallName) => {
+        setScreenTime(time);
+        setScreenHallName(hallName);
+    }
+
     const handleDate = (date) => {
         setSelectedDate(date.toISOString().slice(0, 10));
     }
@@ -51,6 +60,14 @@ function Ticketing() {
     }
 
     const handleTitle = (title) => {
+        axios.get(`/movie/${title}`)
+            .then(res => {
+                setMoviePoster(res.data[0].poster);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
         setSelectedMovieTitle(title);
     }
 
@@ -154,11 +171,10 @@ function Ticketing() {
         const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
         const dateMap = dateList.map(date => {
-            date = new Date(date.getTime() + 9 * 3600 * 1000);
             return (
-                <button className={selectedDate === date.toISOString().slice(0, 10) ? 'date selected' : 'date'} onClick={() => handleDate(date)}>
+                <button className={selectedDate === date.toISOString().slice(0, 10) ? 'day selected' : 'day'} onClick={() => handleDate(date)}>
                     <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
-                    <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'day'}>{date.getDate()}</p>
+                    <p className={date.getDay() === 6 ? 'blue' : date.getDay() === 0 ? 'red' : ''}>{date.getDate()}</p>
                     <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
                 </button>
             )
@@ -172,11 +188,11 @@ function Ticketing() {
         const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
         const dateMap = dateList.map(date => {
-            date = new Date(date.getTime() + 9 * 3600 * 1000);
+            date = new Date(date.getTime());
             return (
-                <button className='date' onClick={() => handleDate(date)}>
+                <button className='day' onClick={() => handleDate(date)}>
                     <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
-                    <p className={date.getDay() === 6 ? 'day blue' : date.getDay() === 0 ? 'day red' : 'day'}>{date.getDate()}</p>
+                    <p className={date.getDay() === 6 ? 'd==blue' : date.getDay() === 0 ? 'red' : '='}>{date.getDate()}</p>
                     <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
                 </button>
             )
@@ -228,7 +244,6 @@ function Ticketing() {
 
     useEffect(() => {
         let idx = -1;
-        reservedSeatCountList[0] = 60;
         if (screenInfoList.length === 0) {
             setScreenInfoMap(<div className='screen-info-warning'>
                 <p>영화, 극장, 날짜를 선택해 주세요</p>
@@ -239,7 +254,7 @@ function Ticketing() {
                     <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
                     <div class='screen-time-container'>
                         {screenInfo.time.split('|').map(time => {
-                            return (<button className={screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-box' : 'screen-time-box'}>
+                            return (<button onClick={() => handleScreenTimeAndHall(time, screenInfo.screen_hall_name)} className={screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-box' : 'screen-time-box'}>
                                 <p className='screen-time'>{time}</p>
                                 <p className={screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? 'red' : ''}>{screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? '매진' : screenInfo.seat_count - reservedSeatCountList[idx] + ' / ' + screenInfo.seat_count}</p>
                             </button>)
@@ -261,13 +276,13 @@ function Ticketing() {
 
     return (
         <div id='ticketingMain' className='main'>
-            <div className="option-container">
-                <div className="section movie-section">
+            <div className='ticketing-option-container'>
+                <div className='section movie-section'>
                     <ul>
                         {movieMap}
                     </ul>
                 </div>
-                <div className="section theater-section">
+                <div className='section theater-section'>
                     <div class='region-container'>
                         {regionMap}
                     </div>
@@ -275,17 +290,46 @@ function Ticketing() {
                         {theaterNameMap}
                     </div>
                 </div>
-                <div className="section screen-info-section">
+                <div className='section screen-info-section'>
                     <Slider {...settings}>
                         {dateMap}
                     </Slider>
-                    <div className="screen-info-container">
+                    <div className='screen-info-container'>
                         {screenInfoMap}
                     </div>
                 </div>
             </div>
-            <div className="confirm-container">
-                
+            <div className='ticketing-info-container'>
+                <div className='movie'>
+                    {moviePoster === null ? <p>영화선택</p> : <img className='poster' src={moviePoster} />}
+                </div>
+                <div className='theater'>
+                    <div className='info name'>
+                        <span>극장</span>
+                        <span>{selectedTheaterName}</span>
+                    </div>
+                    <div className='info date'>
+                        <span>일시</span>
+                        <span>{selectedDate} {screenTime}</span>
+                    </div>
+                    <div className='info screen-hall'>
+                        <span>상영관</span>
+                        <span>{screenHallName}</span>
+                    </div>
+                    <div className='info people'>
+                        <span>인원</span>
+                        <span></span>
+                    </div>
+                </div>
+                <div className="seat">
+                    좌석 선택
+                </div>
+                <div className="payment">
+                    결제
+                </div>
+                <button className="next-step-btn">
+                    
+                </button>
             </div>
         </div>
     )

@@ -1,4 +1,4 @@
-.option-container {
+.ticketing-option-container {
     margin-top: 5rem;
     background-color: aliceblue;
 
@@ -57,7 +57,7 @@
     color: white;
 }
 
-.option-container ul li  {
+.ticketing-option-container ul li  {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -67,15 +67,15 @@
     margin-bottom: 0.5rem;
 }
 
-.option-container ul li.selected {
+.ticketing-option-container ul li.selected {
     background-color: rgb(83, 83, 83);
 }
 
-.option-container ul li.selected .title {
+.ticketing-option-container ul li.selected .title {
     color: white;
 }
 
-.option-container ul li .title {
+.ticketing-option-container ul li .title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -120,7 +120,7 @@
     cursor: default;
 } 
 
-.date {
+.day {
     height: 100px;
     border: 1px solid black;
     border-radius: 5px;
@@ -132,7 +132,7 @@
     gap: 1rem;
 }
 
-.date.selected {
+.day.selected {
     background-color: rgb(83, 83, 83);
 }
 
@@ -172,8 +172,18 @@
     color: red;
 }
 
-.confirm-container {
-    height: 250px;
+.ticketing-info-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+
+    padding: 0 2rem;
+    height: 350px;
     border: 1px solid black;
     background-color: bisque;
+}
+
+.next-step-btn {
+    
 }

@@ -123,7 +123,7 @@ function Movie() {
       data =>
         <div className='movie'>
           <a href={`/movie/detail?title=${data.title}`}>
-            <img src={data.posters} alt='영화 포스터' />
+            <img src={data.poster} alt='영화 포스터' />
           </a>
           <div className='title'>
             {data.title}
@@ -137,7 +137,7 @@ function Movie() {
   }, [movieList])
 
   return (
-    <div id='main'>
+    <div className='main' id='movieMain'>
       <div>
         <button onClick={currentMovieList}>현재 상영작</button>
         <button onClick={scheduledMovieList}>상영 예정작</button>
