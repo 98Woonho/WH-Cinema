@@ -116,7 +116,7 @@ VALUES('대구 프리미엄', '대구'),
 
 INSERT INTO `movie_project_db`.`screen_hall` (name, theater_name, seat_count)
 VALUES('1관', '대구 프리미엄', 60),
-	  ('2관', 138, '대구 프리미엄');
+	  ('2관', '대구 프리미엄', 138);
 
 INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id, movie_title)
 VALUES ('13:00|15:00|17:00|19:00|21:00', '2024-05-25', 1, '도뷔시'),
