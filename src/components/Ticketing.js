@@ -25,11 +25,12 @@ function Ticketing() {
     const [screenInfoMap, setScreenInfoMap] = useState(null);
     const [reservedSeatCountList, setReservedSeatCountList] = useState([]);
     const [moviePoster, setMoviePoster] = useState(null);
-    const [screenTime, setScreenTime] = useState(null);
-    const [screenHallName, setScreenHallName] = useState(null);
+    const [selectedScreenTime, setSelectedScreenTime] = useState(null);
+    const [selectedScreenHallName, setSelectedScreenHallName] = useState(null);
     const [step, setStep] = useState(0);
-    
 
+
+    // 지역 선택 함수
     const handleRegion = (region) => {
         setSelectedRegion(region);
 
@@ -46,20 +47,25 @@ function Ticketing() {
         setTheaterNameMap(filteredTheaterNameMap);
     }
 
+    // 상영시간, 상영관 선택 함수
     const handleScreenTimeAndHall = (time, hallName) => {
-        setScreenTime(time);
-        setScreenHallName(hallName);
+        setSelectedScreenTime(time);
+        setSelectedScreenHallName(hallName);
     }
 
+    // 날짜 선택 함수
     const handleDate = (date) => {
         setSelectedDate(date.toISOString().slice(0, 10));
     }
 
+    // 극장 선택 함수
     const handleTheaterName = (name) => {
         setSelectedTheaterName(name);
     }
 
-    const handleTitle = (title) => {
+    // 영화 선택 함수
+    const handleMovie = (title) => {
+        // 선택한 영화 포스터 가져오기
         axios.get(`/movie/${title}`)
             .then(res => {
                 setMoviePoster(res.data[0].poster);
@@ -72,15 +78,16 @@ function Ticketing() {
     }
 
     useEffect(() => {
+        // 2024-05-28 :: 현재 상영중 영화 리스트 가져오기 (구현 예정)
         axios.get('/movie')
             .then(res => {
-                // 2024-05-25 - 현재 상영중인 영화만 일단 가져오기(미구현)
                 setMovieList(res.data);
             })
             .catch(err => {
                 console.log(err);
             })
 
+        // 극장 리스트 가져오기
         axios.get('/theater')
             .then(res => {
                 setTheaterList(res.data);
@@ -88,6 +95,9 @@ function Ticketing() {
             .catch(err => {
                 console.log(err);
             })
+
+        
+        // 오늘 기준 한달 뒤 날짜 리스트 생성
 
         // 오늘 날짜 
         const today = new Date();
@@ -103,9 +113,10 @@ function Ticketing() {
         setDateList(dateList);
     }, []);
 
+    // 영화 목록 Map set
     useEffect(() => {
         const MovieMap = movieList.map(movie =>
-            <li onClick={() => handleTitle(movie.title)} className={selectedMovieTitle === movie.title ? 'selected' : ''}>
+            <li onClick={() => handleMovie(movie.title)} className={selectedMovieTitle === movie.title ? 'selected' : ''}>
                 <span className={movie.rating === '전체관람가' ? 'rating-icon-all' : movie.rating === '12세이상관람가' ? 'rating-icon-12' : movie.rating === '15세이상관람가' ? 'rating-icon-15' : 'rating-icon-19'}>{movie.rating === '전체관람가' ? 'All' : movie.rating === '12세이상관람가' ? '12' : movie.rating === '15세이상관람가' ? '15' : '19'}
                 </span>
                 <span className='title'>{movie.title}</span>
@@ -146,41 +157,39 @@ function Ticketing() {
         setRegionMap(regionMap);
     }, [theaterList])
 
+    // 지역 선택 시 selected class 추가 및 극장 버튼의 selected class 모두 제거
     useEffect(() => {
-        const uniqueRegions = [...new Set(theaterList.map(theater => theater.region))];
+        // 선택한 지역에 selected class 추가
+        const regionBtns = document.querySelectorAll('.region-container button');
 
-        const regionMap = uniqueRegions.map(region =>
-            // onClick = { () => 함수명(매개변수) } --> 함수에 매개변수를 담아서 click 이벤트를 발생시키고 싶을 때 위 형태로 작성해야함.
-            <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
-        )
+        regionBtns.forEach(btn => {
+            if (selectedRegion === btn.innerText) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+        })
 
-        setRegionMap(regionMap);
+        // 지역 선택 시 이전에 선택한 극장 버튼의 selected가 남아있어서 극장 버튼의 selected 모두 제거
+        const theaterNameBtns = document.querySelectorAll('.theater-name-container button');
+
+        theaterNameBtns.forEach(btn => {
+                btn.classList.remove('selected');
+        })
     }, [selectedRegion])
 
+    // 극장 선택 시 selected class 추가
     useEffect(() => {
-        const theaterNameMap = theaterNameList.map(name =>
-            <button className={selectedTheaterName === name ? 'selected' : ''} onClick={() => handleTheaterName(name)}>{name}</button>
-        )
+        const theaterNameBtns = document.querySelectorAll('.theater-name-container button');
 
-        setTheaterNameMap(theaterNameMap);
-    }, [selectedTheaterName])
-
-    useEffect(() => {
-        const today = new Date();
-
-        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-
-        const dateMap = dateList.map(date => {
-            return (
-                <button className={selectedDate === date.toISOString().slice(0, 10) ? 'day selected' : 'day'} onClick={() => handleDate(date)}>
-                    <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
-                    <p className={date.getDay() === 6 ? 'blue' : date.getDay() === 0 ? 'red' : ''}>{date.getDate()}</p>
-                    <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
-                </button>
-            )
+        theaterNameBtns.forEach(btn => {
+            if (selectedTheaterName === btn.innerText) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
         })
-        setDateMap(dateMap);
-    }, [selectedDate])
+    }, [selectedTheaterName])
 
     useEffect(() => {
         const today = new Date();
@@ -190,15 +199,15 @@ function Ticketing() {
         const dateMap = dateList.map(date => {
             date = new Date(date.getTime());
             return (
-                <button className='day' onClick={() => handleDate(date)}>
+                <button className={selectedDate === date.toISOString().slice(0, 10) ? 'selected day-btn' : 'day-btn'} onClick={() => handleDate(date)}>
                     <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
-                    <p className={date.getDay() === 6 ? 'd==blue' : date.getDay() === 0 ? 'red' : '='}>{date.getDate()}</p>
+                    <p className={date.getDay() === 6 ? 'blue' : date.getDay() === 0 ? 'red' : ''}>{date.getDate()}</p>
                     <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
                 </button>
             )
         })
         setDateMap(dateMap);
-    }, [dateList]);
+    }, [dateList, selectedDate]);
 
     useEffect(() => {
         if (selectedMovieTitle !== null && selectedDate !== null && selectedTheaterName !== null) {
@@ -254,7 +263,7 @@ function Ticketing() {
                     <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
                     <div class='screen-time-container'>
                         {screenInfo.time.split('|').map(time => {
-                            return (<button onClick={() => handleScreenTimeAndHall(time, screenInfo.screen_hall_name)} className={screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-box' : 'screen-time-box'}>
+                            return (<button onClick={() => handleScreenTimeAndHall(time, screenInfo.screen_hall_name)} className={screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-btn' : 'screen-time-btn'}>
                                 <p className='screen-time'>{time}</p>
                                 <p className={screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? 'red' : ''}>{screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? '매진' : screenInfo.seat_count - reservedSeatCountList[idx] + ' / ' + screenInfo.seat_count}</p>
                             </button>)
@@ -266,6 +275,21 @@ function Ticketing() {
             setScreenInfoMap(screenInfoMap);
         }
     }, [reservedSeatCountList])
+
+    useEffect(() => {
+        const screenTimeBtns = document.querySelectorAll('.screen-time-btn');
+
+        screenTimeBtns.forEach(btn => {
+            const screenTime = btn.querySelector('.screen-time');
+
+            if (screenTime.innerText === selectedScreenTime) {
+                btn.classList.add('selected');
+            } else {
+                btn.classList.remove('selected');
+            }
+
+        })
+    }, [selectedScreenTime])
 
     // slick setting
     const settings = {
@@ -286,7 +310,7 @@ function Ticketing() {
                     <div class='region-container'>
                         {regionMap}
                     </div>
-                    <div class='name-container'>
+                    <div class='theater-name-container'>
                         {theaterNameMap}
                     </div>
                 </div>
@@ -310,11 +334,11 @@ function Ticketing() {
                     </div>
                     <div className='info date'>
                         <span>일시</span>
-                        <span>{selectedDate} {screenTime}</span>
+                        <span>{selectedDate} {selectedScreenTime}</span>
                     </div>
                     <div className='info screen-hall'>
                         <span>상영관</span>
-                        <span>{screenHallName}</span>
+                        <span>{selectedScreenHallName}</span>
                     </div>
                     <div className='info people'>
                         <span>인원</span>
@@ -328,7 +352,7 @@ function Ticketing() {
                     결제
                 </div>
                 <button className="next-step-btn">
-                    
+
                 </button>
             </div>
         </div>
