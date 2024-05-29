@@ -189,5 +189,100 @@
 }
 
 .next-step-btn {
-    
+    width: 100px;
+    height: 100px;
+
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: red;
+}
+
+.select-seat-container {
+    display: flex;
+    flex-direction: column;
+
+    height: 700px;
+}
+
+.people {
+    position: relative;
+    background-color: blanchedalmond;
+    border-bottom: 1px solid rgb(175, 150, 114);
+    height: 30%;
+}
+
+.people ul {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.people-type {
+    display: inline-block;
+    width: 80px;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.people-count {
+    width: 30px;
+    height: 30px;
+
+    border: 1px solid rgb(191, 173, 173);
+}
+
+.people-count.selected {
+    background-color: rgb(101, 101, 101);
+    color: white;
+}
+
+.seat-info {
+    height: 70%;
+    display: flex;
+    flex-direction: row;
+}
+
+.seat-left {
+    position: relative;
+    width: 80%;
+    background-color: antiquewhite;
+}
+
+.seat-right {
+    width: 20%;
+    background-color: chartreuse;
+}
+
+.seat-box {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.screen {
+    position: relative;
+    top: 60px;
+    margin: 0 auto;
+    width: 600px;
+    text-align: center;
+    background-color: rgb(204, 204, 204);
+}
+
+.seat-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    margin-bottom: 0.5rem;
+}
+
+.seat {
+    width: 20px;
+    height: 20px;
+    background-color: azure;
 }
