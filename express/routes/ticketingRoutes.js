@@ -14,4 +14,6 @@ router.get('/:title/:theaterName/:screenHallName/:time', (req, res) => {
     })
 })
 
+
+
 module.exports = router;

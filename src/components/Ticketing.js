@@ -25,6 +25,9 @@ function Ticketing() {
     const [screenInfoList, setScreenInfoList] = useState([]);
     const [screenInfoMap, setScreenInfoMap] = useState(null);
     const [reservedSeatCountList, setReservedSeatCountList] = useState([]);
+    const [reservedSeatList, setReservedSeatList] = useState([]);
+    const [selectedSeatList, setSelectedSeatList] = useState([]);
+    const [selectedSeatMap, setSelectedSeatMap] = useState(null);
     const [moviePoster, setMoviePoster] = useState(null);
     const [selectedScreenTime, setSelectedScreenTime] = useState(null);
     const [selectedScreenHallName, setSelectedScreenHallName] = useState(null);
@@ -92,7 +95,6 @@ function Ticketing() {
 
     // 다음 스텝 버튼 클릭 함수
     const handleNextStepBtn = () => {
-        console.log(selectedMovieTitle);
         if (!selectedMovieTitle) {
             alert('영화를 선택해 주세요.');
             return;
@@ -113,7 +115,34 @@ function Ticketing() {
             return;
         }
 
+        axios.get(`/ticketing/${selectedMovieTitle}/${selectedTheaterName}/${selectedScreenHallName}/${selectedScreenTime}`)
+            .then(res => {
+                const reservedSeatList = res.data.map(data =>
+                    data.seat.split(', ')
+                ).flat();
+                setReservedSeatList(reservedSeatList);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
         setStep(2);
+    }
+
+    // 좌석 버튼 클릭 함수
+    const selectSeat = (seat) => {
+        console.log(adult);
+        // 이미 선택된 좌석을 눌렀을 때 -> selected 제거
+        if (seat.classList.contains('selected')) {
+            // selectedSeatList에서 제거
+            setSelectedSeatList(prevSelectedSeatList => prevSelectedSeatList.filter(num => num !== seat.dataset.num));
+            seat.classList.remove('selected');
+        } else {
+            // selectedSeatList에 추가
+            // ...(요소명) : 요소명의 이전 값을 뜻함.
+            setSelectedSeatList(prevSelectedSeatList => [...prevSelectedSeatList, seat.dataset.num]);
+            seat.classList.add('selected');
+        }
     }
 
     useEffect(() => {
@@ -318,25 +347,52 @@ function Ticketing() {
         }
     }, [reservedSeatCountList, selectedScreenTime])
 
-    // step 변경
+    // 좌석 map set
     useEffect(() => {
         if (step === 2) {
+            const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+            let idx = 0;
             const theaterData = seatsData[selectedTheaterName];
             if (theaterData) {
-                const seatMap = theaterData[selectedScreenHallName].map(row =>
-                    <div className="seat-row">
-                        {row.map(seat =>
-                            <div className="seat">
-                                {seat}
-                            </div>
-                        )}
-                    </div>
-                )
+                const seatMap = theaterData[selectedScreenHallName].map(row => {
+                    return (
+                        <div className='seat-row'>
+                            <div className='column'>{columnList[idx++]}</div>
+                            {row.map(seat =>
+                            // e.currentTarget : 자기 자신 요소
+                                <button data-num={columnList[idx - 1] + seat} className={`${seat === '' ? 'seat empty' : 'seat'} ${reservedSeatList.indexOf(columnList[idx - 1] + seat) === -1 ? '' : 'reserved'}`} onClick={(e) => selectSeat(e.currentTarget)}>
+                                    <p className='seat-number'>{seat}</p>
+                                </button>
+                            )}
+                        </div>
+                    )
+                })
                 setSeatMap(seatMap);
             }
         }
+    }, [reservedSeatList])
 
-    }, [step])
+    // 인원 선택 안 했을 시, 좌석 선택 못하게 filter 적용
+    useEffect(() => {
+        if (step === 2) {
+            const filter = document.querySelector('.filter');
+            if (adult === 0 && youth === 0) {
+                filter.style.zIndex = '1';
+            } else {
+                filter.style.zIndex = 'unset';
+            }
+        }
+    }, [adult, youth])
+
+    // 
+    useEffect(() => {
+        const selectedSeatMap = selectedSeatList.map((selectedSeat, index) =>
+            <span>
+                {index === selectedSeatList.length - 1 ? selectedSeat : `${selectedSeat}, `}
+            </span>
+        )
+        setSelectedSeatMap(selectedSeatMap);
+    }, [selectedSeatList])
 
     // slick setting
     const settings = {
@@ -398,7 +454,8 @@ function Ticketing() {
                             </ul>
                         </div>
 
-                        <div className="seat-info">
+                        <div className='seat-info'>
+                            <div className='filter'></div>
                             <div className='seat-left'>
                                 <div className="screen">
                                     스크린
@@ -407,7 +464,16 @@ function Ticketing() {
                                     {seatMap}
                                 </div>
                             </div>
-                            <div className='seat-right'></div>
+                            <div className='seat-right'>
+                                <div>
+                                    <span className='select-icon'></span>
+                                    <span>선택</span>
+                                </div>
+                                <div>
+                                    <span className='reserved-seat-icon'></span>
+                                    <span>예매 완료</span>
+                                </div>
+                            </div>
                         </div>
 
                     </div>
@@ -435,7 +501,8 @@ function Ticketing() {
                     </div>
                 </div>
                 <div>
-                    좌석 선택
+                    <span>좌석</span>
+                    {selectedSeatMap}
                 </div>
                 <div className="payment">
                     결제
