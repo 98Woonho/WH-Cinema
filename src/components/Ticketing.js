@@ -33,17 +33,24 @@ function Ticketing() {
     const [selectedScreenHallName, setSelectedScreenHallName] = useState(null);
     const [seatMap, setSeatMap] = useState(null);
     const [step, setStep] = useState(1);
+    const [personnelList, setPersonnelList] = useState([0, 1, 2, 3, 4]);
+    const [columnList, setColumnList] = useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']);
     const [adult, setAdult] = useState(0);
+    const [tempAdult, setTempAdult] = useState(0);
     const [youth, setYouth] = useState(0);
+    const [tempYouth, setTempYouth] = useState(0);
+    const [adultMap, setAdultMap] = useState(null);
+    const [youthMap, setYouthMap] = useState(null);
+
 
     // 성인 
     const handleAdult = (count) => {
-        setAdult(count);
+        setTempAdult(count);
     }
 
     // 청소년
     const handleYouth = (count) => {
-        setYouth(count);
+        setTempYouth(count);
     }
 
     // 지역 선택 함수
@@ -121,27 +128,29 @@ function Ticketing() {
                     data.seat.split(', ')
                 ).flat();
                 setReservedSeatList(reservedSeatList);
+                setStep(2);
             })
             .catch(err => {
                 console.log(err);
             })
+    }
 
-        setStep(2);
+    const handlePrevStepBtn = () => {
+        if (step === 2) {
+            setStep(1);
+        }
     }
 
     // 좌석 버튼 클릭 함수
     const selectSeat = (seat) => {
-        console.log(adult);
         // 이미 선택된 좌석을 눌렀을 때 -> selected 제거
         if (seat.classList.contains('selected')) {
             // selectedSeatList에서 제거
             setSelectedSeatList(prevSelectedSeatList => prevSelectedSeatList.filter(num => num !== seat.dataset.num));
-            seat.classList.remove('selected');
         } else {
             // selectedSeatList에 추가
             // ...(요소명) : 요소명의 이전 값을 뜻함.
             setSelectedSeatList(prevSelectedSeatList => [...prevSelectedSeatList, seat.dataset.num]);
-            seat.classList.add('selected');
         }
     }
 
@@ -220,9 +229,82 @@ function Ticketing() {
             // onClick = { () => 함수명(매개변수) } --> 함수에 매개변수를 담아서 click 이벤트를 발생시키고 싶을 때 위 형태로 작성해야함.
             <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
         )
-
         setRegionMap(regionMap);
     }, [theaterList])
+
+
+    useEffect(() => {
+        if (step === 1) {
+            const uniqueRegions = [...new Set(theaterList.map(theater => theater.region))];
+
+            const theaterNameMap = theaterNameList.map(name =>
+                <button className={selectedTheaterName === name ? 'selected' : ''} onClick={() => handleTheaterName(name)}>{name}</button>
+            )
+
+            setTheaterNameMap(theaterNameMap);
+
+            // 맵 생성 후 set
+            const regionMap = uniqueRegions.map(region =>
+                // onClick = { () => 함수명(매개변수) } --> 함수에 매개변수를 담아서 click 이벤트를 발생시키고 싶을 때 위 형태로 작성해야함.
+                <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
+            )
+            setRegionMap(regionMap);
+        }
+
+        if (step === 2) {
+            const adultMap = personnelList.map(count =>
+                <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
+            )
+
+            setAdultMap(adultMap);
+
+            const youthMap = personnelList.map(count =>
+                <button className={youth === count ? 'selected people-count' : 'people-count'} onClick={() => handleYouth(count)}>{count}</button>
+            )
+
+            setYouthMap(youthMap);
+
+            let idx = 0;
+            const theaterData = seatsData[selectedTheaterName];
+            if (theaterData) {
+                const seatMap = theaterData[selectedScreenHallName].map(row => {
+                    return (
+                        <div className='seat-row'>
+                            <div className='column'>{columnList[idx++]}</div>
+                            {row.map(seat =>
+                                // e.currentTarget : 자기 자신 요소
+                                <button data-num={columnList[idx - 1] + seat} className={`${seat === '' ? 'seat empty' : 'seat'} ${reservedSeatList.indexOf(columnList[idx - 1] + seat) === -1 ? '' : 'reserved'}`} onClick={(e) => selectSeat(e.currentTarget)}>
+                                    <p className='seat-number'>{seat}</p>
+                                </button>
+                            )}
+                        </div>
+                    )
+                })
+                setSeatMap(seatMap);
+            }
+
+        }
+    }, [step])
+
+    useEffect(() => {
+        if (adult + youth < selectedSeatList.length) {
+            alert('이미 모든 좌석을 선택 하였습니다.');
+
+            setSelectedSeatList(selectedSeatList.slice(0, -1)); // 배열의 첫 번째 요소부터 마지막을 제외한 요소까지 저장
+
+            return;
+        }
+        
+        const seats = document.querySelectorAll('.seat');
+        seats.forEach(seat => {
+            if (selectedSeatList.includes(seat.dataset.num)) {
+                seat.classList.add('selected');
+            } else {
+                seat.classList.remove('selected');
+            }
+        })
+    }, [selectedSeatList])
+
 
     // 지역 선택 시 선택 요소에 selected class 추가 및 극장 버튼의 selected class 모두 제거
     useEffect(() => {
@@ -284,7 +366,6 @@ function Ticketing() {
                     setScreenInfoList(res.data);
                 })
                 .catch(err => {
-                    console.log(err);
                 })
         }
     }, [selectedMovieTitle, selectedDate, selectedTheaterName])
@@ -347,34 +428,15 @@ function Ticketing() {
         }
     }, [reservedSeatCountList, selectedScreenTime])
 
-    // 좌석 map set
-    useEffect(() => {
-        if (step === 2) {
-            const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-            let idx = 0;
-            const theaterData = seatsData[selectedTheaterName];
-            if (theaterData) {
-                const seatMap = theaterData[selectedScreenHallName].map(row => {
-                    return (
-                        <div className='seat-row'>
-                            <div className='column'>{columnList[idx++]}</div>
-                            {row.map(seat =>
-                            // e.currentTarget : 자기 자신 요소
-                                <button data-num={columnList[idx - 1] + seat} className={`${seat === '' ? 'seat empty' : 'seat'} ${reservedSeatList.indexOf(columnList[idx - 1] + seat) === -1 ? '' : 'reserved'}`} onClick={(e) => selectSeat(e.currentTarget)}>
-                                    <p className='seat-number'>{seat}</p>
-                                </button>
-                            )}
-                        </div>
-                    )
-                })
-                setSeatMap(seatMap);
-            }
-        }
-    }, [reservedSeatList])
-
     // 인원 선택 안 했을 시, 좌석 선택 못하게 filter 적용
     useEffect(() => {
         if (step === 2) {
+            const adultMap = personnelList.map(count =>
+                <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
+            )
+
+            setAdultMap(adultMap);
+
             const filter = document.querySelector('.filter');
             if (adult === 0 && youth === 0) {
                 filter.style.zIndex = '1';
@@ -382,17 +444,41 @@ function Ticketing() {
                 filter.style.zIndex = 'unset';
             }
         }
-    }, [adult, youth])
+    }, [adult])
 
-    // 
     useEffect(() => {
-        const selectedSeatMap = selectedSeatList.map((selectedSeat, index) =>
-            <span>
-                {index === selectedSeatList.length - 1 ? selectedSeat : `${selectedSeat}, `}
-            </span>
-        )
-        setSelectedSeatMap(selectedSeatMap);
-    }, [selectedSeatList])
+        if (tempAdult + youth < selectedSeatList.length) {
+            alert('선택한 좌석이 예매 인원보다 많습니다.');
+        } else {
+            setAdult(tempAdult);
+        }
+    }, [tempAdult])
+
+    useEffect(() => {
+        if (step === 2) {
+            const youthMap = personnelList.map(count =>
+                <button className={youth === count ? 'selected people-count' : 'people-count'} onClick={() => handleYouth(count)}>{count}</button>
+            )
+
+            setYouthMap(youthMap);
+            console.log(youth);
+
+            const filter = document.querySelector('.filter');
+            if (adult === 0 && youth === 0) {
+                filter.style.zIndex = '1';
+            } else {
+                filter.style.zIndex = 'unset';
+            }
+        }
+    }, [youth])
+
+    useEffect(() => {
+        if (adult + tempYouth < selectedSeatList.length) {
+            alert('선택한 좌석이 예매 인원보다 많습니다.');
+        } else {
+            setYouth(tempYouth);
+        }
+    }, [tempYouth])
 
     // slick setting
     const settings = {
@@ -434,21 +520,13 @@ function Ticketing() {
                                 <li>
                                     <span className='people-type'>일반</span>
                                     <span>
-                                        {
-                                            [0, 1, 2, 3, 4].map(count =>
-                                                <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
-                                            )
-                                        }
+                                        {adultMap}
                                     </span>
                                 </li>
                                 <li>
                                     <span className='people-type'>청소년</span>
                                     <span>
-                                        {
-                                            [0, 1, 2, 3, 4].map(count =>
-                                                <button className={youth === count ? 'selected people-count' : 'people-count'} onClick={() => handleYouth(count)}>{count}</button>
-                                            )
-                                        }
+                                        {youthMap}
                                     </span>
                                 </li>
                             </ul>
@@ -479,6 +557,11 @@ function Ticketing() {
                     </div>
             }
             <div className='ticketing-info-container'>
+                {step === 2 ?
+                    <button onClick={handlePrevStepBtn}>영화 선택</button>
+                    : ''
+                }
+
                 <div className='movie'>
                     {moviePoster === null ? <p>영화선택</p> : <img className='poster' src={moviePoster} />}
                 </div>
