@@ -8,6 +8,12 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+let adultCount = 0;
+let youthCount = 0;
+let adultCost;
+let youthCost;
+let isFullSelectedSeat = false;
+let isDeletedSelectedSeat = false;
 
 function Ticketing() {
     const [movieMap, setMovieMap] = useState(null);
@@ -37,10 +43,14 @@ function Ticketing() {
     const [youth, setYouth] = useState(0);
     const [adultMap, setAdultMap] = useState(null);
     const [youthMap, setYouthMap] = useState(null);
-    const [costMap, setCostMap] = useState(null);
+    const [adultCostDiv, setAdultCostDiv] = useState(null);
+    const [youthCostDiv, setYouthCostDiv] = useState(null);
+    const [totalCostDiv, setTotalCostDiv] = useState(null);
+
 
     const personnelList = [0, 1, 2, 3, 4];
     const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
 
     // 성인 
     const handleAdult = (count) => {
@@ -154,10 +164,12 @@ function Ticketing() {
         if (seat.classList.contains('selected')) {
             // selectedSeatList에서 제거
             setSelectedSeatList(prevSelectedSeatList => prevSelectedSeatList.filter(num => num !== seat.dataset.num));
+            isDeletedSelectedSeat = true;
         } else {
             // selectedSeatList에 추가
             // ...(요소명) : 요소명의 이전 값을 뜻함.
             setSelectedSeatList(prevSelectedSeatList => [...prevSelectedSeatList, seat.dataset.num]);
+            isDeletedSelectedSeat = false;
         }
     }
 
@@ -259,12 +271,20 @@ function Ticketing() {
         }
 
         if (step === 2) {
+            axios.get(`/theater/screenHall/${selectedScreenHallName}/${selectedTheaterName}`)
+                .then(res => {
+                    adultCost = res.data[0].adult_cost;
+                    youthCost = res.data[0].youth_cost;
+                }).catch(err => {
+                    console.log(err);
+                });
+
             if (selectedSeatList.length !== 0 || adult !== 0 || youth !== 0) {
                 setSelectedSeatList([]);
                 setYouth(0);
                 setAdult(0);
             }
-            
+
             const adultMap = personnelList.map(count =>
                 <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
             )
@@ -341,7 +361,6 @@ function Ticketing() {
 
         const dateMap = dateList.map(date => {
             date = new Date(date.getTime());
-            date.setHours(date.getHours() + 9); // .toISOString()을 했을 때, UTC 기준으로 표시되기 때문에 9시간을 더해줌.
             return (
                 <button className={selectedDate === date.toISOString().slice(0, 10) ? 'selected day-btn' : 'day-btn'} onClick={() => handleDate(date)}>
                     <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
@@ -424,72 +443,122 @@ function Ticketing() {
     }, [reservedSeatCountList, selectedScreenTime])
 
     useEffect(() => {
+        // 일반
+        const adultMap = personnelList.map(count =>
+            <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
+        )
+
+        setAdultMap(adultMap);
+
+        // 청소년
+        const youthMap = personnelList.map(count =>
+            <button className={youth === count ? 'selected people-count' : 'people-count'} onClick={() => handleYouth(count)}>{count}</button>
+        )
+
+        setYouthMap(youthMap);
+
+        // 인원 선택 안 했을 시, 좌석 선택 못하도록 필터 적용
         if (step === 2) {
-            // 좌석 선택 시, 총 인원 수 보다 많을 때
-            if (adult + youth < selectedSeatList.length) {
-                alert('이미 모든 좌석을 선택 하였습니다.');
-    
-                setSelectedSeatList(selectedSeatList.slice(0, -1)); // 배열의 첫 번째 요소부터 마지막을 제외한 요소까지 저장
-    
-                return;
-            }
-
-            // 일반
-            const adultMap = personnelList.map(count =>
-                <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
-            )
-
-            setAdultMap(adultMap);
-
-            // 청소년
-            const youthMap = personnelList.map(count =>
-                <button className={youth === count ? 'selected people-count' : 'people-count'} onClick={() => handleYouth(count)}>{count}</button>
-            )
-
-            setYouthMap(youthMap);
-
-            // 인원 선택 안 했을 시, 좌석 선택 못하도록 필터 적용
             const filter = document.querySelector('.filter');
             if (adult === 0 && youth === 0) {
                 filter.style.zIndex = '1';
             } else {
                 filter.style.zIndex = 'unset';
             }
-            
-            const seats = document.querySelectorAll('.seat');
-            seats.forEach(seat => {
-                if (selectedSeatList.includes(seat.dataset.num)) {
-                    seat.classList.add('selected');
-                } else {
-                    seat.classList.remove('selected');
-                }
-            })
-
-            const selectedSeatMap = selectedSeatList.map((selectedSeat, idx) => 
-                <span>{idx === selectedSeatList.length - 1 ? selectedSeat : `${selectedSeat}, `}</span>
-            )
-
-            setSelectedSeatMap(selectedSeatMap);
         }
 
-        
-    }, [adult, youth, selectedSeatList])
+    }, [adult, youth])
 
-    // useEffect(() => {
-    //     if (tempAdult + youth < selectedSeatList.length) {
-    //         alert('선택한 좌석이 예매 인원보다 많습니다.');
-    //     } else {
-    //         setAdult(tempAdult);
-    //     }
-    // }, [tempAdult])
+    useEffect(() => {
+        // 좌석 선택 시, 총 인원 수 보다 많을 때
+        if (adult + youth < selectedSeatList.length) {
+            alert('이미 모든 좌석을 선택 하였습니다.');
 
-    // useEffect(() => {
-    //     if (adult + tempYouth < selectedSeatList.length) {
-    //         alert('선택한 좌석이 예매 인원보다 많습니다.');
-    //     } else {
-    //         setYouth(tempYouth);
-    //     }
-    // }, [tempYouth])
+            setSelectedSeatList(selectedSeatList.slice(0, -1)); // 배열의 첫 번째 요소부터 마지막을 제외한 요소까지 저장
+
+            isFullSelectedSeat = true;
+
+            return;
+        }
+
+
+        if (!isFullSelectedSeat && !isDeletedSelectedSeat && selectedSeatList.length !== 0) {
+            if (adult > adultCount) {
+                const adultCostDiv = <div>
+                    <span>일반</span>
+                    <span>{adultCost} X {++adultCount}</span>
+                </div>;
+                setAdultCostDiv(adultCostDiv);
+            } else {
+                const youthCostDiv = <div>
+                    <span>청소년</span>
+                    <span>{youthCost} X {++youthCount}</span>
+                </div>;
+                setYouthCostDiv(youthCostDiv);
+            }
+        }
+
+        if (isDeletedSelectedSeat && adult > selectedSeatList.length) {
+            const adultCostDiv = <div>
+                <span>일반</span>
+                <span>{adultCost} X {--adultCount}</span>
+            </div>;
+
+            isDeletedSelectedSeat = false;
+            isFullSelectedSeat = false;
+
+            if (adultCount === 0) {
+                setAdultCostDiv(null);
+            } else {
+                setAdultCostDiv(adultCostDiv);
+            }
+        }
+
+        if (isDeletedSelectedSeat && adult <= selectedSeatList.length) {
+            const youthCostDiv = <div>
+                <span>청소년</span>
+                <span>{youthCost} X {--youthCount}</span>
+            </div>
+
+            isDeletedSelectedSeat = false;
+            isFullSelectedSeat = false;
+
+            if (youthCount === 0) {
+                setYouthCostDiv(null);
+            } else {
+                setYouthCostDiv(youthCostDiv);
+            }
+        }
+
+        const seats = document.querySelectorAll('.seat');
+        seats.forEach(seat => {
+            if (selectedSeatList.includes(seat.dataset.num)) {
+                seat.classList.add('selected');
+            } else {
+                seat.classList.remove('selected');
+            }
+        })
+
+        // 일반
+        const adultMap = personnelList.map(count =>
+            <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
+        )
+
+        setAdultMap(adultMap);
+
+        // 청소년
+        const youthMap = personnelList.map(count =>
+            <button className={youth === count ? 'selected people-count' : 'people-count'} onClick={() => handleYouth(count)}>{count}</button>
+        )
+
+        setYouthMap(youthMap);
+
+        const selectedSeatMap = selectedSeatList.map((selectedSeat, idx) =>
+            <span>{idx === selectedSeatList.length - 1 ? selectedSeat : `${selectedSeat}, `}</span>
+        )
+
+        setSelectedSeatMap(selectedSeatMap);
+    }, [selectedSeatList])
 
     // slick setting
     const settings = {
@@ -599,8 +668,9 @@ function Ticketing() {
                     {selectedSeatMap}
                 </div>
                 <div className="payment">
-                    {costMap}
-                    총금액
+                    결제
+                    {adultCostDiv}
+                    {youthCostDiv}
                 </div>
                 {step === 1 ? <button className="next-step-btn" onClick={handleNextStepBtn}>
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC" />

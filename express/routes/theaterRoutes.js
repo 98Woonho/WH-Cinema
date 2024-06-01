@@ -32,4 +32,17 @@ router.get('/screenInfo/:title/:date/:theaterName', (req, res) => {
     })
 })
 
+router.get('/screenHall/:name/:theaterName/', (req, res) => {
+    const { name, theaterName } = req.params;
+    db.query(`SELECT adult_cost, youth_cost
+              FROM screen_hall
+              WHERE name = '${name}' AND theater_name = '${theaterName}'`, (err, data) => {
+        if (!err) {
+            res.status(200).send(data);
+        } else {
+            res.status(500).send(err);
+        }
+    })
+})
+
 module.exports = router;
