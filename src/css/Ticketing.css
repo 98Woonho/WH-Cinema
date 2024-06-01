@@ -311,7 +311,6 @@
 .seat {
     position: relative;
     font-size: 0.75rem;
-    cursor: pointer;
     width: 15px;
     height: 15px;
     background-color: #666;
@@ -334,7 +333,7 @@
 
 .seat.reserved {
     background-color: #bbb;
-    cursor: default;
+    pointer-events: none;
 }
 
 .seat-number {

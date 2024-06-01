@@ -33,24 +33,31 @@ function Ticketing() {
     const [selectedScreenHallName, setSelectedScreenHallName] = useState(null);
     const [seatMap, setSeatMap] = useState(null);
     const [step, setStep] = useState(1);
-    const [personnelList, setPersonnelList] = useState([0, 1, 2, 3, 4]);
-    const [columnList, setColumnList] = useState(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']);
     const [adult, setAdult] = useState(0);
-    const [tempAdult, setTempAdult] = useState(0);
     const [youth, setYouth] = useState(0);
-    const [tempYouth, setTempYouth] = useState(0);
     const [adultMap, setAdultMap] = useState(null);
     const [youthMap, setYouthMap] = useState(null);
+    const [costMap, setCostMap] = useState(null);
 
+    const personnelList = [0, 1, 2, 3, 4];
+    const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
     // 성인 
     const handleAdult = (count) => {
-        setTempAdult(count);
+        if (youth + count < selectedSeatList.length) {
+            alert('선택한 좌석이 예매 인원보다 많습니다.');
+            return;
+        }
+        setAdult(count);
     }
 
     // 청소년
     const handleYouth = (count) => {
-        setTempYouth(count);
+        if (count + adult < selectedSeatList.length) {
+            alert('선택한 좌석이 예매 인원보다 많습니다.');
+            return;
+        }
+        setYouth(count);
     }
 
     // 지역 선택 함수
@@ -252,6 +259,12 @@ function Ticketing() {
         }
 
         if (step === 2) {
+            if (selectedSeatList.length !== 0 || adult !== 0 || youth !== 0) {
+                setSelectedSeatList([]);
+                setYouth(0);
+                setAdult(0);
+            }
+            
             const adultMap = personnelList.map(count =>
                 <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
             )
@@ -285,25 +298,6 @@ function Ticketing() {
 
         }
     }, [step])
-
-    useEffect(() => {
-        if (adult + youth < selectedSeatList.length) {
-            alert('이미 모든 좌석을 선택 하였습니다.');
-
-            setSelectedSeatList(selectedSeatList.slice(0, -1)); // 배열의 첫 번째 요소부터 마지막을 제외한 요소까지 저장
-
-            return;
-        }
-        
-        const seats = document.querySelectorAll('.seat');
-        seats.forEach(seat => {
-            if (selectedSeatList.includes(seat.dataset.num)) {
-                seat.classList.add('selected');
-            } else {
-                seat.classList.remove('selected');
-            }
-        })
-    }, [selectedSeatList])
 
 
     // 지역 선택 시 선택 요소에 selected class 추가 및 극장 버튼의 selected class 모두 제거
@@ -347,6 +341,7 @@ function Ticketing() {
 
         const dateMap = dateList.map(date => {
             date = new Date(date.getTime());
+            date.setHours(date.getHours() + 9); // .toISOString()을 했을 때, UTC 기준으로 표시되기 때문에 9시간을 더해줌.
             return (
                 <button className={selectedDate === date.toISOString().slice(0, 10) ? 'selected day-btn' : 'day-btn'} onClick={() => handleDate(date)}>
                     <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
@@ -376,7 +371,7 @@ function Ticketing() {
             const reservedSeatCountList = [];
 
             for (const screenInfo of screenInfoList) {
-                for (const time of screenInfo.time.split('|')) {
+                for (const time of screenInfo.time.split(',')) {
                     try {
                         const res = await axios.get(`/ticketing/${screenInfo.title}/${screenInfo.theater_name}/${screenInfo.screen_hall_name}/${time}`);
                         let reservedSeatCount = 0;
@@ -413,7 +408,7 @@ function Ticketing() {
                 <div>
                     <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
                     <div class='screen-time-container'>
-                        {screenInfo.time.split('|').map(time =>
+                        {screenInfo.time.split(',').map(time =>
                             // className 조건 두 개 이상 하는 법 -> {` `}
                             <button onClick={() => handleScreenTimeAndHall(time, screenInfo.screen_hall_name)} className={`${screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-btn' : 'screen-time-btn'} ${time === selectedScreenTime ? 'selected' : ''}`}>
                                 <p>{time}</p>
@@ -428,57 +423,73 @@ function Ticketing() {
         }
     }, [reservedSeatCountList, selectedScreenTime])
 
-    // 인원 선택 안 했을 시, 좌석 선택 못하게 filter 적용
     useEffect(() => {
         if (step === 2) {
+            // 좌석 선택 시, 총 인원 수 보다 많을 때
+            if (adult + youth < selectedSeatList.length) {
+                alert('이미 모든 좌석을 선택 하였습니다.');
+    
+                setSelectedSeatList(selectedSeatList.slice(0, -1)); // 배열의 첫 번째 요소부터 마지막을 제외한 요소까지 저장
+    
+                return;
+            }
+
+            // 일반
             const adultMap = personnelList.map(count =>
                 <button className={adult === count ? 'selected people-count' : 'people-count'} onClick={() => handleAdult(count)}>{count}</button>
             )
 
             setAdultMap(adultMap);
 
-            const filter = document.querySelector('.filter');
-            if (adult === 0 && youth === 0) {
-                filter.style.zIndex = '1';
-            } else {
-                filter.style.zIndex = 'unset';
-            }
-        }
-    }, [adult])
-
-    useEffect(() => {
-        if (tempAdult + youth < selectedSeatList.length) {
-            alert('선택한 좌석이 예매 인원보다 많습니다.');
-        } else {
-            setAdult(tempAdult);
-        }
-    }, [tempAdult])
-
-    useEffect(() => {
-        if (step === 2) {
+            // 청소년
             const youthMap = personnelList.map(count =>
                 <button className={youth === count ? 'selected people-count' : 'people-count'} onClick={() => handleYouth(count)}>{count}</button>
             )
 
             setYouthMap(youthMap);
-            console.log(youth);
 
+            // 인원 선택 안 했을 시, 좌석 선택 못하도록 필터 적용
             const filter = document.querySelector('.filter');
             if (adult === 0 && youth === 0) {
                 filter.style.zIndex = '1';
             } else {
                 filter.style.zIndex = 'unset';
             }
-        }
-    }, [youth])
+            
+            const seats = document.querySelectorAll('.seat');
+            seats.forEach(seat => {
+                if (selectedSeatList.includes(seat.dataset.num)) {
+                    seat.classList.add('selected');
+                } else {
+                    seat.classList.remove('selected');
+                }
+            })
 
-    useEffect(() => {
-        if (adult + tempYouth < selectedSeatList.length) {
-            alert('선택한 좌석이 예매 인원보다 많습니다.');
-        } else {
-            setYouth(tempYouth);
+            const selectedSeatMap = selectedSeatList.map((selectedSeat, idx) => 
+                <span>{idx === selectedSeatList.length - 1 ? selectedSeat : `${selectedSeat}, `}</span>
+            )
+
+            setSelectedSeatMap(selectedSeatMap);
         }
-    }, [tempYouth])
+
+        
+    }, [adult, youth, selectedSeatList])
+
+    // useEffect(() => {
+    //     if (tempAdult + youth < selectedSeatList.length) {
+    //         alert('선택한 좌석이 예매 인원보다 많습니다.');
+    //     } else {
+    //         setAdult(tempAdult);
+    //     }
+    // }, [tempAdult])
+
+    // useEffect(() => {
+    //     if (adult + tempYouth < selectedSeatList.length) {
+    //         alert('선택한 좌석이 예매 인원보다 많습니다.');
+    //     } else {
+    //         setYouth(tempYouth);
+    //     }
+    // }, [tempYouth])
 
     // slick setting
     const settings = {
@@ -588,7 +599,8 @@ function Ticketing() {
                     {selectedSeatMap}
                 </div>
                 <div className="payment">
-                    결제
+                    {costMap}
+                    총금액
                 </div>
                 {step === 1 ? <button className="next-step-btn" onClick={handleNextStepBtn}>
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC" />
