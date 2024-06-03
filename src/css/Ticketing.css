@@ -356,3 +356,34 @@
     height: 20px;
     background-color: #bbb;
 }
+
+.payment-container {
+    display: flex;
+    flex-direction: row;
+    background-color: #f2f0e5;
+
+    height: 400px;
+}
+
+.payment-left {
+    width: 70%;
+    height: 100%;
+}
+
+.payment-right {
+    width: 30%;
+    height: 100%;
+}
+
+.payment-method-box {
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 3rem;
+}
+
+.payment-method-box button {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-right: 1rem;
+}

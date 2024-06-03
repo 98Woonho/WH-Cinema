@@ -8,12 +8,13 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-let adultCount = 0;
-let youthCount = 0;
-let adultCost;
-let youthCost;
-let isFullSelectedSeat = false;
-let isDeletedSelectedSeat = false;
+let adultCount = 0; // 좌석 선택 시 요금에 표시할 일반 count
+let youthCount = 0; // 좌석 선택 시 요금에 표시할 청소년 count
+let adultCost; // 일반 요금
+let youthCost; // 청소년 요금
+let totalCost; // 총 요금
+let isFullSelectedSeat = false; // 선택 좌석이 인원을 초과하는가에 대한 여부
+let isDeletedSelectedSeat = false; // 선택한 좌석을 취소했는가에 대한 여부
 
 function Ticketing() {
     const [movieMap, setMovieMap] = useState(null);
@@ -51,6 +52,9 @@ function Ticketing() {
     const personnelList = [0, 1, 2, 3, 4];
     const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
+    const handlePaymentMethodBtn = (e) => {
+        console.log(e.target.classList.add('selected'));
+    }
 
     // 성인 
     const handleAdult = (count) => {
@@ -119,37 +123,53 @@ function Ticketing() {
 
     // 다음 스텝 버튼 클릭 함수
     const handleNextStepBtn = () => {
-        if (!selectedMovieTitle) {
-            alert('영화를 선택해 주세요.');
-            return;
+        if (step === 1) {
+            if (!selectedMovieTitle) {
+                alert('영화를 선택해 주세요.');
+                return;
+            }
+
+            if (!selectedTheaterName) {
+                alert('극장을 선택해 주세요.');
+                return;
+            }
+
+            if (!selectedDate) {
+                alert('날짜를 선택해 주세요.');
+                return;
+            }
+
+            if (!selectedScreenTime) {
+                alert('상영시간을 선택해 주세요.');
+                return;
+            }
+
+            axios.get(`/ticketing/${selectedMovieTitle}/${selectedTheaterName}/${selectedScreenHallName}/${selectedScreenTime}`)
+                .then(res => {
+                    const reservedSeatList = res.data.map(data =>
+                        data.seat.split(', ')
+                    ).flat();
+                    setReservedSeatList(reservedSeatList);
+                    setStep(2);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
 
-        if (!selectedTheaterName) {
-            alert('극장을 선택해 주세요.');
-            return;
-        }
+        if (step === 2) {
+            if (adult === 0 && youth === 0) {
+                alert('관람 인원을 선택해 주세요.');
+                return;
+            }
 
-        if (!selectedDate) {
-            alert('날짜를 선택해 주세요.');
-            return;
-        }
+            if (selectedSeatList.length !== adult + youth) {
+                alert('관람 인원과 좌석 수가 동일하지 않습니다.');
+                return;
+            }
 
-        if (!selectedScreenTime) {
-            alert('상영시간을 선택해 주세요.');
-            return;
+            setStep(3);
         }
-
-        axios.get(`/ticketing/${selectedMovieTitle}/${selectedTheaterName}/${selectedScreenHallName}/${selectedScreenTime}`)
-            .then(res => {
-                const reservedSeatList = res.data.map(data =>
-                    data.seat.split(', ')
-                ).flat();
-                setReservedSeatList(reservedSeatList);
-                setStep(2);
-            })
-            .catch(err => {
-                console.log(err);
-            })
     }
 
     const handlePrevStepBtn = () => {
@@ -457,6 +477,57 @@ function Ticketing() {
 
         setYouthMap(youthMap);
 
+
+        isFullSelectedSeat = false;
+
+        // 일반, 청소년 각각 최소 1명 이상이고, 좌석을 선택한 상황
+
+        if (youth !== 0 && selectedSeatList.length !== 0) {
+            // 일반 인원을 늘렸을 때
+            // ex) 일반2, 청소년2 인 상황에서 일반을 3명으로 선택하면, 요금 정보가 
+            // 일반2, 청소년2 -> 일반3, 청소년1 으로 변경됨.
+            if (adult > adultCount) {
+                adultCount = adult;
+                const adultCostDiv = <div>
+                    <span>일반</span>
+                    <span>{adultCost} X {adultCount}</span>
+                </div>;
+                setAdultCostDiv(adultCostDiv);
+
+                youthCount = selectedSeatList.length - adult;
+                if (youthCount === 0) {
+                    setYouthCostDiv(null);
+                } else {
+                    const youthCostDiv = <div>
+                        <span>청소년</span>
+                        <span>{youthCost} X {youthCount}</span>
+                    </div>;
+                    setYouthCostDiv(youthCostDiv);
+                }
+            }
+
+            // 일반 인원을 줄였을 때
+            if (adult < adultCount) {
+                adultCount = adult;
+                const adultCostDiv = <div>
+                    <span>일반</span>
+                    <span>{adultCost} X {adultCount}</span>
+                </div>;
+                setAdultCostDiv(adultCostDiv);
+
+                youthCount = selectedSeatList.length - adult;
+                if (youthCount === 0) {
+                    setYouthCostDiv(null);
+                } else {
+                    const youthCostDiv = <div>
+                        <span>청소년</span>
+                        <span>{youthCost} X {youthCount}</span>
+                    </div>;
+                    setYouthCostDiv(youthCostDiv);
+                }
+            }
+        }
+
         // 인원 선택 안 했을 시, 좌석 선택 못하도록 필터 적용
         if (step === 2) {
             const filter = document.querySelector('.filter');
@@ -467,6 +538,16 @@ function Ticketing() {
             }
         }
 
+        totalCost = adultCost * adultCount + youthCost * youthCount;
+
+        if (totalCost > 0) {
+            const totalCostDiv = <div>
+                <span>총금액</span>
+                <span>{totalCost}</span>
+            </div>
+
+            setTotalCostDiv(totalCostDiv);
+        }
     }, [adult, youth])
 
     useEffect(() => {
@@ -481,7 +562,7 @@ function Ticketing() {
             return;
         }
 
-
+        // 좌석을 선택 했을 때, 일반 요금 우선 카운트 후, 청소년 요금 카운트
         if (!isFullSelectedSeat && !isDeletedSelectedSeat && selectedSeatList.length !== 0) {
             if (adult > adultCount) {
                 const adultCostDiv = <div>
@@ -498,38 +579,43 @@ function Ticketing() {
             }
         }
 
-        if (isDeletedSelectedSeat && adult > selectedSeatList.length) {
-            const adultCostDiv = <div>
-                <span>일반</span>
-                <span>{adultCost} X {--adultCount}</span>
-            </div>;
+        // 좌석을 취소 했을 때
+        if (isDeletedSelectedSeat) {
 
-            isDeletedSelectedSeat = false;
-            isFullSelectedSeat = false;
+            // 선택 좌석보다 일반 인원이 더 많으면
+            if (adult > selectedSeatList.length) {
+                const adultCostDiv = <div>
+                    <span>일반</span>
+                    <span>{adultCost} X {--adultCount}</span>
+                </div>;
 
-            if (adultCount === 0) {
-                setAdultCostDiv(null);
+                isDeletedSelectedSeat = false;
+                isFullSelectedSeat = false;
+
+                if (adultCount === 0) {
+                    setAdultCostDiv(null);
+                } else {
+                    setAdultCostDiv(adultCostDiv);
+                }
+                // 그 외
             } else {
-                setAdultCostDiv(adultCostDiv);
+                const youthCostDiv = <div>
+                    <span>청소년</span>
+                    <span>{youthCost} X {--youthCount}</span>
+                </div>
+
+                isDeletedSelectedSeat = false;
+                isFullSelectedSeat = false;
+
+                if (youthCount === 0) {
+                    setYouthCostDiv(null);
+                } else {
+                    setYouthCostDiv(youthCostDiv);
+                }
             }
         }
 
-        if (isDeletedSelectedSeat && adult <= selectedSeatList.length) {
-            const youthCostDiv = <div>
-                <span>청소년</span>
-                <span>{youthCost} X {--youthCount}</span>
-            </div>
-
-            isDeletedSelectedSeat = false;
-            isFullSelectedSeat = false;
-
-            if (youthCount === 0) {
-                setYouthCostDiv(null);
-            } else {
-                setYouthCostDiv(youthCostDiv);
-            }
-        }
-
+        // 좌석 클릭 시 좌석에 selected class 추가 및 제거
         const seats = document.querySelectorAll('.seat');
         seats.forEach(seat => {
             if (selectedSeatList.includes(seat.dataset.num)) {
@@ -558,6 +644,17 @@ function Ticketing() {
         )
 
         setSelectedSeatMap(selectedSeatMap);
+
+        totalCost = adultCost * adultCount + youthCost * youthCount;
+
+        if (totalCost > 0) {
+            const totalCostDiv = <div>
+                <span>총금액</span>
+                <span>{totalCost}</span>
+            </div>
+
+            setTotalCostDiv(totalCostDiv);
+        }
     }, [selectedSeatList])
 
     // slick setting
@@ -569,72 +666,86 @@ function Ticketing() {
 
     return (
         <div id='ticketingMain' className='main'>
-            {
-                step === 1 ?
-                    <div className='ticketing-option-container'>
-                        <div className='section movie-section'>
-                            <ul>
-                                {movieMap}
-                            </ul>
+            {step === 1 ? (
+                <div className='ticketing-option-container'>
+                    <div className='section movie-section'>
+                        <ul>
+                            {movieMap}
+                        </ul>
+                    </div>
+                    <div className='section theater-section'>
+                        <div class='region-container'>
+                            {regionMap}
                         </div>
-                        <div className='section theater-section'>
-                            <div class='region-container'>
-                                {regionMap}
-                            </div>
-                            <div class='theater-name-container'>
-                                {theaterNameMap}
-                            </div>
-                        </div>
-                        <div className='section screen-info-section'>
-                            <Slider {...settings}>
-                                {dateMap}
-                            </Slider>
-                            <div className='screen-info-container'>
-                                {screenInfoMap}
-                            </div>
+                        <div class='theater-name-container'>
+                            {theaterNameMap}
                         </div>
                     </div>
-                    : <div className='select-seat-container'>
-                        <div className='people'>
-                            <ul>
-                                <li>
-                                    <span className='people-type'>일반</span>
-                                    <span>
-                                        {adultMap}
-                                    </span>
-                                </li>
-                                <li>
-                                    <span className='people-type'>청소년</span>
-                                    <span>
-                                        {youthMap}
-                                    </span>
-                                </li>
-                            </ul>
+                    <div className='section screen-info-section'>
+                        <Slider {...settings}>
+                            {dateMap}
+                        </Slider>
+                        <div className='screen-info-container'>
+                            {screenInfoMap}
                         </div>
-
-                        <div className='seat-info'>
-                            <div className='filter'></div>
-                            <div className='seat-left'>
-                                <div className="screen">
-                                    스크린
-                                </div>
-                                <div className='seat-box'>
-                                    {seatMap}
-                                </div>
-                            </div>
-                            <div className='seat-right'>
-                                <div>
-                                    <span className='select-icon'></span>
-                                    <span>선택</span>
-                                </div>
-                                <div>
-                                    <span className='reserved-seat-icon'></span>
-                                    <span>예매 완료</span>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
+                </div>
+            ) : step === 2 ? (<div className='select-seat-container'>
+                <div className='people'>
+                    <ul>
+                        <li>
+                            <span className='people-type'>일반</span>
+                            <span>
+                                {adultMap}
+                            </span>
+                        </li>
+                        <li>
+                            <span className='people-type'>청소년</span>
+                            <span>
+                                {youthMap}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div className='seat-info'>
+                    <div className='filter'></div>
+                    <div className='seat-left'>
+                        <div className='screen'>
+                            스크린
+                        </div>
+                        <div className='seat-box'>
+                            {seatMap}
+                        </div>
+                    </div>
+                    <div className='seat-right'>
+                        <div>
+                            <span className='select-icon'></span>
+                            <span>선택</span>
+                        </div>
+                        <div>
+                            <span className='reserved-seat-icon'></span>
+                            <span>예매 완료</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ) : (<div className='payment-container'>
+                <div className='payment-left'>
+                    <div className='payment-method-box'>
+                        <button onClick={handlePaymentMethodBtn}>신용/체크 카드</button>
+                        <button onClick={handlePaymentMethodBtn}>카카오페이</button>
+                        <button onClick={handlePaymentMethodBtn}>토스페이</button>
+                        <button onClick={handlePaymentMethodBtn}>페이코</button>
+                        <button onClick={handlePaymentMethodBtn}>휴대폰 결제</button>
+                    </div>
+                </div>
+                <div className='payment-right'>
+
+                </div>
+            </div>
+
+            )
             }
             <div className='ticketing-info-container'>
                 {step === 2 ?
@@ -667,15 +778,22 @@ function Ticketing() {
                     <span>좌석</span>
                     {selectedSeatMap}
                 </div>
-                <div className="payment">
+                <div className='payment'>
                     결제
                     {adultCostDiv}
                     {youthCostDiv}
+                    {totalCostDiv}
                 </div>
-                {step === 1 ? <button className="next-step-btn" onClick={handleNextStepBtn}>
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC" />
+                {step === 1 ? (<button className='next-step-btn' onClick={handleNextStepBtn}>
+                    <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
                     <p>좌석선택</p>
-                </button> : <button>스텝 2 버튼 만들 예정</button>}
+                </button>
+                ) : step === 2 ? (<button className='next-step-btn' onClick={handleNextStepBtn}>
+                    <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
+                    <p>결제선택</p>
+                </button>
+                ) : (<button>결제하기</button>
+                )}
 
             </div>
         </div>
