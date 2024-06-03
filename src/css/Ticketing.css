@@ -387,3 +387,17 @@
     padding: 1.5rem;
     margin-right: 1rem;
 }
+
+.payment-method-box button.selected {
+    background-color: aquamarine;
+}
+
+.payment-btn {
+    width: 100px;
+    height: 100px;
+
+    color: #f0eeee;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: red;
+}

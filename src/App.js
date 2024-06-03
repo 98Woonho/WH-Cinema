@@ -42,6 +42,23 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    const script1 = document.createElement('script');
+    script1.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
+    script1.async = true;
+    document.body.appendChild(script1);
+
+    const script2 = document.createElement('script');
+    script2.src = 'https://cdn.iamport.kr/js/iamport.payment-1.1.8.js';
+    script2.async = true;
+    document.body.appendChild(script2);
+
+    return () => {
+      document.body.removeChild(script1);
+      document.body.removeChild(script2);
+    };
+  }, [])
+
+  useEffect(() => {
     // accessToken, refreshToken 검증
     axios.get('/user/verify', { withCredentials: true })
       .then(res => {
@@ -59,22 +76,7 @@ function App() {
           // })
         }
       })
-
-    const script1 = document.createElement('script');
-    script1.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
-    script1.async = true;
-    document.body.appendChild(script1);
-
-    const script2 = document.createElement('script');
-    script2.src = 'https://cdn.iamport.kr/js/iamport.payment-1.1.8.js';
-    script2.async = true;
-    document.body.appendChild(script2);
-
-    return () => {
-      document.body.removeChild(script1);
-      document.body.removeChild(script2);
-    };
-  }, [])
+  })
 
   return (
     <div id='App'>

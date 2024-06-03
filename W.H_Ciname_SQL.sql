@@ -104,7 +104,7 @@ VALUES ('범죄도시4', '액션, 범죄', 'http://file.koreafilm.or.kr/thm/02/9
 ('바커스: 슈퍼스타가 될 거야','애니메이션','http://file.koreafilm.or.kr/thm/02/99/18/40/tn_DPF029192.jpg','2024-06-01',85,'"나는 슈퍼스타가 될 거야!"<br><br>슈퍼스타를 꿈 꿔왔던 \'로지\'와 친구들은<br>유명해지기 위해 다양한 종류의 영상들을<br>인터넷에 올리지만 반응이 좋지는 않다.<br>그러던 중 우연히 옆집에 이사를 온 슈퍼스타 \'캣\'을 만나게 되고<br>\'로지\'의 꿈을 알게 된 \'캣\'은 함께 무대에 오를 것을 제안한다.<br>단 조건은 그 동안 함께한 친구들을 버리고<br>\'로지\'만 무대에 오르는 것<br><br>거부할 수 없는 \'캣\'의 제안에 \'로지\'의 선택은?','전체관람가','표도르 드미트리예프','박시윤, 김소희, 임하진, 서정익, 정해은','러시아','http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840575.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840576.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840577.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840578.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840579.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840580.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840581.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840582.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840583.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/76/tn_DST840584.jpg');
 
 
-
+ 
 INSERT INTO `movie_project_db`.`user`(`user_id`,`password`,`name`,`birthday`,`phone`, `role`)
 VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150', 'USER');
 
@@ -121,8 +121,8 @@ VALUES('1관', '대구 프리미엄', 60, 15000, 12000),
 	  ('2관', '대구 프리미엄', 138, 15000, 12000);
 
 INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id, movie_title)
-VALUES ('13:00,15:00,17:00,19:00,21:00', '2024-05-25', 1, '도뷔시'),
-('14:50', '2024-05-25', 2, '도뷔시');
+VALUES ('13:00,15:00,17:00,19:00,21:00', '2024-06-03', 1, '도뷔시'),
+('14:50', '2024-06-03', 2, '도뷔시');
 
 INSERT INTO `movie_project_db`.`ticketing` (theater_name, screen_hall_name, movie_title, screen_time, seat)
 VALUES ('대구 프리미엄', '1관', '도뷔시', '15:00', 'A1, A2'),

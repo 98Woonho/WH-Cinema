@@ -3,6 +3,7 @@ import '../css/Ticketing.css';
 import axios from 'axios';
 import seatsData from '../data/seatsData.json';
 
+
 // react-slick
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -52,8 +53,40 @@ function Ticketing() {
     const personnelList = [0, 1, 2, 3, 4];
     const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
+    // 결제
+    const payment = async (e) => {
+        if (!e.target.classList.contains('on')) {
+            alert('결제 수단을 선택해 주세요.');
+            return;
+        }
+
+        const userId = await axios.get('/user/accessTokenPayload', { withCredentials: true });
+        console.log(userId);
+
+        axios.get(`/user/${userId}`)
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    // 결제 수단 선택 버튼
     const handlePaymentMethodBtn = (e) => {
-        console.log(e.target.classList.add('selected'));
+        // 결제 버튼에 className='on' 추가
+        const paymentBtn = document.querySelector('.payment-btn');
+        paymentBtn.classList.add('on');
+
+        // 클릭한 결제 수단 버튼에 className='selected' 추가
+        // 나머지 결제 수단 버튼에 className='selected' 제거
+        const paymentMethodBtns = document.querySelectorAll('.payment-method-box button');
+        paymentMethodBtns.forEach(paymentMethodBtn => {
+            e.target.classList.add('selected');
+            if (e.target !== paymentMethodBtn) {
+                paymentMethodBtn.classList.remove('selected');
+            }
+        })
     }
 
     // 성인 
@@ -733,11 +766,11 @@ function Ticketing() {
             ) : (<div className='payment-container'>
                 <div className='payment-left'>
                     <div className='payment-method-box'>
-                        <button onClick={handlePaymentMethodBtn}>신용/체크 카드</button>
-                        <button onClick={handlePaymentMethodBtn}>카카오페이</button>
-                        <button onClick={handlePaymentMethodBtn}>토스페이</button>
-                        <button onClick={handlePaymentMethodBtn}>페이코</button>
-                        <button onClick={handlePaymentMethodBtn}>휴대폰 결제</button>
+                        <button id='card' onClick={handlePaymentMethodBtn}>신용/체크 카드</button>
+                        <button id='kakaoPay' onClick={handlePaymentMethodBtn}>카카오페이</button>
+                        <button id='tossPay' onClick={handlePaymentMethodBtn}>토스페이</button>
+                        <button id='payco' onClick={handlePaymentMethodBtn}>페이코</button>
+                        <button id='phone' onClick={handlePaymentMethodBtn}>휴대폰 결제</button>
                     </div>
                 </div>
                 <div className='payment-right'>
@@ -792,7 +825,7 @@ function Ticketing() {
                     <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
                     <p>결제선택</p>
                 </button>
-                ) : (<button>결제하기</button>
+                ) : (<button className='payment-btn' onClick={payment}>결제하기</button>
                 )}
 
             </div>

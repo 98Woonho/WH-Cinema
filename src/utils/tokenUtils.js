@@ -59,3 +59,9 @@ exports.verify = (token) => {
         };
     }
 };
+
+// exports.getAccessTokenPayload = (token) => {
+//     const decodedToken = jwt.decode(token); // accessToken을 decode해서 payload 정보 가져오기
+//     const userId = decodedToken.userId; // payload에 있는 userId
+//     return userId;
+// };

@@ -6,9 +6,20 @@ const bcrypt = require('bcrypt');
 const tokenUtils = require('../../src/utils/tokenUtils.js');
 const jwt = require('jsonwebtoken');
 
-router.get('/', (req, res) => {
-  const { name, birthday, phone } = req.query;
+router.get('/:name/:birthday/:phone', (req, res) => {
+  const { name, birthday, phone } = req.params;
   db.query(`select * from user where name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  })
+})
+
+router.get('/:userId', (req, res) => {
+  const userId = req.params.userId;
+  db.query(`select * from user where user_id = '${userId}'`, (err, data) => {
     if (!err) {
       res.send(data);
     } else {
@@ -19,6 +30,8 @@ router.get('/', (req, res) => {
 
 router.get('/verify', (req, res) => {
   const cookies = req.cookies;
+
+  console.log(cookies);
 
   if (!cookies.refresh || !cookies.access) { // refresh cookie || access cookie가 없을 때 (쿠키가 만료 되어서 사라졌거나, 강제로 쿠키를 삭제한 경우)
     res.status(401).send();
@@ -39,7 +52,7 @@ router.get('/verify', (req, res) => {
     const userId = decodedToken.userId; // payload에 있는 userId
 
     // 3. 쿠키에 있는 refreshToken을 가져와서 db에 있는 refreshToken이랑 비교 함.
-    db.query(`select token from token where userId = '${userId}'`, (err, data) => {
+    db.query(`select token from token where user_id = '${userId}'`, (err, data) => {
       if (!err) {
         const dbRefreshToken = data[0].token;
 
@@ -87,7 +100,7 @@ router.get('/refreshVerify', (req, res) => {
 
 router.get('/refreshToken', (req, res) => {
   const { userId } = req.query;
-  db.query(`select token from token where userId = '${userId}'`, (err, data) => {
+  db.query(`select token from token where user_id = '${userId}'`, (err, data) => {
     if (!err) {
       res.send(data[0].token);
     } else {
@@ -96,16 +109,26 @@ router.get('/refreshToken', (req, res) => {
   })
 })
 
+router.get('/accessTokenPayload', (req, res) => {
+  const cookies = req.cookies;
+
+  const accessToken = cookies.access.split('Bearer ')[1];
+
+  const userId = tokenUtils.getAccessTokenPayload(accessToken);
+
+  res.send(userId);
+})
+
 router.post('/login', (req, res) => {
   const { userId, password, rememberMe } = req.body;
 
-  db.query(`select * from user where userId='${userId}'`, (err, data) => {
+  db.query(`select * from user where user_id='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length == 0 || !bcrypt.compareSync(password, data[0].password)) {
         res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
       } else {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
-        const refreshToken = rememberMe ? tokenUtils.makeRefreshToken({ userId: userId }, '7d') : tokenUtils.makeRefreshToken({ userId: userId }, '1d');
+        const refreshToken = tokenUtils.makeRefreshToken({ userId: userId }, rememberMe ? '7d' : '1d');
 
         res.cookie("access", `Bearer ${accessToken}`,  { httpOnly: true, maxAge: 7 * 24 * 3600 * 1000});
         res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true, maxAge: rememberMe ?  7 * 24 * 3600 * 1000 : 24 * 3600 * 1000});
@@ -126,7 +149,7 @@ router.post('/login', (req, res) => {
 
 router.post('/join', (req, res) => {
   const { userId, password, name, birthday, phone } = req.body;
-  db.query(`select * from user where userId='${userId}'`, (err, data) => {
+  db.query(`select * from user where user_id='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length != 0) {
         res.status(409).json({ error: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.' });
