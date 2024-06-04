@@ -41,6 +41,24 @@ a {
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // accessToken, refreshToken 검증
+  axios.get('/user/verify', { withCredentials: true })
+    .then(res => {
+      setIsAuthenticated(true);
+    })
+    .catch(err => {
+      if (err.response.status === 401) {
+        setIsAuthenticated(false);
+        // axios.post('/user/logout')
+        // .then(res => {
+        //   console.log(res);
+        // })
+        // .catch(err => {
+        //   console.log(err);
+        // })
+      }
+    })
+
   useEffect(() => {
     const script1 = document.createElement('script');
     script1.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
@@ -57,26 +75,6 @@ function App() {
       document.body.removeChild(script2);
     };
   }, [])
-
-  useEffect(() => {
-    // accessToken, refreshToken 검증
-    axios.get('/user/verify', { withCredentials: true })
-      .then(res => {
-        setIsAuthenticated(true);
-      })
-      .catch(err => {
-        if (err.response.status === 401) {
-          setIsAuthenticated(false);
-          // axios.post('/user/logout')
-          // .then(res => {
-          //   console.log(res);
-          // })
-          // .catch(err => {
-          //   console.log(err);
-          // })
-        }
-      })
-  })
 
   return (
     <div id='App'>

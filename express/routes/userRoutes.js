@@ -6,32 +6,8 @@ const bcrypt = require('bcrypt');
 const tokenUtils = require('../../src/utils/tokenUtils.js');
 const jwt = require('jsonwebtoken');
 
-router.get('/:name/:birthday/:phone', (req, res) => {
-  const { name, birthday, phone } = req.params;
-  db.query(`select * from user where name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
-    if (!err) {
-      res.send(data);
-    } else {
-      res.send(err);
-    }
-  })
-})
-
-router.get('/:userId', (req, res) => {
-  const userId = req.params.userId;
-  db.query(`select * from user where user_id = '${userId}'`, (err, data) => {
-    if (!err) {
-      res.send(data);
-    } else {
-      res.send(err);
-    }
-  })
-})
-
 router.get('/verify', (req, res) => {
   const cookies = req.cookies;
-
-  console.log(cookies);
 
   if (!cookies.refresh || !cookies.access) { // refresh cookie || access cookie가 없을 때 (쿠키가 만료 되어서 사라졌거나, 강제로 쿠키를 삭제한 경우)
     res.status(401).send();
@@ -65,7 +41,7 @@ router.get('/verify', (req, res) => {
           } else { // 5. refreshToken이 유효하면 accessToken을 재발급 후 쿠키에 저장
             // console.log("refreshToken 만료 안 됨!!");
             const newAccessToken = tokenUtils.makeAccessToken({ userId: userId });
-            res.cookie('access', `Bearer ${newAccessToken}`, { maxAge: 7 * 24 * 3600 * 1000 });
+            res.cookie('access', `Bearer ${newAccessToken}`, { maxAge: 7 * 24 * 3600 * 1000, httpOnly: true });
             res.status(200).send();
           }
         } else { // 3-2. 다르다? 로그아웃 처리 
@@ -81,6 +57,7 @@ router.get('/verify', (req, res) => {
     res.status(200).send();
   }
 })
+
 
 router.get('/accessVerify', (req, res) => {
   const { accessToken } = req.query;
@@ -114,9 +91,9 @@ router.get('/accessTokenPayload', (req, res) => {
 
   const accessToken = cookies.access.split('Bearer ')[1];
 
-  const userId = tokenUtils.getAccessTokenPayload(accessToken);
+  const result = tokenUtils.getAccessTokenPayload(accessToken);
 
-  res.send(userId);
+  res.send(result);
 })
 
 router.post('/login', (req, res) => {
@@ -197,5 +174,27 @@ router.post('/certification', async (req, res) => {
     console.log(err);
   }
 });
+
+router.get('/:name/:birthday/:phone', (req, res) => {
+  const { name, birthday, phone } = req.params;
+  db.query(`select * from user where name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  })
+})
+
+router.get('/:userId', (req, res) => {
+  const userId = req.params.userId;
+  db.query(`select * from user where user_id = '${userId}'`, (err, data) => {
+    if (!err) {
+      res.send(data);
+    } else {
+      res.send(err);
+    }
+  })
+})
 
 module.exports = router;

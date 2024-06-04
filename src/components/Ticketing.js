@@ -54,22 +54,29 @@ function Ticketing() {
     const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 
     // 결제
-    const payment = async (e) => {
+    const payment = (e) => {
         if (!e.target.classList.contains('on')) {
             alert('결제 수단을 선택해 주세요.');
             return;
         }
 
-        const userId = await axios.get('/user/accessTokenPayload', { withCredentials: true });
-        console.log(userId);
+        axios.get('/user/accessTokenPayload', { withCredentials: true })
+        .then(res => {
+            const userId = res.data.userId;
 
-        axios.get(`/user/${userId}`)
+            axios.get(`/user/${userId}`)
             .then(res => {
                 console.log(res);
             })
             .catch(err => {
                 console.log(err);
             })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+        
     }
 
     // 결제 수단 선택 버튼
