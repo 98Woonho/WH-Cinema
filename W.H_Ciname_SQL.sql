@@ -63,8 +63,12 @@ CREATE TABLE `movie_project_db`.`ticketing` (
 	movie_title VARCHAR(255), 
 	screen_time VARCHAR(255),
     seat VARCHAR(255),
+    status VARCHAR(255),
+    created_at DATETIME,
+    user_id VARCHAR(100),
     FOREIGN KEY (theater_name) REFERENCES `theater` (name),
-    FOREIGN KEY (movie_title) REFERENCES `movie` (title)
+    FOREIGN KEY (movie_title) REFERENCES `movie` (title),
+    FOREIGN KEY (user_id) REFERENCES `user` (user_id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
  );
@@ -124,9 +128,9 @@ INSERT INTO `movie_project_db`.`screen_info` (time, date, screen_hall_id, movie_
 VALUES ('13:00,15:00,17:00,19:00,21:00', '2024-06-03', 1, '도뷔시'),
 ('14:50', '2024-06-03', 2, '도뷔시');
 
-INSERT INTO `movie_project_db`.`ticketing` (theater_name, screen_hall_name, movie_title, screen_time, seat)
-VALUES ('대구 프리미엄', '1관', '도뷔시', '15:00', 'A1, A2'),
-('대구 프리미엄', '1관', '도뷔시', '19:00', 'A3, A4'),
-('대구 프리미엄', '2관', '도뷔시', '14:50', 'A5, A6'),
-('대구 프리미엄', '1관', '도뷔시', '13:00', 'B1, B2'),
-('대구 프리미엄', '1관', '도뷔시', '13:00', 'A1, A2');
+-- INSERT INTO `movie_project_db`.`ticketing` (theater_name, screen_hall_name, movie_title, screen_time, seat, status)
+-- VALUES ('대구 프리미엄', '1관', '도뷔시', '15:00', 'A1, A2', '예약완료'),
+-- ('대구 프리미엄', '1관', '도뷔시', '19:00', 'A3, A4', '예약완료'),
+-- ('대구 프리미엄', '2관', '도뷔시', '14:50', 'A5, A6', '예약완료'),
+-- ('대구 프리미엄', '1관', '도뷔시', '13:00', 'B1, B2', '예약완료'),
+-- ('대구 프리미엄', '1관', '도뷔시', '13:00', 'A1, A2', '예약완료');

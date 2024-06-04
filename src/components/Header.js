@@ -18,7 +18,7 @@ function Header(isAuthenticated) {
     <div id='header'>
       <a href='/movie'>영화</a>
       <a href='/ticketing'>예매</a>
-      {isAuthenticated.isAuthenticated ? (
+      {!isAuthenticated.isAuthenticated ? (
         <>
           <a href='/user/login'>로그인</a>
           <a href='/user/certification'>회원가입</a>

@@ -12,7 +12,7 @@ router.get('/verify', (req, res) => {
   if (!cookies.refresh || !cookies.access) { // refresh cookie || access cookie가 없을 때 (쿠키가 만료 되어서 사라졌거나, 강제로 쿠키를 삭제한 경우)
     res.status(401).send();
     return;
-  } 
+  }
 
   const accessToken = cookies.access.split('Bearer ')[1];
   const refreshToken = cookies.refresh.split('Bearer ')[1];
@@ -89,6 +89,10 @@ router.get('/refreshToken', (req, res) => {
 router.get('/accessTokenPayload', (req, res) => {
   const cookies = req.cookies;
 
+  if (!cookies.refresh || !cookies.access) { // refresh cookie || access cookie가 없을 때 (쿠키가 만료 되어서 사라졌거나, 강제로 쿠키를 삭제한 경우)
+    res.status(401).send();
+    return;
+  }
   const accessToken = cookies.access.split('Bearer ')[1];
 
   const result = tokenUtils.getAccessTokenPayload(accessToken);
@@ -107,8 +111,8 @@ router.post('/login', (req, res) => {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
         const refreshToken = tokenUtils.makeRefreshToken({ userId: userId }, rememberMe ? '7d' : '1d');
 
-        res.cookie("access", `Bearer ${accessToken}`,  { httpOnly: true, maxAge: 7 * 24 * 3600 * 1000});
-        res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true, maxAge: rememberMe ?  7 * 24 * 3600 * 1000 : 24 * 3600 * 1000});
+        res.cookie("access", `Bearer ${accessToken}`, { httpOnly: true, maxAge: 3600 * 1000 });
+        res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true, maxAge: rememberMe ? 7 * 24 * 3600 * 1000 : 24 * 3600 * 1000 });
 
         db.query(`insert into token values('${userId}', '${refreshToken}') ON DUPLICATE KEY UPDATE token='${refreshToken}'`, (err, data) => {
           if (!err) {
@@ -149,8 +153,8 @@ router.post('/join', (req, res) => {
 
 // 로그아웃 시 jwt 쿠키 삭제
 router.get('/logout', (req, res) => {
-  res.clearCookie('access', { httpOnly: true});
-  res.clearCookie('refresh', { httpOnly: true});
+  res.clearCookie('access', { httpOnly: true });
+  res.clearCookie('refresh', { httpOnly: true });
   res.status(200).send();
 })
 

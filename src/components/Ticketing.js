@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import '../css/Ticketing.css';
 import axios from 'axios';
 import seatsData from '../data/seatsData.json';
+import { useNavigate } from 'react-router-dom';
 
 
 // react-slick
@@ -48,10 +49,13 @@ function Ticketing() {
     const [adultCostDiv, setAdultCostDiv] = useState(null);
     const [youthCostDiv, setYouthCostDiv] = useState(null);
     const [totalCostDiv, setTotalCostDiv] = useState(null);
-
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+    const [userId, setUserId] = useState(null);
 
     const personnelList = [0, 1, 2, 3, 4];
     const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+    const navigate = useNavigate();
 
     // 결제
     const payment = (e) => {
@@ -60,30 +64,76 @@ function Ticketing() {
             return;
         }
 
-        axios.get('/user/accessTokenPayload', { withCredentials: true })
-        .then(res => {
-            const userId = res.data.userId;
 
-            axios.get(`/user/${userId}`)
+        const { IMP } = window;
+        let pg;
+        let pay_method;
+
+        axios.get(`/user/${userId}`)
             .then(res => {
-                console.log(res);
+                const phone = res.data[0].phone;
+                if (selectedPaymentMethod === 'card') {
+                    pg = "html5_inicis";
+                    pay_method = "card";
+                }
+
+                if (selectedPaymentMethod === 'kakaoPay') {
+                    pg = "kakaopay";
+                    pay_method = "card";
+                }
+
+                if (selectedPaymentMethod === 'tossPay') {
+                    pg = "tosspay";
+                    pay_method = "card";
+                }
+
+                if (selectedPaymentMethod === 'payco') {
+                    pg = "payco"
+                    pay_method = "card";
+                }
+
+                if (selectedPaymentMethod === 'phone') {
+                    pg = "danal";
+                    pay_method = "phone";
+                }
+
+                IMP.init('imp82217082');
+
+                IMP.request_pay({
+                    pg: pg,
+                    pay_method: pay_method,
+                    merchant_uid: 'merchant_' + new Date().getTime(),
+                    name: `${selectedTheaterName}_${selectedMovieTitle}`, // 제품 이름
+                    amount: 100, // 총 가격
+                    buyer_tel: phone, // 구매자 휴대폰 번호
+                },
+                    function (resp) {
+                        // const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, name: `${selectedTheaterName}_${selectedMovieTitle}`, ticketingId: ticketingId };
+                        axios.post('/payment')
+                            .then(res => {
+                                console.log(res);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            })
+                    }
+                )
             })
             .catch(err => {
                 console.log(err);
             })
-        })
-        .catch(err => {
-            console.log(err);
-        })
-
-        
     }
+
+
 
     // 결제 수단 선택 버튼
     const handlePaymentMethodBtn = (e) => {
         // 결제 버튼에 className='on' 추가
         const paymentBtn = document.querySelector('.payment-btn');
         paymentBtn.classList.add('on');
+
+        // 선택한 결제 수단 set
+        setSelectedPaymentMethod(e.target.id);
 
         // 클릭한 결제 수단 버튼에 className='selected' 추가
         // 나머지 결제 수단 버튼에 className='selected' 제거
@@ -208,7 +258,20 @@ function Ticketing() {
                 return;
             }
 
-            setStep(3);
+            axios.get('/user/accessTokenPayload', { withCredentials: true })
+                .then(res => {
+                    setUserId(res.data.userId);
+                    setStep(3);
+                })
+                .catch(err => {
+                    if (err.response.status === 401) {
+                        if (window.confirm('로그인 후 이용 가능한 서비스 입니다.\n로그인 하시겠습니까?')) {
+                            navigate('/user/login');
+                        } else {
+                            return;
+                        }
+                    }
+                })
         }
     }
 
@@ -375,6 +438,29 @@ function Ticketing() {
                 })
                 setSeatMap(seatMap);
             }
+        }
+
+        if (step === 3) {
+            const date = new Date(new Date());
+
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hour = String(date.getHours()).padStart(2, '0');
+            const minute = String(date.getMinutes()).padStart(2, '0');
+            const second = String(date.getSeconds()).padStart(2, '0');
+
+            const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+
+            const ticketingObj = { theaterName: selectedTheaterName, screenHallName: selectedScreenHallName, movieTitle: selectedMovieTitle, screenTime: selectedScreenTime, seat: selectedSeatList.join(', '), status: '예약중', createdAt: formattedDate, userId: userId };
+
+            axios.post('/ticketing', ticketingObj)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
 
         }
     }, [step])
@@ -521,61 +607,60 @@ function Ticketing() {
         isFullSelectedSeat = false;
 
         // 일반, 청소년 각각 최소 1명 이상이고, 좌석을 선택한 상황
-
         if (youth !== 0 && selectedSeatList.length !== 0) {
             // 일반 인원을 늘렸을 때
             // ex) 일반2, 청소년2 인 상황에서 일반을 3명으로 선택하면, 요금 정보가 
             // 일반2, 청소년2 -> 일반3, 청소년1 으로 변경됨.
             if (adult > adultCount) {
                 adultCount = adult;
+
                 const adultCostDiv = <div>
                     <span>일반</span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
+
                 setAdultCostDiv(adultCostDiv);
 
+
+
                 youthCount = selectedSeatList.length - adult;
-                if (youthCount === 0) {
-                    setYouthCostDiv(null);
-                } else {
-                    const youthCostDiv = <div>
-                        <span>청소년</span>
-                        <span>{youthCost} X {youthCount}</span>
-                    </div>;
-                    setYouthCostDiv(youthCostDiv);
-                }
+
+                const youthCostDiv = youthCount === 0 ? null : <div>
+                    <span>청소년</span>
+                    <span>{youthCost} X {youthCount}</span>
+                </div>;
+
+                setYouthCostDiv(youthCostDiv);
             }
 
             // 일반 인원을 줄였을 때
             if (adult < adultCount) {
                 adultCount = adult;
-                const adultCostDiv = <div>
+
+                const adultCostDiv = adultCount === 0 ? null : <div>
                     <span>일반</span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
+
                 setAdultCostDiv(adultCostDiv);
+                
 
                 youthCount = selectedSeatList.length - adult;
-                if (youthCount === 0) {
-                    setYouthCostDiv(null);
-                } else {
-                    const youthCostDiv = <div>
-                        <span>청소년</span>
-                        <span>{youthCost} X {youthCount}</span>
-                    </div>;
-                    setYouthCostDiv(youthCostDiv);
-                }
+
+                const youthCostDiv = youthCount === 0 ? null : <div>
+                    <span>청소년</span>
+                    <span>{youthCost} X {youthCount}</span>
+                </div>;
+
+                setYouthCostDiv(youthCostDiv);
             }
         }
 
         // 인원 선택 안 했을 시, 좌석 선택 못하도록 필터 적용
         if (step === 2) {
             const filter = document.querySelector('.filter');
-            if (adult === 0 && youth === 0) {
-                filter.style.zIndex = '1';
-            } else {
-                filter.style.zIndex = 'unset';
-            }
+
+            filter.style.zIndex = adult === 0 && youth === 0 ? '1' : 'unset';
         }
 
         totalCost = adultCost * adultCount + youthCost * youthCount;
@@ -621,37 +706,33 @@ function Ticketing() {
 
         // 좌석을 취소 했을 때
         if (isDeletedSelectedSeat) {
-
             // 선택 좌석보다 일반 인원이 더 많으면
             if (adult > selectedSeatList.length) {
-                const adultCostDiv = <div>
+                adultCount = selectedSeatList.length
+
+                const adultCostDiv = adultCount === 0 ? null : <div>
                     <span>일반</span>
-                    <span>{adultCost} X {--adultCount}</span>
+                    <span>{adultCost} X {adultCount}</span>
                 </div>;
 
+                setAdultCostDiv(adultCostDiv);
+
                 isDeletedSelectedSeat = false;
                 isFullSelectedSeat = false;
 
-                if (adultCount === 0) {
-                    setAdultCostDiv(null);
-                } else {
-                    setAdultCostDiv(adultCostDiv);
-                }
                 // 그 외
             } else {
-                const youthCostDiv = <div>
+                youthCount = selectedSeatList.length - adult;
+
+                const youthCostDiv = youthCount === 0 ? null : <div>
                     <span>청소년</span>
-                    <span>{youthCost} X {--youthCount}</span>
-                </div>
+                    <span>{youthCost} X {youthCount}</span>
+                </div>;
+
+                setYouthCostDiv(youthCostDiv);
 
                 isDeletedSelectedSeat = false;
                 isFullSelectedSeat = false;
-
-                if (youthCount === 0) {
-                    setYouthCostDiv(null);
-                } else {
-                    setYouthCostDiv(youthCostDiv);
-                }
             }
         }
 
@@ -685,16 +766,14 @@ function Ticketing() {
 
         setSelectedSeatMap(selectedSeatMap);
 
-        totalCost = adultCost * adultCount + youthCost * youthCount;
 
-        if (totalCost > 0) {
-            const totalCostDiv = <div>
-                <span>총금액</span>
-                <span>{totalCost}</span>
-            </div>
+        const totalCostDiv = selectedSeatList <= 0 ? null : <div>
+            <span>총금액</span>
+            <span>{adultCost * adultCount + youthCost * youthCount}</span>
+        </div>
 
-            setTotalCostDiv(totalCostDiv);
-        }
+        setTotalCostDiv(totalCostDiv);
+
     }, [selectedSeatList])
 
     // slick setting
