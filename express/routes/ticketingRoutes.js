@@ -33,8 +33,8 @@ router.post('/', (req, res) => {
             if (err) {
                 return res.send(err);
             }
-
-            res.status(200).send();
+            
+            res.status(200).send({ ticketingId: data.insertId });
         })
     })
 });

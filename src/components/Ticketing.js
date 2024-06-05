@@ -51,6 +51,7 @@ function Ticketing() {
     const [totalCostDiv, setTotalCostDiv] = useState(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     const [userId, setUserId] = useState(null);
+    const [ticketingId, setTicketingId] = useState(null);
 
     const personnelList = [0, 1, 2, 3, 4];
     const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
@@ -63,7 +64,6 @@ function Ticketing() {
             alert('결제 수단을 선택해 주세요.');
             return;
         }
-
 
         const { IMP } = window;
         let pg;
@@ -108,14 +108,25 @@ function Ticketing() {
                     buyer_tel: phone, // 구매자 휴대폰 번호
                 },
                     function (resp) {
-                        // const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, name: `${selectedTheaterName}_${selectedMovieTitle}`, ticketingId: ticketingId };
-                        axios.post('/payment')
-                            .then(res => {
-                                console.log(res);
-                            })
-                            .catch(err => {
-                                console.log(err);
-                            })
+                        console.log(resp);
+                        if (resp.success) {
+                            const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, name: `${selectedTheaterName}_${selectedMovieTitle}`, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId };
+                            axios.post('/payment', paymentObj)
+                                .then(res => {
+                                    console.log(res);
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                })
+                        } else {
+                            if (resp.error_code === 'F1001') {
+                                alert('결제가 취소 되었습니다.');
+                            } else {
+                                // 그 외의 결제 실패
+                                alert(`결제에 실패하였습니다. 에러 메시지: ${resp.error_msg}`);
+                            }
+                        }
+
                     }
                 )
             })
@@ -456,7 +467,7 @@ function Ticketing() {
 
             axios.post('/ticketing', ticketingObj)
                 .then(res => {
-                    console.log(res);
+                    setTicketingId(res.ticketingId);
                 })
                 .catch(err => {
                     console.log(err);
@@ -643,7 +654,7 @@ function Ticketing() {
                 </div>;
 
                 setAdultCostDiv(adultCostDiv);
-                
+
 
                 youthCount = selectedSeatList.length - adult;
 
