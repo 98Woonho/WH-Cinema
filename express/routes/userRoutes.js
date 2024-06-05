@@ -28,7 +28,7 @@ router.get('/verify', (req, res) => {
     const userId = decodedToken.userId; // payload에 있는 userId
 
     // 3. 쿠키에 있는 refreshToken을 가져와서 db에 있는 refreshToken이랑 비교 함.
-    db.query(`select token from token where user_id = '${userId}'`, (err, data) => {
+    db.query(`SELECT token FROM token WHERE user_id = '${userId}'`, (err, data) => {
       if (!err) {
         const dbRefreshToken = data[0].token;
 
@@ -77,12 +77,12 @@ router.get('/refreshVerify', (req, res) => {
 
 router.get('/refreshToken', (req, res) => {
   const { userId } = req.query;
-  db.query(`select token from token where user_id = '${userId}'`, (err, data) => {
-    if (!err) {
-      res.send(data[0].token);
-    } else {
+  db.query(`SELECT token FROM token WHERE user_id = '${userId}'`, (err, data) => {
+    if (err) {
       res.send(err);
     }
+
+    res.send(data[0].token);
   })
 })
 
@@ -103,7 +103,7 @@ router.get('/accessTokenPayload', (req, res) => {
 router.post('/login', (req, res) => {
   const { userId, password, rememberMe } = req.body;
 
-  db.query(`select * from user where user_id='${userId}'`, (err, data) => {
+  db.query(`SELECT * FROM user WHERE user_id='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length == 0 || !bcrypt.compareSync(password, data[0].password)) {
         res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
@@ -130,7 +130,7 @@ router.post('/login', (req, res) => {
 
 router.post('/join', (req, res) => {
   const { userId, password, name, birthday, phone } = req.body;
-  db.query(`select * from user where user_id='${userId}'`, (err, data) => {
+  db.query(`SELECT * FROM user WHERE user_id='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length != 0) {
         res.status(409).json({ error: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.' });
@@ -181,23 +181,23 @@ router.post('/certification', async (req, res) => {
 
 router.get('/:name/:birthday/:phone', (req, res) => {
   const { name, birthday, phone } = req.params;
-  db.query(`select * from user where name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
-    if (!err) {
-      res.send(data);
-    } else {
+  db.query(`SELECT * FROM user WHERE name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
+    if (err) {
       res.send(err);
     }
+
+    res.send(data);
   })
 })
 
 router.get('/:userId', (req, res) => {
   const userId = req.params.userId;
-  db.query(`select * from user where user_id = '${userId}'`, (err, data) => {
-    if (!err) {
-      res.send(data);
-    } else {
+  db.query(`SELECT * FROM user WHERE user_id = '${userId}'`, (err, data) => {
+    if (err) {
       res.send(err);
     }
+
+    res.send(data);
   })
 })
 

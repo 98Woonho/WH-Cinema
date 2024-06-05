@@ -3,12 +3,12 @@ const router = express.Router();
 const db = require('../config/db.js');
 
 router.get('/', (req, res) => {
-    db.query(`select * from theater`, (err, data) => {
-        if (!err) {
-            res.status(200).send(data);
-        } else {
+    db.query(`SELECT * FROM theater`, (err, data) => {
+        if (err) {
             res.status(500).send(err);
         }
+
+        res.status(200).send(data);
     })
 })
 
@@ -24,11 +24,11 @@ router.get('/screenInfo/:title/:date/:theaterName', (req, res) => {
               JOIN screen_hall sh ON sh.id = si.screen_hall_id
               WHERE si.movie_title = '${title}' AND si.date = '${date}' AND sh.theater_name = '${theaterName}'
               ORDER BY sh.name ASC`, (err, data) => {
-        if (!err) {
-            res.status(200).send(data);
-        } else {
+        if (err) {
             res.status(500).send(err);
         }
+
+        res.status(200).send(data);
     })
 })
 
@@ -37,11 +37,11 @@ router.get('/screenHall/:name/:theaterName/', (req, res) => {
     db.query(`SELECT adult_cost, youth_cost
               FROM screen_hall
               WHERE name = '${name}' AND theater_name = '${theaterName}'`, (err, data) => {
-        if (!err) {
-            res.status(200).send(data);
-        } else {
+        if (err) {
             res.status(500).send(err);
         }
+
+        res.status(200).send(data);
     })
 })
 
