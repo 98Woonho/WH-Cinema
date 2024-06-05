@@ -73,6 +73,23 @@ CREATE TABLE `movie_project_db`.`ticketing` (
     ON UPDATE CASCADE
  );
  
+ CREATE TABLE `movie_project_db`.`payment` (
+	id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    ticketing_id BIGINT,
+    imp_uid VARCHAR(255),
+    merchant_uid VARCHAR(255),
+    user_id VARCHAR(100),
+    paid_amount BIGINT,
+    pay_date DATETIME,
+    pay_method VARCHAR(255),
+    status VARCHAR(255),
+    FOREIGN KEY (ticketing_id) REFERENCES `ticketing` (id),
+    FOREIGN KEY (user_id) REFERENCES `user` (user_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+ );
+ 
+ 
  INSERT INTO `movie_project_db`.`movie` (`title`,`genre`,`poster`,`release_date`,`runtime`,`plot`,`rating`, `director`,`actor`,`nation`,`stillcuts`)
 VALUES ('범죄도시4', '액션, 범죄', 'http://file.koreafilm.or.kr/thm/02/99/18/37/tn_DPK021860.jpg', '2024-04-24', 109, '신종 마약 사건 3년 뒤,<br>괴물형사 \'마석도\'(마동석)와 서울 광수대는<br>배달앱을 이용한 마약 판매 사건을 수사하던 중<br>수배 중인 앱 개발자가 필리핀에서 사망한 사건이<br>대규모 온라인 불법 도박 조직과 연관되어 있음을 알아낸다.<br><br>필리핀에 거점을 두고 납치, 감금, 폭행, 살인 등으로<br>대한민국 온라인 불법 도박 시장을 장악한<br>특수부대 용병 출신의 빌런 \'백창기\'(김무열)와<br>한국에서 더 큰 판을 짜고 있는 IT업계 천재 CEO \'장동철\'(이동휘).<br><br>\'마석도\'는 더 커진 판을 잡기 위해<br>\'장이수\'(박지환)에게 뜻밖의 협력을 제안하고<br>광역수사대는 물론,<br>사이버수사대까지 합류해 범죄를 소탕하기 시작하는데...<br><br><strong>나쁜 놈 잡는데 국경도 영역도 제한 없다!<br>업그레이드 소탕 작전! 거침없이 싹 쓸어버린다!</strong>', '15세이상관람가', '허명행', '마동석, 김무열, 이동휘, 박지환', '한국','http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840308.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840309.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840310.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840311.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840312.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840313.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840314.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840315.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840316.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/74/tn_DST840317.jpg'),
 ('혹성탈출-새로운 시대', '액션, SF', 'https://file.koreafilm.or.kr/thm/02/99/18/39/tn_DPF029167.jpg', '2024-05-08', 145, '<strong>인류의 시대는 끝났고, 세상의 주인이 바뀌었다!</strong><br><br>진화한 유인원과 퇴화된 인간들이 살아가는 땅.<br>유인원 리더 \'프록시무스\'는 완전한 군림을 위해<br>인간들을 사냥하며 자신의 제국을 건설한다.<br><br>한편, 또 다른 유인원 \'노아\'는 우연히<br>숨겨진 과거의 이야기와 \'시저\'의 가르침을 듣게 되고,<br>의문의 한 인간 소녀와 함께 자유를 향한 여정을 시작하게 되는데...<br><br><strong>美 버라이어티 선정 2024년 최고의 기대작<br>아바타: 물의 길  제작진 x  메이즈 러너  웨스 볼 감독<br>5월 8일, 압도적 비주얼 스펙터클을 경험하라!</strong>', '12세이상관람가','웨스 볼','오웬 티그, 프레이아 앨런, 케빈 두런드, 피터 마콘, 윌리엄 H.머시', '미국','http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842159.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842160.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842161.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842146.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842147.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842148.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842149.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842150.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842151.jpg|http://file.koreafilm.or.kr/thm/01/copy/00/66/86/tn_DST842152.jpg'),

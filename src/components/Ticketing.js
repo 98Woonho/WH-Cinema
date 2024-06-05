@@ -108,9 +108,8 @@ function Ticketing() {
                     buyer_tel: phone, // 구매자 휴대폰 번호
                 },
                     function (resp) {
-                        console.log(resp);
                         if (resp.success) {
-                            const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, name: `${selectedTheaterName}_${selectedMovieTitle}`, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId };
+                            const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId };
                             axios.post('/payment', paymentObj)
                                 .then(res => {
                                     console.log(res);
@@ -865,7 +864,6 @@ function Ticketing() {
                     <div className='payment-method-box'>
                         <button id='card' onClick={handlePaymentMethodBtn}>신용/체크 카드</button>
                         <button id='kakaoPay' onClick={handlePaymentMethodBtn}>카카오페이</button>
-                        <button id='tossPay' onClick={handlePaymentMethodBtn}>토스페이</button>
                         <button id='payco' onClick={handlePaymentMethodBtn}>페이코</button>
                         <button id='phone' onClick={handlePaymentMethodBtn}>휴대폰 결제</button>
                     </div>
