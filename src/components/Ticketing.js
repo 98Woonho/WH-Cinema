@@ -149,7 +149,7 @@ function Ticketing() {
 
                             axios.post('/payment', paymentObj)
                                 .then(res => {
-                                    console.log(res);
+                                    alert('예매가 완료 되었습니다. 예매확인 페이지로 이동합니다.');
                                 })
                                 .catch(err => {
                                     console.log(err);
@@ -325,6 +325,18 @@ function Ticketing() {
     const handlePrevStepBtn = () => {
         if (step === 2) {
             setStep(1);
+        } 
+
+        if (step === 3) {
+            axios.delete(`/ticketing/${ticketingId}`)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+                
+            setStep(2);
         }
     }
 
@@ -910,6 +922,8 @@ function Ticketing() {
             <div className='ticketing-info-container'>
                 {step === 2 ?
                     <button onClick={handlePrevStepBtn}>영화 선택</button>
+                    : step === 3 ? 
+                    <button onClick={handlePrevStepBtn}>좌석 선택</button>
                     : ''
                 }
 

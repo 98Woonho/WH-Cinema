@@ -10,7 +10,13 @@ router.post('/', (req, res) => {
             res.send(err);
         }
 
-        res.status(200).send();
+        db.query(`UPDATE ticketing SET status = '예약완료' WHERE id = ${ticketingId}`, (err, data) => {
+            if (err) {
+                res.send(err);
+            }
+
+            res.status(200).send();
+        })
     })
 })
 
