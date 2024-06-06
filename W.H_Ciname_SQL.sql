@@ -126,8 +126,6 @@ VALUES ('범죄도시4', '액션, 범죄', 'http://file.koreafilm.or.kr/thm/02/9
 
 
  
-INSERT INTO `movie_project_db`.`user`(`user_id`,`password`,`name`,`birthday`,`phone`, `role`)
-VALUES('lkj1150', 'test', '이운호', '1998-09-28', '01095331150', 'USER');
 
 INSERT INTO `movie_project_db`.`theater` (name, region)
 VALUES('대구 프리미엄', '대구'),

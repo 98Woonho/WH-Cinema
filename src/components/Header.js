@@ -5,7 +5,7 @@ import axios from 'axios';
 function Header(isAuthenticated) {
 
   const handleLogout = () => {
-    axios.get('user/logout', { withCredentials: true })
+    axios.post('user/logout', { withCredentials: true })
     .then(res => {
       window.location.reload();
     })

@@ -49,13 +49,13 @@ function App() {
     .catch(err => {
       if (err.response.status === 401) {
         setIsAuthenticated(false);
-        // axios.post('/user/logout')
-        // .then(res => {
-        //   console.log(res);
-        // })
-        // .catch(err => {
-        //   console.log(err);
-        // })
+
+        axios.post('/user/logout')
+        .then(res => {
+        })
+        .catch(err => {
+          console.log(err);
+        })
       }
     })
 

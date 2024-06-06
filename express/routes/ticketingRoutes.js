@@ -34,9 +34,21 @@ router.post('/', (req, res) => {
                 return res.send(err);
             }
             
-            res.status(200).send({ ticketingId: data.insertId });
+            res.status(200).send({ ticketingId: data.insertId, ticketingCreatedAt: createdAt });
         })
     })
 });
+
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.query(`DELETE FROM ticketing WHERE id = '${id}'`, (err, data) => {
+        if (err) {
+            res.send(err);
+        }
+
+        res.status(200).send();
+    })
+})
 
 module.exports = router;

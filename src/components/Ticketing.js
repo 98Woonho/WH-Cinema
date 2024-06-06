@@ -10,6 +10,8 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+const personnelList = [0, 1, 2, 3, 4];
+const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
 let adultCount = 0; // 좌석 선택 시 요금에 표시할 일반 count
 let youthCount = 0; // 좌석 선택 시 요금에 표시할 청소년 count
 let adultCost; // 일반 요금
@@ -52,14 +54,43 @@ function Ticketing() {
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     const [userId, setUserId] = useState(null);
     const [ticketingId, setTicketingId] = useState(null);
-
-    const personnelList = [0, 1, 2, 3, 4];
-    const columnList = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    const [ticketingCreatedAt, setTicketingCreatedAt] = useState(null);
 
     const navigate = useNavigate();
 
+    if (step === 3) {
+        // 결제 페이지에서 다른 페이지로 이동 시, 예약 데이터 삭제
+        window.addEventListener('beforeunload', function (e) {
+            axios.delete(`/ticketing/${ticketingId}`)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        });
+    }
+
     // 결제
-    const payment = (e) => {
+    const handlePayment = (e) => {
+        const targetDate = new Date();
+        targetDate.setMinutes(targetDate.getMinutes() - 10);
+
+        // 결제 페이지에서 일정 시간 이상 머무를 시, 경고문 출력, 예약 데이터 삭제 후 홈으로 navigate
+        if (ticketingCreatedAt < targetDate) {
+            alert('예매 및 결제 시간이 초과 되었습니다. 잠시 후 다시 시도해 주세요.');
+            axios.delete(`/ticketing/${ticketingId}`)
+                .then(res => {
+                    console.log(res);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+
+            navigate('/');
+            return;
+        }
+
         if (!e.target.classList.contains('on')) {
             alert('결제 수단을 선택해 주세요.');
             return;
@@ -109,7 +140,13 @@ function Ticketing() {
                 },
                     function (resp) {
                         if (resp.success) {
-                            const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId };
+                            let payDate = new Date();
+                            payDate.setHours(payDate.getHours() + 9);
+
+                            payDate = payDate.toISOString().slice(0, 19).replace('T', ' ');
+
+                            const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId, userId: userId, payDate: payDate };
+
                             axios.post('/payment', paymentObj)
                                 .then(res => {
                                     console.log(res);
@@ -451,22 +488,17 @@ function Ticketing() {
         }
 
         if (step === 3) {
-            const date = new Date(new Date());
+            let createdAt = new Date();
+            createdAt.setHours(createdAt.getHours() + 9);
 
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hour = String(date.getHours()).padStart(2, '0');
-            const minute = String(date.getMinutes()).padStart(2, '0');
-            const second = String(date.getSeconds()).padStart(2, '0');
+            createdAt = createdAt.toISOString().slice(0, 19).replace('T', ' ');
 
-            const formattedDate = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
-
-            const ticketingObj = { theaterName: selectedTheaterName, screenHallName: selectedScreenHallName, movieTitle: selectedMovieTitle, screenTime: selectedScreenTime, seat: selectedSeatList.join(', '), status: '예약중', createdAt: formattedDate, userId: userId };
+            const ticketingObj = { theaterName: selectedTheaterName, screenHallName: selectedScreenHallName, movieTitle: selectedMovieTitle, screenTime: selectedScreenTime, seat: selectedSeatList.join(', '), status: '예약중', createdAt: createdAt, userId: userId };
 
             axios.post('/ticketing', ticketingObj)
                 .then(res => {
-                    setTicketingId(res.ticketingId);
+                    setTicketingCreatedAt(new Date(res.data.ticketingCreatedAt));
+                    setTicketingId(res.data.ticketingId);
                 })
                 .catch(err => {
                     console.log(err);
@@ -920,7 +952,7 @@ function Ticketing() {
                     <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
                     <p>결제선택</p>
                 </button>
-                ) : (<button className='payment-btn' onClick={payment}>결제하기</button>
+                ) : (<button className='payment-btn' onClick={handlePayment}>결제하기</button>
                 )}
 
             </div>
