@@ -26,6 +26,7 @@ function Header(isAuthenticated) {
       ) : (
         <>
           <button className="logout" onClick={handleLogout}>로그아웃</button>
+          <a href='/user/myPage'>마이페이지</a>
         </>
       )}
     </div>
