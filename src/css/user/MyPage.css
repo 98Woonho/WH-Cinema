@@ -65,6 +65,14 @@
     border-bottom: 1px solid rgb(129, 129, 129);
 }
 
-.row-title {
+.user-info-update-table label {
+    display: inline-block;
+    width: 120px;
+}
 
+.update-btn {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 0.5rem;
+    background-color: aliceblue;
 }

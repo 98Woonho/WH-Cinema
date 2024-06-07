@@ -8,7 +8,8 @@ function MyPage() {
     const [updateUserId, setUpdateUserId] = useState('');
     const [password, setPassword] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
-    const [menu, setMenu] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [menu, setMenu] = useState('info');
 
     const navigate = useNavigate();
 
@@ -18,6 +19,10 @@ function MyPage() {
 
     const handleCurrentPassword = (e) => {
         setCurrentPassword(e.target.value);
+    }
+
+    const handleNewPassword = (e) => {
+        setNewPassword(e.target.value);
     }
 
     // 메뉴 이벤트
@@ -57,6 +62,10 @@ function MyPage() {
 
     const handleUpdateId = (e) => {
 
+    }
+
+    const handleUpdatePassword = (e) => {
+        
     }
 
     useEffect(() => {
@@ -112,24 +121,21 @@ function MyPage() {
                                     <td className='row-title'>아이디</td>
                                     <td>
                                         <input type='text' name='userId' value={updateUserId} onChange={handleUpdateUserId} />
-                                        <button className='update-id-btn' onClick={handleUpdateId}>아이디 변경</button>
+                                        <button className='update-btn' onClick={handleUpdateId}>아이디 변경</button>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td className='row-title'>비밀번호</td>
                                     <td>
                                         <div>
-                                            <label>현재 비밀번호 : </label>
+                                            <label>현재 비밀번호</label>
                                             <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
                                         </div>
                                         <div>
-                                            <label>새 비밀번호 : </label>
-                                            <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
+                                            <label>새 비밀번호</label>
+                                            <input type='password' name='newPassword' onChange={handleNewPassword} />
                                         </div>
-                                        <div>
-                                            <label>새 비밀번호 확인 : </label>
-                                            <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
-                                        </div>
+                                        <button className='update-btn' onClick={handleUpdatePassword}>비밀번호 변경</button>
                                     </td>
                                 </tr>
                             </tbody>
