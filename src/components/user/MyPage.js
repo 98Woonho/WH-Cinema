@@ -4,17 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 function MyPage() {
-    const [myPageRightMap, setMyPageRightMap] = useState(null);
     const [user, setUser] = useState([]);
-    const [userId, setUserId] = useState('');
+    const [updateUserId, setUpdateUserId] = useState('');
     const [password, setPassword] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
+    const [menu, setMenu] = useState('');
 
     const navigate = useNavigate();
 
-    const handleUserId = (e) => {
-        console.log(e.target.value);
-        setUserId(e.target.value);
+    const handleUpdateUserId = (e) => {
+        setUpdateUserId(e.target.value);
     }
 
     const handleCurrentPassword = (e) => {
@@ -35,57 +34,29 @@ function MyPage() {
     const handleInfo = (e) => {
         handleMenu(e);
 
-        const myPageRightMap = <div className='user-info'>
-            <span>아이디 : {user.user_id}</span>
-            <span>이름 : {user.name}</span>
-            <span>휴대폰 번호 : {user.phone}</span>
-        </div>;
-
-        setMyPageRightMap(myPageRightMap);
+        setMenu('info');
     }
 
     const handleInfoUpdate = (e) => {
         handleMenu(e);
 
-        setMyPageRightMap(<form className='user-info-update-form'>
-            <table className='user-info-update-table'>
-                <tbody>
-                    <tr>
-                        <td className='row-title'>아이디</td>
-                        <td>
-                            <input type='text' name='userId' onChange={handleUserId} />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className='row-title'>비밀번호</td>
-                        <td>
-                            <label>현재 비밀번호 : </label>
-                            <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            {/* <div>
-                <label>아이디 : </label>
-                <input type='text' name='userId' value={user.user_id} onChange={handleUserId} />
-            </div>
-            <div>
-                <label>비밀번호 : </label>
-                <input type='password' name='currentPassword' onChange={handlePassword} />
-            </div> */}
-        </form >)
+        setMenu('infoUpdate');
     }
 
     const handleSecession = (e) => {
         handleMenu(e);
 
-        setMyPageRightMap(<div>회원탈퇴</div>)
+        setMenu('secession');
     }
 
     const handleTicketingInfo = (e) => {
         handleMenu(e);
 
-        setMyPageRightMap(<div>예매현황</div>)
+        setMenu('ticketingInfo');
+    }
+
+    const handleUpdateId = (e) => {
+
     }
 
     useEffect(() => {
@@ -96,7 +67,7 @@ function MyPage() {
                 axios.get(`/user/${userId}`)
                     .then(res => {
                         setUser(res.data[0]);
-                        setUserId(res.data[0].user_id);
+                        setUpdateUserId(res.data[0].user_id);
                     })
                     .catch(err => {
                         console.log(err);
@@ -128,7 +99,49 @@ function MyPage() {
                 </div>
             </div>
             <div className="my-page-right">
-                {myPageRightMap}
+                {menu === 'info' ?
+                    <div className='user-info'>
+                        <span>아이디 : {user.user_id}</span>
+                        <span>이름 : {user.name}</span>
+                        <span>휴대폰 번호 : {user.phone}</span>
+                    </div>
+                    : menu === 'infoUpdate' ?
+                        <table className='user-info-update-table'>
+                            <tbody>
+                                <tr>
+                                    <td className='row-title'>아이디</td>
+                                    <td>
+                                        <input type='text' name='userId' value={updateUserId} onChange={handleUpdateUserId} />
+                                        <button className='update-id-btn' onClick={handleUpdateId}>아이디 변경</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className='row-title'>비밀번호</td>
+                                    <td>
+                                        <div>
+                                            <label>현재 비밀번호 : </label>
+                                            <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
+                                        </div>
+                                        <div>
+                                            <label>새 비밀번호 : </label>
+                                            <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
+                                        </div>
+                                        <div>
+                                            <label>새 비밀번호 확인 : </label>
+                                            <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        : menu === 'secession' ?
+                            <div>
+
+                            </div>
+                            : <div>
+
+                            </div>
+                }
             </div>
         </div>
     );
