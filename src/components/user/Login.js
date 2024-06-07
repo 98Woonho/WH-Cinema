@@ -9,7 +9,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
 
-    const handleuserId = (e) => {
+    const handleUserId = (e) => {
         setUserId(e.target.value);
     }
 
@@ -41,7 +41,7 @@ function Login() {
             <h2>로그인</h2>
             <div>
                 <label>아이디 : </label>
-                <input type='text' name='userId' value={userId} onChange={handleuserId} />
+                <input type='text' name='userId' value={userId} onChange={handleUserId} />
             </div>
             <div>
                 <label>비밀번호 : </label>
@@ -50,9 +50,6 @@ function Login() {
             <div>
                 <input type="checkbox" onChange={handleRememberMe}/>
                 <span>로그인 유지</span>
-            </div>
-            <div>
-                <p id='warning'></p>
             </div>
             <div>
                 <button type='button' onClick={login}>Login</button>

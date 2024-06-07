@@ -28,10 +28,43 @@
     font-weight: 600;
 }
 
-.menu p {
+.menu-container p {
     cursor: pointer;
 }
 
-.menu p.selected {
+.menu-container p:hover {
     color: blue;
+}
+
+.menu-container p.selected {
+    color: blue;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.user-info-update-table {
+    width: 80%;
+    margin: 2rem auto;
+
+    border-top: 2px solid black;
+}
+
+.user-info-update-table td {
+    padding: 1rem;
+}
+
+.user-info-update-table td.row-title {
+    border-right: 1px solid rgb(112, 112, 112);
+}
+
+.user-info-update-table tr {
+    border-bottom: 1px solid rgb(129, 129, 129);
+}
+
+.row-title {
+
 }
