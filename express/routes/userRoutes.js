@@ -202,4 +202,10 @@ router.get('/:userId', (req, res) => {
   })
 })
 
+router.patch('/', (req, res) => {
+  const { type, value } = req.body;
+
+  console.log(type);
+})
+
 module.exports = router;

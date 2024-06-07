@@ -65,7 +65,43 @@ function MyPage() {
     }
 
     const handleUpdatePassword = (e) => {
-        
+
+    }
+
+    const certification = (e) => {
+        e.preventDefault();
+
+        const { IMP } = window;
+        IMP.init('imp82217082');
+
+        IMP.certification(
+            {
+                pg: 'inicis_unified',
+                merchant_uid: `mid_${new Date().getTime()}`,
+            },
+            async function (res) {
+                if (res.success) {
+                    // 통합인증 정보 가져오기
+                    const certificationInfo = await axios.post('/user/certification', { imp_uid: res.imp_uid }, { headers: { 'Content-Type': 'application/json' } });
+
+                    // 통합인증 정보에서 필요한 정보 set
+                    const { name, phone } = certificationInfo.data.response;
+
+                    const userObj = { name: name, phone: phone };
+
+                    axios.patch('/user', userObj)
+                        .then(res => {
+                            console.log(res);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                        
+                } else {
+                    alert("인증에 실패하였습니다. 에러 내용: " + res.error_msg);
+                }
+            }
+        )
     }
 
     useEffect(() => {
@@ -136,6 +172,14 @@ function MyPage() {
                                             <input type='password' name='newPassword' onChange={handleNewPassword} />
                                         </div>
                                         <button className='update-btn' onClick={handleUpdatePassword}>비밀번호 변경</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td className='row-title'>이름 및 휴대폰 번호</td>
+                                    <td>
+                                        {user.name}
+                                        {user.phone}
+                                        <button className='update-btn' onClick={certification}>본인인증</button>
                                     </td>
                                 </tr>
                             </tbody>
