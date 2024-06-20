@@ -22,11 +22,6 @@ function Movie() {
   // /movie 경로로 접속하면 현재상영작을 먼저 보여줌.
   // 현재상영작, 상영예정작 버튼을 누를 때 마다 그에 맞는 영화 목록을 movieList에 set
   useEffect(() => {
-    // axios.get(`http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=FPWJ81L14L7X38342790&releaseDts=20240523&ratedYn=y&releaseDte=20240723&listCount=500`)
-    //   .then(res => {
-    //     console.log(res.data.Data[0].Result)
-    //   })
-
     if (num === 0) {
       const currentDate = new Date();
 

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 function MyPage() {
     const [user, setUser] = useState([]);
-    const [updateUserId, setUpdateUserId] = useState('');
+    const [newUserId, setNewUserId] = useState('');
     const [password, setPassword] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -13,15 +13,15 @@ function MyPage() {
 
     const navigate = useNavigate();
 
-    const handleUpdateUserId = (e) => {
-        setUpdateUserId(e.target.value);
+    const changeNewUserId = (e) => {
+        setNewUserId(e.target.value);
     }
 
-    const handleCurrentPassword = (e) => {
+    const changeCurrentPassword = (e) => {
         setCurrentPassword(e.target.value);
     }
 
-    const handleNewPassword = (e) => {
+    const changeNewPassword = (e) => {
         setNewPassword(e.target.value);
     }
 
@@ -61,11 +61,63 @@ function MyPage() {
     }
 
     const handleUpdateId = (e) => {
+        e.preventDefault();
 
+        if (newUserId === '' || newUserId === user.user_id) {
+            alert('현재 아이디와 동일한 아이디 입니다. 다른 아이디를 입력해 주세요.');
+            return;
+        }
+
+        axios.patch('/user', { newUserId: newUserId, currentUserId: user.user_id })
+            .then(res => {
+                alert(res.data.msg);
+
+                axios.post('/user/logout', { withCredentials: true })
+                    .then(res => {
+                        navigate('/user/login');
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            })
+            .catch(err => {
+                if (err.response.status === 409) {
+                    alert(err.response.data.msg);
+                } else {
+                    alert('알 수 없는 이유로 비밀번호를 변경하지 못하였습니다. 잠시 후 다시 시도해 주세요.');
+                }
+            })
     }
 
     const handleUpdatePassword = (e) => {
+        e.preventDefault();
 
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+
+        if (newPassword.match(passwordRegex) === null) {
+            alert('올바른 새 비밀번호를 입력해 주세요.');
+            return;
+        }
+
+        axios.patch('/user', { newPassword: newPassword, currentUserId: user.user_id, currentPassword: currentPassword })
+            .then(res => {
+                alert(res.data.msg);
+
+                axios.post('/user/logout', { withCredentials: true })
+                    .then(res => {
+                        navigate('/user/login');
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            })
+            .catch(err => {
+                if (err.response.status === 401 || err.response.status === 400) {
+                    alert(err.response.data.msg);
+                } else {
+                    alert('알 수 없는 이유로 비밀번호를 변경하지 못하였습니다. 잠시 후 다시 시도해 주세요.');
+                }
+            })
     }
 
     const certification = (e) => {
@@ -96,7 +148,7 @@ function MyPage() {
                         .catch(err => {
                             console.log(err);
                         })
-                        
+
                 } else {
                     alert("인증에 실패하였습니다. 에러 내용: " + res.error_msg);
                 }
@@ -112,7 +164,6 @@ function MyPage() {
                 axios.get(`/user/${userId}`)
                     .then(res => {
                         setUser(res.data[0]);
-                        setUpdateUserId(res.data[0].user_id);
                     })
                     .catch(err => {
                         console.log(err);
@@ -128,6 +179,10 @@ function MyPage() {
                 }
             })
     }, [])
+
+    useEffect(() => {
+        setNewUserId(user.user_id);
+    }, [user])
 
     return (
         <div id='myPage'>
@@ -156,7 +211,7 @@ function MyPage() {
                                 <tr>
                                     <td className='row-title'>아이디</td>
                                     <td>
-                                        <input type='text' name='userId' value={updateUserId} onChange={handleUpdateUserId} />
+                                        <input type='text' name='userId' value={newUserId} onChange={changeNewUserId} />
                                         <button className='update-btn' onClick={handleUpdateId}>아이디 변경</button>
                                     </td>
                                 </tr>
@@ -165,11 +220,11 @@ function MyPage() {
                                     <td>
                                         <div>
                                             <label>현재 비밀번호</label>
-                                            <input type='password' name='currentPassword' onChange={handleCurrentPassword} />
+                                            <input type='password' name='currentPassword' onChange={changeCurrentPassword} />
                                         </div>
                                         <div>
                                             <label>새 비밀번호</label>
-                                            <input type='password' name='newPassword' onChange={handleNewPassword} />
+                                            <input type='password' name='newPassword' onChange={changeNewPassword} />
                                         </div>
                                         <button className='update-btn' onClick={handleUpdatePassword}>비밀번호 변경</button>
                                     </td>

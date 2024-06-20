@@ -112,7 +112,7 @@ router.post('/login', (req, res) => {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
         const refreshToken = tokenUtils.makeRefreshToken({ userId: userId }, rememberMe ? '7d' : '1d');
 
-        res.cookie("access", `Bearer ${accessToken}`, { httpOnly: true, maxAge: 7 * 24 * 3600 * 1000});
+        res.cookie("access", `Bearer ${accessToken}`, { httpOnly: true, maxAge: 7 * 24 * 3600 * 1000 });
         res.cookie("refresh", `Bearer ${refreshToken}`, { httpOnly: true, maxAge: rememberMe ? 7 * 24 * 3600 * 1000 : 24 * 3600 * 1000 });
 
         db.query(`insert into token values('${userId}', '${refreshToken}') ON DUPLICATE KEY UPDATE token='${refreshToken}'`, (err, data) => {
@@ -193,7 +193,7 @@ router.get('/:name/:birthday/:phone', (req, res) => {
 
 router.get('/:userId', (req, res) => {
   const userId = req.params.userId;
-  db.query(`SELECT * FROM user WHERE user_id = '${userId}'`, (err, data) => {
+  db.query(`SELECT user_id, name, birthday, phone, role FROM user WHERE user_id = '${userId}'`, (err, data) => {
     if (err) {
       res.send(err);
     }
@@ -203,9 +203,61 @@ router.get('/:userId', (req, res) => {
 })
 
 router.patch('/', (req, res) => {
-  const { type, value } = req.body;
+  const { newUserId, currentUserId, newPassword, currentPassword } = req.body;
 
-  console.log(type);
+  // 아이디 변경 시
+  if (newUserId) {
+
+    // 변경할려는 userId와 같은 userId의 db SELECT
+    db.query(`SELECT * FROM user WHERE user_id='${newUserId}'`, (err, data) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      // 데이터가 존재 할 때
+      if (data.length > 0) {
+        return res.status(409).json({ msg: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.' });
+      }
+
+      // userId UPDATE
+      db.query(`UPDATE user SET user_id='${newUserId}' WHERE user_id='${currentUserId}'`, (err, data) => {
+        if (err) {
+          res.send(err);
+        }
+
+        res.status(200).json({ msg: '아이디가 변경 되었습니다. 로그인을 다시 해주세요.' });
+      })
+    }
+    )
+  }
+
+  // 비밀번호 변경 시
+  if (newPassword) {
+    db.query(`SELECT * FROM user WHERE user_id='${currentUserId}'`, (err, data) => {
+      if (err) {
+        return res.send(err);
+      }
+
+      if (!bcrypt.compareSync(currentPassword, data[0].password)) {
+        return res.status(401).json({ msg: '현재 비밀번호가 일치하지 않습니다. 확인 후 다시 입력 해주세요.' });
+      }
+
+      if (bcrypt.compareSync(newPassword, data[0].password)) {
+        return res.status(400).json({ msg: '현재 비밀번호와 동일한 비밀번호 입니다. 다른 비밀번호를 입력해 주세요.' });
+      }
+
+      const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+
+      db.query(`UPDATE user SET password='${hashedNewPassword}' WHERE user_id='${currentUserId}'`, (err, data) => {
+        if (err) {
+          res.send(err);
+        }
+
+        res.status(200).json({ msg: '비밀번호가 변경 되었습니다. 로그인을 다시 해주세요.' })
+      })
+    })
+  }
 })
+
 
 module.exports = router;
