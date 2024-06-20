@@ -48,12 +48,12 @@ function Join() {
 
         axios.post('/user/join', userObj)
         .then(res => {
-            alert(res.data.message);
+            alert(res.data.msg);
             navigate('/user/login');
         })
         .catch(err => {
             if (err.response.status === 409) {
-                alert(err.response.data.error);
+                alert(err.response.data.msg);
             } else {
                 alert('알 수 없는 이유로 회원가입에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
             }

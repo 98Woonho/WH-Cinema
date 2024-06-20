@@ -107,7 +107,7 @@ router.post('/login', (req, res) => {
   db.query(`SELECT * FROM user WHERE user_id='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length == 0 || !bcrypt.compareSync(password, data[0].password)) {
-        res.status(400).json({ error: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
+        res.status(400).json({ msg: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
       } else {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
         const refreshToken = tokenUtils.makeRefreshToken({ userId: userId }, rememberMe ? '7d' : '1d');
@@ -134,13 +134,13 @@ router.post('/join', (req, res) => {
   db.query(`SELECT * FROM user WHERE user_id='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length != 0) {
-        res.status(409).json({ error: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.' });
+        res.status(409).json({ msg: '이미 존재하는 아이디 입니다. 다른 아이디를 입력해 주세요.' });
       } else {
         const hashedPassword = bcrypt.hashSync(password, 10);
         const role = 'USER';
         db.query(`insert into user values('${userId}', '${hashedPassword}', '${name}', '${birthday}', '${phone}', '${role}')`, (err, data) => {
           if (!err) {
-            res.status(201).json({ message: '회원가입이 완료 되었습니다.' });
+            res.status(201).json({ msg: '회원가입이 완료 되었습니다.' });
           } else {
             res.send(err);
           }
