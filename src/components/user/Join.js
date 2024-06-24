@@ -48,8 +48,12 @@ function Join() {
 
         axios.post('/user/join', userObj)
         .then(res => {
+            const state = {
+                isJoinPage: true
+            }
+
             alert(res.data.msg);
-            navigate('/user/login');
+            navigate('/user/login', { state });
         })
         .catch(err => {
             if (err.response.status === 409) {
