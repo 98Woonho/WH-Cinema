@@ -158,7 +158,7 @@ function MyPage() {
 
     const handleSubmitSecession = () => {
         if (window.confirm('정말로 회원 탈퇴를 하시겠습니까?\n탈퇴한 계정은 복구가 불가능합니다.')) {
-            axios.delete(`/user/{${user.user_id}}`)
+            axios.delete(`/user/${user.user_id}`)
             .then(res => {
                 axios.post('/user/logout', { withCredentials: true })
                     .then(res => {

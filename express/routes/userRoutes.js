@@ -239,39 +239,23 @@ router.patch('/', (req, res) => {
         res.send(err);
       }
 
-      // if (!bcrypt.compareSync(currentPassword, data[0].password)) {
-      //   return res.status(401).json({ msg: '현재 비밀번호가 일치하지 않습니다. 확인 후 다시 입력 해주세요.' });
-      // }
-
-      // if (bcrypt.compareSync(newPassword, data[0].password)) {
-      //   return res.status(400).json({ msg: '현재 비밀번호와 동일한 비밀번호 입니다. 다른 비밀번호를 입력해 주세요.' });
-      // }
-
-      // const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
-
-      // db.query(`UPDATE user SET password='${hashedNewPassword}' WHERE user_id='${currentUserId}'`, (err, data) => {
-      //   if (err) {
-      //     res.send(err);
-      //   }
-
-      //   res.status(200).json({ msg: '비밀번호가 변경 되었습니다. 로그인을 다시 해주세요.' })
-      // })
-
-
       if (!bcrypt.compareSync(currentPassword, data[0].password)) {
-        res.status(401).json({ msg: '현재 비밀번호가 일치하지 않습니다. 확인 후 다시 입력 해주세요.' });
-      } else if (bcrypt.compareSync(newPassword, data[0].password)) {
-        res.status(400).json({ msg: '현재 비밀번호와 동일한 비밀번호 입니다. 다른 비밀번호를 입력해 주세요.' });
-      } else {
-        const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
-        db.query(`UPDATE user SET password='${hashedNewPassword}' WHERE user_id='${currentUserId}'`, (err, data) => {
-          if (err) {
-            res.send(err);
-          }
-
-          res.status(200).json({ msg: '비밀번호가 변경 되었습니다. 로그인을 다시 해주세요.' })
-        })
+        return res.status(401).json({ msg: '현재 비밀번호가 일치하지 않습니다. 확인 후 다시 입력 해주세요.' });
       }
+
+      if (bcrypt.compareSync(newPassword, data[0].password)) {
+        return res.status(400).json({ msg: '현재 비밀번호와 동일한 비밀번호 입니다. 다른 비밀번호를 입력해 주세요.' });
+      }
+
+      const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+
+      db.query(`UPDATE user SET password='${hashedNewPassword}' WHERE user_id='${currentUserId}'`, (err, data) => {
+        if (err) {
+          res.send(err);
+        }
+
+        res.status(200).json({ msg: '비밀번호가 변경 되었습니다. 로그인을 다시 해주세요.' })
+      })
     })
   }
 })
