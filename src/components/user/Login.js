@@ -1,13 +1,17 @@
 import '../../css/user/Login.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 
 function Login() {
+    const location = useLocation();
     const navigate = useNavigate();
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
+
+    const { isJoinPage } = location.state === null ? '' : location.state;
+    console.log(isJoinPage);
 
     const handleUserId = (e) => {
         setUserId(e.target.value);
@@ -25,7 +29,7 @@ function Login() {
         const userObj = { userId: userId, password: password, rememberMe: rememberMe };
         axios.post('/user/login', userObj)
             .then(res => {
-                navigate(-1);
+                isJoinPage ? navigate('/') : navigate(-1);
             })
             .catch(err => {
                 if (err.response.status === 400) {

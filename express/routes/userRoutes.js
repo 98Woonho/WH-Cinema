@@ -258,5 +258,16 @@ router.patch('/', (req, res) => {
   }
 })
 
+router.delete('/:userId', (req, res) => {
+  const { userId } = req.params;
+
+  db.query(`DELETE FROM user WHERE user_id='${userId}'`, (err, data) => {
+    if (err) {
+      res.send(err);
+    }
+
+    res.status(200).send();
+  })
+})
 
 module.exports = router;

@@ -42,7 +42,7 @@ function MyPage() {
         setMenu('info');
     }
 
-    const handleInfoUpdate = (e) => {
+    const handleUpdateInfo = (e) => {
         handleMenu(e);
 
         setMenu('infoUpdate');
@@ -156,6 +156,25 @@ function MyPage() {
         )
     }
 
+    const handleSubmitSecession = () => {
+        if (window.confirm('정말로 회원 탈퇴를 하시겠습니까?\n탈퇴한 계정은 복구가 불가능합니다.')) {
+            axios.delete(`/user/${user.user_id}`)
+            .then(res => {
+                axios.post('/user/logout', { withCredentials: true })
+                    .then(res => {
+                        alert('회원탈퇴가 완료 되었습니다.\n로그인 화면으로 이동합니다.')
+                        navigate('/user/login');
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+    }
+
     useEffect(() => {
         axios.get('/user/accessTokenPayload', { withCredentials: true })
             .then(res => {
@@ -190,7 +209,7 @@ function MyPage() {
                 <div className='menu-container'>
                     <h2 className='menu-title'>회원</h2>
                     <p className='menu selected' onClick={handleInfo}>회원정보</p>
-                    <p className='menu' onClick={handleInfoUpdate}>회원정보수정</p>
+                    <p className='menu' onClick={handleUpdateInfo}>회원정보수정</p>
                     <p className='menu' onClick={handleSecession}>회원탈퇴</p>
                 </div>
                 <div className='menu-container'>
@@ -241,7 +260,7 @@ function MyPage() {
                         </table>
                         : menu === 'secession' ?
                             <div>
-
+                                <button className='secession-btn' onClick={handleSubmitSecession}>회원탈퇴</button>
                             </div>
                             : <div>
 

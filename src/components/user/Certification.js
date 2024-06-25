@@ -38,8 +38,12 @@ function Certification() {
                                 navigate('/user/join', { state });
                             // 가입되어 있는 유저가 있으면 문구 출력 후 로그인 페이지로 이동
                             } else {
+                                const state = {
+                                    isJoinPage: true
+                                }
+
                                 alert('이미 해당 정보로 계정이 존재 합니다. 로그인 화면으로 이동합니다.');
-                                navigate('/user/login');
+                                navigate('/user/login', { state });
                             }
                         })
                         .catch(err => {
