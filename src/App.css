@@ -3,6 +3,10 @@
   justify-content: center;
 }
 
+body {
+  position: relative;
+}
+
 #App {
   background-color: aqua;
 }

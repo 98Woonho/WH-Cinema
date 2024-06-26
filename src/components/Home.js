@@ -1,6 +1,7 @@
 // 홈페이지
 
 import { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 // import { Cookies } from "react-cookie";
 // import axios from 'axios';
 
@@ -14,10 +15,12 @@ function Home() {
   useEffect(() => {
     const playBtns = document.querySelectorAll('.play-btn');
     const trailers = document.querySelectorAll('.trailer');
+    const dialog = document.getElementById('dialog');
 
     playBtns.forEach((playBtn, index) => {
       playBtn.addEventListener('click', function () {
         trailers[index].classList.add('visible');
+        dialog.classList.add('visible');
       })
     })
   }, []);
@@ -30,20 +33,21 @@ function Home() {
 
   return (
     <>
-      <div className="video-dialog">
-        <iframe className="trailer" width="1000px" height="700px" src="https://www.youtube.com/embed/4ycxumdqUnY"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
-      <div className="video-dialog">
-        <iframe className="trailer" width="1000px" height="700px" src="https://www.youtube.com/embed/oGbkEBrqUAs"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
+      {ReactDOM.createPortal(
+        <>
+          <iframe className="trailer" width="1000px" height="700px" src="https://www.youtube.com/embed/4ycxumdqUnY"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+          <iframe className="trailer" width="1000px" height="700px" src="https://www.youtube.com/embed/oGbkEBrqUAs"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </>,
+        document.getElementById('dialog')
+      )}
       <main id="homeMain">
         <div className="content-container">
           <div className="main-img-container">
