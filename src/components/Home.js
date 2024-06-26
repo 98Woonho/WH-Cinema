@@ -14,13 +14,21 @@ import '../css/Home.css';
 function Home() {
   useEffect(() => {
     const playBtns = document.querySelectorAll('.play-btn');
-    const trailers = document.querySelectorAll('.trailer');
+    const trailerContainers = document.querySelectorAll('.trailer-container');
     const dialog = document.getElementById('dialog');
+    const closeDialogBtns = document.querySelectorAll('.close-dialog-btn');
 
     playBtns.forEach((playBtn, index) => {
       playBtn.addEventListener('click', function () {
-        trailers[index].classList.add('visible');
+        trailerContainers[index].classList.add('visible');
         dialog.classList.add('visible');
+      })
+    })
+
+    closeDialogBtns.forEach((closeDialogBtn, index) => {
+      closeDialogBtn.addEventListener('click', function () {
+        trailerContainers[index].classList.remove('visible');
+        dialog.classList.remove('visible');
       })
     })
   }, []);
@@ -28,23 +36,35 @@ function Home() {
   const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    infinite: false
+    infinite: false,
+    autoplay: true,
+    infinite: true,
   }
 
   return (
     <>
       {ReactDOM.createPortal(
         <>
-          <iframe className="trailer" width="1000px" height="700px" src="https://www.youtube.com/embed/4ycxumdqUnY"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
-          <iframe className="trailer" width="1000px" height="700px" src="https://www.youtube.com/embed/oGbkEBrqUAs"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
+          <div className="trailer-container">
+            <button className="close-dialog-btn">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR4nO3YT0sCQRyH8YeuUu0KG/RHUG8efAceetFBJ6noEKUI6iG1wHolxcIYg6wi67Qzs3w/IHga92F09zeCiIiIiMg/6QEPwKXDNRvAHXBLhYbADzAHLhysdwo8W2ueUJEMmJoPfj9yZ/KdeDRrfQNdKpYCY3MBC+DKQUQHT46JsSO+fEYUxSwPjMkjnkKKsGNGVsw1u50BLyFGFMWsdsQEH7GR7Ik534poE7hkK+YmxoiNJjAxF/4BvJr3n0CLyCTAmwnIX+uYdqJ2Ic06fLWSgjtXdD/2dM/tN5pnSHrA0z3Y0aTMvBVsTFpiAg5mfHc9xnuNyaxT4qLkKbFhzv7eTocZMHN41PUWM6zLnw99E+Miwo65BwYO1xQRERER4c8v6Th7MMbV15kAAAAASUVORK5CYII=" />
+            </button>
+            <iframe className="trailer" width="950px" height="550px" src="https://www.youtube.com/embed/4ycxumdqUnY"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div className="trailer-container">
+            <button className="close-dialog-btn">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR4nO3YT0sCQRyH8YeuUu0KG/RHUG8efAceetFBJ6noEKUI6iG1wHolxcIYg6wi67Qzs3w/IHga92F09zeCiIiIiMg/6QEPwKXDNRvAHXBLhYbADzAHLhysdwo8W2ueUJEMmJoPfj9yZ/KdeDRrfQNdKpYCY3MBC+DKQUQHT46JsSO+fEYUxSwPjMkjnkKKsGNGVsw1u50BLyFGFMWsdsQEH7GR7Ik534poE7hkK+YmxoiNJjAxF/4BvJr3n0CLyCTAmwnIX+uYdqJ2Ic06fLWSgjtXdD/2dM/tN5pnSHrA0z3Y0aTMvBVsTFpiAg5mfHc9xnuNyaxT4qLkKbFhzv7eTocZMHN41PUWM6zLnw99E+Miwo65BwYO1xQRERER4c8v6Th7MMbV15kAAAAASUVORK5CYII=" />
+            </button>
+            <iframe className="trailer" width="950px" height="550px" src="https://www.youtube.com/embed/oGbkEBrqUAs"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
         </>,
         document.getElementById('dialog')
       )}
