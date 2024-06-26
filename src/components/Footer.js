@@ -5,9 +5,11 @@ import '../css/Footer.css'
 
 function Footer() {
   return(
-    <div id='Footer'>
+    <footer id='Footer'>
+      <div className="content-container">
         푸터
-    </div>
+      </div>
+    </footer>
   )
 }
 

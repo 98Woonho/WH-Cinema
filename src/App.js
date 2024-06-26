@@ -39,17 +39,17 @@ a {
 `;
 
 function App() {
-  axios.get('http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=FPWJ81L14L7X38342790&releaseDts=20240626&ratedYn=y&releaseDte=20240826&listCount=500')
-  .then(res => {
-    console.log(res);
-  })
-  .catch(err => {
-    console.log(err);
-  })
+  // axios.get('http://api.koreafilm.or.kr/openapi-data2/wisenut/search_api/search_json2.jsp?collection=kmdb_new2&detail=Y&ServiceKey=FPWJ81L14L7X38342790&releaseDts=20240626&ratedYn=y&releaseDte=20240826&listCount=500')
+  //   .then(res => {
+  //     console.log(res);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   })
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  
+
 
   // accessToken, refreshToken 검증
   axios.get('/user/verify', { withCredentials: true })
@@ -61,11 +61,11 @@ function App() {
         setIsAuthenticated(false);
 
         axios.post('/user/logout')
-        .then(res => {
-        })
-        .catch(err => {
-          console.log(err);
-        })
+          .then(res => {
+          })
+          .catch(err => {
+            console.log(err);
+          })
       }
     })
 
@@ -91,12 +91,12 @@ function App() {
       <GlobalStyle />
       <BrowserRouter>
         <Header isAuthenticated={isAuthenticated} />
-        <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/ticketing' element={<Ticketing />} />
-          <Route path='/user/*' element={<UserRouter />} />
-          <Route path='/movie/*' element={<MovieRouter />} />
-        </Routes>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/ticketing' element={<Ticketing />} />
+            <Route path='/user/*' element={<UserRouter />} />
+            <Route path='/movie/*' element={<MovieRouter />} />
+          </Routes>
         <Footer />
       </BrowserRouter>
     </div>
