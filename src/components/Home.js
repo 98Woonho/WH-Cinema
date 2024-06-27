@@ -20,7 +20,8 @@ function Home() {
 
     playBtns.forEach((playBtn, index) => {
       playBtn.addEventListener('click', function () {
-        trailerContainers[index].classList.add('visible');
+        console.log(trailerContainers[index - 1]);
+        trailerContainers[index - 1].classList.add('visible');
         dialog.classList.add('visible');
       })
     })
@@ -36,9 +37,9 @@ function Home() {
   const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,
-    infinite: false,
-    autoplay: true,
     infinite: true,
+    autoplay: true,
+    draggable: false,
   }
 
   return (
@@ -47,7 +48,7 @@ function Home() {
         <>
           <div className="trailer-container">
             <button className="close-dialog-btn">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR4nO3YT0sCQRyH8YeuUu0KG/RHUG8efAceetFBJ6noEKUI6iG1wHolxcIYg6wi67Qzs3w/IHga92F09zeCiIiIiMg/6QEPwKXDNRvAHXBLhYbADzAHLhysdwo8W2ueUJEMmJoPfj9yZ/KdeDRrfQNdKpYCY3MBC+DKQUQHT46JsSO+fEYUxSwPjMkjnkKKsGNGVsw1u50BLyFGFMWsdsQEH7GR7Ik534poE7hkK+YmxoiNJjAxF/4BvJr3n0CLyCTAmwnIX+uYdqJ2Ic06fLWSgjtXdD/2dM/tN5pnSHrA0z3Y0aTMvBVsTFpiAg5mfHc9xnuNyaxT4qLkKbFhzv7eTocZMHN41PUWM6zLnw99E+Miwo65BwYO1xQRERER4c8v6Th7MMbV15kAAAAASUVORK5CYII=" />
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR4nO3YT0sCQRyH8YeuUu0KG/RHUG8efAceetFBJ6noEKUI6iG1wHolxcIYg6wi67Qzs3w/IHga92F09zeCiIiIiMg/6QEPwKXDNRvAHXBLhYbADzAHLhysdwo8W2ueUJEMmJoPfj9yZ/KdeDRrfQNdKpYCY3MBC+DKQUQHT46JsSO+fEYUxSwPjMkjnkKKsGNGVsw1u50BLyFGFMWsdsQEH7GR7Ik534poE7hkK+YmxoiNJjAxF/4BvJr3n0CLyCTAmwnIX+uYdqJ2Ic06fLWSgjtXdD/2dM/tN5pnSHrA0z3Y0aTMvBVsTFpiAg5mfHc9xnuNyaxT4qLkKbFhzv7eTocZMHN41PUWM6zLnw99E+Miwo65BwYO1xQRERER4c8v6Th7MMbV15kAAAAASUVORK5CYII=" />
             </button>
             <iframe className="trailer" width="950px" height="550px" src="https://www.youtube.com/embed/4ycxumdqUnY"
               frameborder="0"
@@ -57,7 +58,7 @@ function Home() {
           </div>
           <div className="trailer-container">
             <button className="close-dialog-btn">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR4nO3YT0sCQRyH8YeuUu0KG/RHUG8efAceetFBJ6noEKUI6iG1wHolxcIYg6wi67Qzs3w/IHga92F09zeCiIiIiMg/6QEPwKXDNRvAHXBLhYbADzAHLhysdwo8W2ueUJEMmJoPfj9yZ/KdeDRrfQNdKpYCY3MBC+DKQUQHT46JsSO+fEYUxSwPjMkjnkKKsGNGVsw1u50BLyFGFMWsdsQEH7GR7Ik534poE7hkK+YmxoiNJjAxF/4BvJr3n0CLyCTAmwnIX+uYdqJ2Ic06fLWSgjtXdD/2dM/tN5pnSHrA0z3Y0aTMvBVsTFpiAg5mfHc9xnuNyaxT4qLkKbFhzv7eTocZMHN41PUWM6zLnw99E+Miwo65BwYO1xQRERER4c8v6Th7MMbV15kAAAAASUVORK5CYII=" />
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABJUlEQVR4nO3YT0sCQRyH8YeuUu0KG/RHUG8efAceetFBJ6noEKUI6iG1wHolxcIYg6wi67Qzs3w/IHga92F09zeCiIiIiMg/6QEPwKXDNRvAHXBLhYbADzAHLhysdwo8W2ueUJEMmJoPfj9yZ/KdeDRrfQNdKpYCY3MBC+DKQUQHT46JsSO+fEYUxSwPjMkjnkKKsGNGVsw1u50BLyFGFMWsdsQEH7GR7Ik534poE7hkK+YmxoiNJjAxF/4BvJr3n0CLyCTAmwnIX+uYdqJ2Ic06fLWSgjtXdD/2dM/tN5pnSHrA0z3Y0aTMvBVsTFpiAg5mfHc9xnuNyaxT4qLkKbFhzv7eTocZMHN41PUWM6zLnw99E+Miwo65BwYO1xQRERER4c8v6Th7MMbV15kAAAAASUVORK5CYII=" />
             </button>
             <iframe className="trailer" width="950px" height="550px" src="https://www.youtube.com/embed/oGbkEBrqUAs"
               frameborder="0"
@@ -69,27 +70,25 @@ function Home() {
         document.getElementById('dialog')
       )}
       <main id="homeMain">
+        <div className="main-img-container">
+          <div className="slider-container">
+            <Slider {...settings}>
+              <div className="slider-img">
+                <button className="play-btn">
+                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmUlEQVR4nO2bv49NQRTHDxFEEIUfEaJDLKFQSfyqCCr/wCarUBLUEgmFdgtaodRtS+KFiEqzcb278/3OuInNRrF+JCJYwpUTb3gRsTtX3u7Onfkk072bl/vJzJkzZ84VyWQymUwm0wQAa51ze40xu4qiWC6pAGADgNsAPpGsdQB4C+BaWZZrpM0A2Epy0r/4X8aktfa0tBWS9//x8r8GgDHn3DZpEyR3z+Xl+8YHkpc6nc4yaQMkhwMF+NkwTvKAxA6AC00E9CR8I3mjqqp1EiskLzYV0Cfilc4kSVUAf4t4UJblTklVAH9K+EjyCoAVErsAAM80RwBwnuT7QBnPjTGHJPIZcNf/rtvtbgZwJ3A2fNdnNMuU2AV4jDGnSFaBs+GNtfZsXddLJHYBytTU1Cpd5yRnAkU8BDAksQvw6KkRwJNACV9IXq+qaqXELkDRad3LJl8HirAAjknsAjzOuU2hQdL/h7V2o8QuwEPyKMkycLd4p1ttXddLJXYBiq7vXpD8HCjisbV2j8QuwGOt3T7XWkPf+EpytCiK1RK7AB8kAYw0CJIvnHMHJXYBnomJifUkb2l2GCBhxlp7UtogwAPgSGCQnB5oUZbzLEDRcjuAy/0V6FmC4xlpkwCP3j30js+zSRiVQcEsgDEsgRFJOQgWg8wJuPi3wRPSkkRoOjARqqJPhGyqqXDV/DD01Fq7X+YT5uMwF7wgos9KiiUxksdloWEuinI+y+KPoi+LmwYXI9prFP3FSDfFqzEA45rCGmPONbwcPSyLHebrceYGCYYnL+1pkcH/N0ndjL1Jajj1NrmhpBslFZL3km2VVYwxWwC8TLZZWtGE5892+d4J72rr2+X70VKUMWafc25HUh9MZDKZTCYjreAH6Fc/zScrkLcAAAAASUVORK5CYII=" />
+                </button>
+                <img src="main-img1.webp" alt="" />
+              </div>
+              <div className="slider-img">
+                <button className="play-btn">
+                  <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmUlEQVR4nO2bv49NQRTHDxFEEIUfEaJDLKFQSfyqCCr/wCarUBLUEgmFdgtaodRtS+KFiEqzcb278/3OuInNRrF+JCJYwpUTb3gRsTtX3u7Onfkk072bl/vJzJkzZ84VyWQymUwm0wQAa51ze40xu4qiWC6pAGADgNsAPpGsdQB4C+BaWZZrpM0A2Epy0r/4X8aktfa0tBWS9//x8r8GgDHn3DZpEyR3z+Xl+8YHkpc6nc4yaQMkhwMF+NkwTvKAxA6AC00E9CR8I3mjqqp1EiskLzYV0Cfilc4kSVUAf4t4UJblTklVAH9K+EjyCoAVErsAAM80RwBwnuT7QBnPjTGHJPIZcNf/rtvtbgZwJ3A2fNdnNMuU2AV4jDGnSFaBs+GNtfZsXddLJHYBytTU1Cpd5yRnAkU8BDAksQvw6KkRwJNACV9IXq+qaqXELkDRad3LJl8HirAAjknsAjzOuU2hQdL/h7V2o8QuwEPyKMkycLd4p1ttXddLJXYBiq7vXpD8HCjisbV2j8QuwGOt3T7XWkPf+EpytCiK1RK7AB8kAYw0CJIvnHMHJXYBnomJifUkb2l2GCBhxlp7UtogwAPgSGCQnB5oUZbzLEDRcjuAy/0V6FmC4xlpkwCP3j30js+zSRiVQcEsgDEsgRFJOQgWg8wJuPi3wRPSkkRoOjARqqJPhGyqqXDV/DD01Fq7X+YT5uMwF7wgos9KiiUxksdloWEuinI+y+KPoi+LmwYXI9prFP3FSDfFqzEA45rCGmPONbwcPSyLHebrceYGCYYnL+1pkcH/N0ndjL1Jajj1NrmhpBslFZL3km2VVYwxWwC8TLZZWtGE5892+d4J72rr2+X70VKUMWafc25HUh9MZDKZTCYjreAH6Fc/zScrkLcAAAAASUVORK5CYII=" />
+                </button>
+                <img src="main-img2.webp" alt="" />
+              </div>
+            </Slider>
+          </div>
+        </div>
         <div className="content-container">
-          <div className="main-img-container">
-            <div className="slider-container">
-              <Slider {...settings}>
-                <div className="slider-img">
-                  <button className="play-btn">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmUlEQVR4nO2bv49NQRTHDxFEEIUfEaJDLKFQSfyqCCr/wCarUBLUEgmFdgtaodRtS+KFiEqzcb278/3OuInNRrF+JCJYwpUTb3gRsTtX3u7Onfkk072bl/vJzJkzZ84VyWQymUwm0wQAa51ze40xu4qiWC6pAGADgNsAPpGsdQB4C+BaWZZrpM0A2Epy0r/4X8aktfa0tBWS9//x8r8GgDHn3DZpEyR3z+Xl+8YHkpc6nc4yaQMkhwMF+NkwTvKAxA6AC00E9CR8I3mjqqp1EiskLzYV0Cfilc4kSVUAf4t4UJblTklVAH9K+EjyCoAVErsAAM80RwBwnuT7QBnPjTGHJPIZcNf/rtvtbgZwJ3A2fNdnNMuU2AV4jDGnSFaBs+GNtfZsXddLJHYBytTU1Cpd5yRnAkU8BDAksQvw6KkRwJNACV9IXq+qaqXELkDRad3LJl8HirAAjknsAjzOuU2hQdL/h7V2o8QuwEPyKMkycLd4p1ttXddLJXYBiq7vXpD8HCjisbV2j8QuwGOt3T7XWkPf+EpytCiK1RK7AB8kAYw0CJIvnHMHJXYBnomJifUkb2l2GCBhxlp7UtogwAPgSGCQnB5oUZbzLEDRcjuAy/0V6FmC4xlpkwCP3j30js+zSRiVQcEsgDEsgRFJOQgWg8wJuPi3wRPSkkRoOjARqqJPhGyqqXDV/DD01Fq7X+YT5uMwF7wgos9KiiUxksdloWEuinI+y+KPoi+LmwYXI9prFP3FSDfFqzEA45rCGmPONbwcPSyLHebrceYGCYYnL+1pkcH/N0ndjL1Jajj1NrmhpBslFZL3km2VVYwxWwC8TLZZWtGE5892+d4J72rr2+X70VKUMWafc25HUh9MZDKZTCYjreAH6Fc/zScrkLcAAAAASUVORK5CYII=" />
-                  </button>
-                  <img src="main-img1.webp" alt="" />
-                </div>
-                <div className="slider-img">
-                  <button className="play-btn">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmUlEQVR4nO2bv49NQRTHDxFEEIUfEaJDLKFQSfyqCCr/wCarUBLUEgmFdgtaodRtS+KFiEqzcb278/3OuInNRrF+JCJYwpUTb3gRsTtX3u7Onfkk072bl/vJzJkzZ84VyWQymUwm0wQAa51ze40xu4qiWC6pAGADgNsAPpGsdQB4C+BaWZZrpM0A2Epy0r/4X8aktfa0tBWS9//x8r8GgDHn3DZpEyR3z+Xl+8YHkpc6nc4yaQMkhwMF+NkwTvKAxA6AC00E9CR8I3mjqqp1EiskLzYV0Cfilc4kSVUAf4t4UJblTklVAH9K+EjyCoAVErsAAM80RwBwnuT7QBnPjTGHJPIZcNf/rtvtbgZwJ3A2fNdnNMuU2AV4jDGnSFaBs+GNtfZsXddLJHYBytTU1Cpd5yRnAkU8BDAksQvw6KkRwJNACV9IXq+qaqXELkDRad3LJl8HirAAjknsAjzOuU2hQdL/h7V2o8QuwEPyKMkycLd4p1ttXddLJXYBiq7vXpD8HCjisbV2j8QuwGOt3T7XWkPf+EpytCiK1RK7AB8kAYw0CJIvnHMHJXYBnomJifUkb2l2GCBhxlp7UtogwAPgSGCQnB5oUZbzLEDRcjuAy/0V6FmC4xlpkwCP3j30js+zSRiVQcEsgDEsgRFJOQgWg8wJuPi3wRPSkkRoOjARqqJPhGyqqXDV/DD01Fq7X+YT5uMwF7wgos9KiiUxksdloWEuinI+y+KPoi+LmwYXI9prFP3FSDfFqzEA45rCGmPONbwcPSyLHebrceYGCYYnL+1pkcH/N0ndjL1Jajj1NrmhpBslFZL3km2VVYwxWwC8TLZZWtGE5892+d4J72rr2+X70VKUMWafc25HUh9MZDKZTCYjreAH6Fc/zScrkLcAAAAASUVORK5CYII=" />
-                  </button>
-                  <img src="main-img2.webp" alt="" />
-                </div>
-              </Slider>
-            </div>
-          </div>
-          <div className="content-container">
-          </div>
         </div>
       </main>
     </>

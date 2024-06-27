@@ -3,13 +3,30 @@
 }
 
 #header .content-container {
+    position: relative;
     height: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
-.logo {
+#header .content-container ul {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
+
+#header .logo-link {
+    position: absolute;
+    background: url("https://fontmeme.com/permalink/240626/2cc27132657daa24cd6375b25b976e10.png") no-repeat center;
+    background-size: contain;
+    width: 200px;
+    height: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#header .logo {
     width: 200px;
     height: 50px;
     object-fit: contain;

@@ -7,8 +7,8 @@ body {
   position: relative;
 }
 
-#App {
-  background-color: aqua;
+.flex-1 {
+  flex: 1;
 }
 
 .content-container {
