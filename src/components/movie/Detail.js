@@ -42,11 +42,11 @@ function Detail() {
                         <a className='ticketing' href='/ticketing'>예매하기</a>
                     </div>
                 </div>
-                <div className="plot-container">
+                <div className='plot-container'>
                     <h2>줄거리</h2>
                     <div className='plot' dangerouslySetInnerHTML={{ __html: movie.plot }} />
                 </div>
-                <div>
+                <div className='stillcut-container'>
                     <h2>스틸컷</h2>
                     <div className='stillcuts'>
                         {stillcuts[0] === ''

@@ -1,0 +1,29 @@
+#loginMain {
+    height: 85vh;
+}
+
+#loginMain h1 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+#loginMain .login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#loginForm {
+    width: 350px;
+    border-radius: 5px;
+    border: 1px solid #e2e2e2;
+    padding: 2rem;
+}
+
+#loginForm .login-btn {
+    background-color: #ff6c6c;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+    padding: 0.5rem 0;
+}

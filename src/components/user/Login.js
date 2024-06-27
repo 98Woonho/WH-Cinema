@@ -11,7 +11,6 @@ function Login() {
     const [rememberMe, setRememberMe] = useState(false);
 
     const { isJoinPage } = location.state === null ? '' : location.state;
-    console.log(isJoinPage);
 
     const handleUserId = (e) => {
         setUserId(e.target.value);
@@ -41,22 +40,26 @@ function Login() {
     }
 
     return (
-        <div id='login'>
-            <h2>로그인</h2>
-            <div>
-                <label>아이디 : </label>
-                <input type='text' name='userId' value={userId} onChange={handleUserId} />
-            </div>
-            <div>
-                <label>비밀번호 : </label>
-                <input type='password' name='password' value={password} onChange={handlePassword} />
-            </div>
-            <div>
-                <input type="checkbox" onChange={handleRememberMe}/>
-                <span>로그인 유지</span>
-            </div>
-            <div>
-                <button type='button' onClick={login}>Login</button>
+        <div id='loginMain' className='main'>
+            <div className="content-container">
+                <h1>로그인</h1>
+                <div className="login-container">
+                    <form id='loginForm'>
+                        <div>
+                            <input className="common-input" type='text' name='userId' value={userId} onChange={handleUserId} placeholder="아이디" />
+                        </div>
+                        <div>
+                            <input className="common-input" type='password' name='password' value={password} onChange={handlePassword} placeholder="비밀번호" />
+                        </div>
+                        <div>
+                            <input type="checkbox" onChange={handleRememberMe} />
+                            <span>로그인 유지</span>
+                        </div>
+                        <div>
+                            <button className='login-btn'>Login</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     )

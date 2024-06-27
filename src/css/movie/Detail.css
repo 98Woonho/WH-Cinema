@@ -66,10 +66,21 @@
     margin-top: 1.5rem;
 }
 
-#detailMain .plot-container {
+#detailMain .plot-container,
+#detailMain .stillcut-container {
     margin-top: 5rem;
 }
 
+#detailMain .stillcuts {
+    margin-top: 2rem;
+}
+
+#detailMain .plot {
+    margin-top: 2rem;
+    line-height: 250%;
+}
+
 #detailMain h2 {
-    
+    font-size: 1.5rem;
+    font-weight: 600;
 }
