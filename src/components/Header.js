@@ -17,9 +17,7 @@ function Header(isAuthenticated) {
   return (
     <header id='header'>
       <div className="content-container">
-        <a className="logo-link" href="/">
-          {/* <img className="logo" src="https://fontmeme.com/permalink/240626/2cc27132657daa24cd6375b25b976e10.png" alt="play-story-font" border="0" /> */}
-        </a>
+        <a className="logo-link" href="/"></a>
         <ul>
           <li>
             <a href='/movie'>영화</a>

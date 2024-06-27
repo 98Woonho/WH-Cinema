@@ -7,97 +7,71 @@ import axios from 'axios';
 function Movie() {
   const [movieMap, setMovieMap] = useState(null);
   const [movieList, setMovieList] = useState([]);
-  const [num, setNum] = useState(0); // 현재상영작과 상영예정작을 가져오는 동작을 구분하기 위한 변수
+  const [num, setNum] = useState(1); // 현재상영작과 상영예정작을 가져오는 동작을 구분하기 위한 변수
+  const [sort, setSort] = useState('');
 
   // 현재상영작 버튼 클릭 함수
-  const currentMovieList = () => {
-    setNum(0);
+  const handleCurrentMovieList = () => {
+    setNum(1);
   }
 
   // 상영예정작 버튼 클릭 함수
-  const scheduledMovieList = () => {
-    setNum(1);
+  const handleScheduledMovieList = () => {
+    setNum(0);
   };
 
-  // /movie 경로로 접속하면 현재상영작을 먼저 보여줌.
-  // 현재상영작, 상영예정작 버튼을 누를 때 마다 그에 맞는 영화 목록을 movieList에 set
+  const handleChangeSort = (e) => {
+    setSort(e.target.value);
+  }
+
+  // 정렬 기준 and 상영 옵션에 따른 영화 목록 가져오기
   useEffect(() => {
-    if (num === 0) {
-      const currentDate = new Date();
-
-      // 현재 날짜에서 YYYY-MM-DD를 가져옴
-      const newCurrentDate = currentDate.toISOString().slice(0, 10);
-
-      // 현재 날짜로부터 60일 전 날짜를 계산
-      const sixtyDaysAgoDate = new Date(currentDate.getTime() - (60 * 24 * 60 * 60 * 1000));
-
-      // 60일 전 날짜에서 YYYY-MM-DD를 가져옴
-      const newSixtyDaysAgoDate = sixtyDaysAgoDate.toISOString().slice(0, 10);
-
-      axios.get(`/movie/${newCurrentDate}/${newSixtyDaysAgoDate}`)
-        .then(res => {
-          setMovieList(res.data);
-        })
-        .catch(err => {
-          console.log(err);
+    axios.get(`/movie?screeningFlag=${num}&sort=${sort}`)
+    .then(res => {
+      if (num === 1) {
+        setMovieList(res.data);
+      }
+  
+      if (num === 0) {
+        const movieList = res.data;
+  
+        // 상영예정작 영화리스트를 날짜순으로 오름차순 정렬
+        const sortedMovieList = movieList.sort((a, b) => {
+          const dateA = new Date(a.release_date);
+          const dateB = new Date(b.release_date);
+          return dateA - dateB;
         });
-    } else {
-      // num이 1이면, 즉 상영 예정작을 클릭했을 때는 내일 날짜부터 2개월 후의 영화를 가져옴
-
-      const tomorrowDate = new Date();
-      tomorrowDate.setDate(tomorrowDate.getDate() + 1);
-
-      // 내일 날짜에서 YYYY-MM-DD를 가져옴
-      const newTomorrowDate = tomorrowDate.toISOString().slice(0, 10);
-
-      // 내일 날짜로부터 60일 후 날짜를 계산
-      const sixtyDaysLaterDate = new Date(tomorrowDate.getTime() + (60 * 24 * 60 * 60 * 1000));
-
-      // 60일 후 날짜에서 YYYY-MM-DD를 가져옴
-      const newSixtyDaysLaterDate = sixtyDaysLaterDate.toISOString().slice(0, 10);
-
-      axios.get(`/movie/${newSixtyDaysLaterDate}/${newTomorrowDate}`)
-        .then(res => {
-          const movieList = res.data;
-
-          // 상영예정작 영화리스트를 날짜순으로 오름차순 정렬
-          const sortedMovieList = movieList.sort((a, b) => {
-            const dateA = new Date(a.release_date);
-            const dateB = new Date(b.release_date);
-            return dateA - dateB;
-          });
-
-          // 상영예정작 리스트에 D-day를 추가
-          sortedMovieList.forEach(movie => {
-            const releaseDate = movie.release_date;
-
-            // 주어진 날짜 문자열을 Date 객체로 변환
-            const givenDate = new Date(releaseDate);
-
-            // 현재 날짜
-            const currentDate = new Date();
-
-            // 남은 날짜 계산
-            const timeDiff = Math.abs(currentDate.getTime() - givenDate.getTime());
-            const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-            // "D-n" 형식으로 남은 날짜 표시
-            const result = "D-" + diffDays;
-
-            movie.Dday = result;
-          })
-
-          setMovieList(sortedMovieList);
+  
+        // 상영예정작 리스트에 D-day를 추가
+        sortedMovieList.forEach(movie => {
+          const releaseDate = movie.release_date;
+  
+          // 주어진 날짜 문자열을 Date 객체로 변환
+          const givenDate = new Date(releaseDate);
+  
+          // 현재 날짜
+          const currentDate = new Date();
+  
+          // 남은 날짜 계산
+          const timeDiff = Math.abs(currentDate.getTime() - givenDate.getTime());
+          const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+  
+          // "D-n" 형식으로 남은 날짜 표시
+          const result = "D-" + diffDays;
+  
+          movie.Dday = result;
         })
-        .catch(err => {
-          console.log(err);
-        });
-    }
-  }, [num]);
+  
+        setMovieList(sortedMovieList);
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, [sort, num])
 
   // movieList가 set되면 화면에 보여주기 위한 map을 set
   useEffect(() => {
-    
     // movieList의 개봉일 형태 변경
     movieList.forEach(movie => {
       const releaseDate = movie.release_date;
@@ -133,12 +107,23 @@ function Movie() {
 
   return (
     <div className='main' id='movieMain'>
-      <div>
-        <button onClick={currentMovieList}>현재 상영작</button>
-        <button onClick={scheduledMovieList}>상영 예정작</button>
-      </div>
-      <div className='movie-container'>
-        {movieMap}
+      <div className="content-container">
+        <div className="button-container">
+          <div className="flex-1"></div>
+          <button className={num == 1 ? 'selected' : ''} onClick={handleCurrentMovieList}>현재 상영작</button>
+          <button className={num == 0 ? 'selected' : ''} onClick={handleScheduledMovieList}>상영 예정작</button>
+        </div>
+        <div className="sort-container">
+          <div className="flex-1"></div>
+          <select onChange={handleChangeSort} className="sort-select">
+            <option value="평점순">평점순</option>
+            <option value="개봉일순(오름차순)">개봉일순(오름차순)</option>
+            <option value="개봉일순(내림차순)">개봉일순(내림차순)</option>
+          </select>
+        </div>
+        <div className='movie-container'>
+          {movieMap}
+        </div>
       </div>
     </div>
   );

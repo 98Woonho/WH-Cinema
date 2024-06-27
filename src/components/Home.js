@@ -11,6 +11,11 @@ import 'slick-carousel/slick/slick-theme.css';
 import '../css/Home.css';
 
 function Home() {
+  const [topRateScreeningMovieList, setTopRateScreeningMovieList] = useState([]);
+  const [topRateScreeningMovieMap, setTopRateScreeningMovieMap] = useState(null);
+  const [topRateScheduledMovieList, setTopRateScheduledMovieList] = useState([]);
+  const [topRateScheduledMovieMap, setTopRateScheduledMovieMap] = useState(null);
+
   useEffect(() => {
     const playBtns = document.querySelectorAll('.play-btn');
     const trailerContainers = document.querySelectorAll('.trailer-container');
@@ -31,14 +36,46 @@ function Home() {
       })
     })
 
-    axios.get('/movie/topRate?nowScreeningFlag=true')
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+    axios.get('/movie/topRate?screeningFlag=1')
+      .then(res => {
+        setTopRateScreeningMovieList(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    axios.get('/movie/topRate?screeningFlag=0')
+      .then(res => {
+        setTopRateScheduledMovieList(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }, []);
+
+  useEffect(() => {
+    const topRateScreeningMovieMap = topRateScreeningMovieList.map(
+      data =>
+        <li>
+          <img src={data.poster} alt="" />
+          <p className="title">{data.title}</p>
+        </li>
+    );
+
+    setTopRateScreeningMovieMap(topRateScreeningMovieMap);
+  }, [topRateScreeningMovieList])
+
+  useEffect(() => {
+    const topRateScheduledMovieMap = topRateScheduledMovieList.map(
+      data =>
+        <li>
+          <img src={data.poster} alt="" />
+          <p className="title">{data.title}</p>
+        </li>
+    );
+
+    setTopRateScheduledMovieMap(topRateScheduledMovieMap);
+  }, [topRateScheduledMovieList])
 
   const settings = {
     slidesToShow: 1,
@@ -95,9 +132,17 @@ function Home() {
           </div>
         </div>
         <div className="content-container">
-          <h2>현재 상영작 TOP 5</h2>
-          <div>
-            
+          <div className="top-5-container">
+            <h1>현재 상영작 <span>TOP 5</span></h1>
+            <ul className="top-5">
+              {topRateScreeningMovieMap}
+            </ul>
+          </div>
+          <div className="top-5-container">
+            <h1>상영 예정작 <span>TOP 5</span></h1>
+            <ul className="top-5">
+              {topRateScheduledMovieMap}
+            </ul>
           </div>
         </div>
       </main>

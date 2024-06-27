@@ -2,33 +2,46 @@
     gap: 4rem;
 }
 
-.detail {
+#detailMain .detail-container {
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
+
+    border-radius: 5px;
+    box-shadow: 0 5px 60px -20px rgba(0, 0, 0, 0.5);
+    padding: 2rem;
+    background-color: aliceblue;
 }
 
-.stillcuts {
-    margin: 3rem 0 7rem 0;
+#detailMain .detail-container h1 {
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+#detailMain .detail > * {
+    margin-bottom: 1rem;
+}
+
+#detailMain .stillcuts {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 80px;
+    gap: 40px;
 }
 
-.stillcuts img {
-    width: 240px;
+#detailMain .stillcuts img {
+    width: 100%;
 }
 
-.info1 li {
+#detailMain .info1 li {
     display: inline-block;
     margin-left: 10px;
 }
 
-.info1 li:first-child {
+#detailMain .info1 li:first-child {
     margin-left: 0;
 }
 
-.info1 li:before {
+#detailMain .info1 li:before {
     content: '';
     display: inline-block;
     width: 1px;
@@ -39,11 +52,24 @@
     margin-right: 10px;
 }
 
-.info1 li:first-child:before {
+#detailMain .info1 li:first-child:before {
     width: 0;
     margin-right: 0;
 }
 
-.ticketing {
-    margin-top: 3rem;
+#detailMain .ticketing {
+    display: inline-block;
+    color: #ffffff;
+    background-color: #ff4f4f;
+    padding: 0.5rem;
+    border-radius: 5px;
+    margin-top: 1.5rem;
+}
+
+#detailMain .plot-container {
+    margin-top: 5rem;
+}
+
+#detailMain h2 {
+    
 }

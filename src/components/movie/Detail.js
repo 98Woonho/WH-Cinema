@@ -11,9 +11,11 @@ function Detail() {
     const [stillcuts, setStillcuts] = useState([]);
 
     useEffect(() => {
-        axios.get(`/movie/${query.get('title')}`)
+        axios.get(`/movie?title=${query.get('title')}`)
             .then(res => {
-                console.log(res);
+                const releaseDate = new Date(res.data[0].release_date);
+                res.data[0].release_date = releaseDate.toISOString().slice(0, 10);
+
                 setStillcuts(res.data[0].stillcuts.split('|'));
                 setMovie(res.data[0]);
             })
@@ -24,35 +26,38 @@ function Detail() {
 
     return (
         <div id='detailMain' className='main'>
-            <div className='detail'>
-                <img src={movie.poster} alt='영화 포스터' />
-                <div>
-                    <h1>{movie.title}</h1>
-                    <div>
+            <div className="content-container">
+                <div className='detail-container'>
+                    <img src={movie.poster} alt='영화 포스터' />
+                    <div className='detail'>
+                        <h1>{movie.title}</h1>
                         <ul className='info1'>
-                            <li>{movie.releaseDate} 개봉</li>
+                            <li>{movie.release_date} 개봉</li>
                             <li>{movie.runtime}분</li>
                             <li>{movie.rating}</li>
                         </ul>
-                        <ul>
-                            <li>감독 : {movie.director}</li>
-                            <li>배우 : {movie.actor}</li>
-                            <li>장르 : {movie.genre} / {movie.nation}</li>
-                        </ul>
+                        <div>감독 : {movie.director}</div>
+                        <div>배우 : {movie.actor}</div>
+                        <div>장르 : {movie.genre} / {movie.nation}</div>
                         <a className='ticketing' href='/ticketing'>예매하기</a>
                     </div>
                 </div>
-            </div>
-            <div id="plot" dangerouslySetInnerHTML={{ __html: movie.plot }} />
-            <div>
-                <h2>스틸컷</h2>
-                <div className='stillcuts'>
-                    {stillcuts[0] === ''
-                        ? <p>이미지가 존재하지 않습니다.</p> 
-                        : stillcuts.map(url => (
-                            <img src={url} />
-                        ))
-                    }
+                <div className="plot-container">
+                    <h2>줄거리</h2>
+                    <div className='plot' dangerouslySetInnerHTML={{ __html: movie.plot }} />
+                </div>
+                <div>
+                    <h2>스틸컷</h2>
+                    <div className='stillcuts'>
+                        {stillcuts[0] === ''
+                            ? <p>이미지가 존재하지 않습니다.</p>
+                            : stillcuts.map(url => (
+                                <div>
+                                    <img src={url} />
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
         </div>

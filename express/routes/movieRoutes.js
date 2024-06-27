@@ -4,40 +4,51 @@ const db = require('../config/db.js');
 
 
 router.get('/', (req, res) => {
-    db.query(`SELECT * FROM movie`, (err, data) => {
+    const { title, screeningFlag, sort } = req.query;
+    let query = 'SELECT * FROM movie';
+
+    if (title) {
+        query += ` WHERE title = '${title}'`;
+    }
+
+    if (screeningFlag) {
+        query += ` WHERE screening_flag = '${screeningFlag}'`;
+    }
+
+    if (sort === '평점순') {
+        query += ' ORDER BY vote_average DESC';
+    }
+    
+    if (sort === '개봉일순(오름차순)') {
+        query += ' ORDER BY release_date ASC';
+    }
+
+    if (sort === '개봉일순(내림차순)') {
+        query += ' ORDER BY release_date DESC';
+    }
+
+
+    db.query(query, (err, data) => {
         if (err) {
             res.send(err);
         }
 
         res.send(data);
-    })
-});
-
-router.get('/:title', (req, res) => {
-    const title = req.params.title;
-    db.query(`SELECT * FROM movie WHERE title = '${title}'`, (err, data) => {
-        if (err) {
-            res.send(err);
-        }
-
-        res.send(data);
-    })
-});
-
-router.get('/:date1/:date2', (req, res) => {
-    const date1 = req.params.date1;
-    const date2 = req.params.date2;
-    db.query(`SELECT * FROM movie WHERE release_date <= '${date1}' AND release_date >= '${date2}'`, (err, data) => {
-        if (err) {
-            res.send(err);
-        }
-
-        res.send(data);
-    })
+    });
 });
 
 router.get('/topRate', (req, res) => {
-    console.log('hi');
+    const { screeningFlag } = req.query;
+
+    const query = `SELECT * FROM movie WHERE screening_flag = '${screeningFlag}' ORDER BY vote_average DESC LIMIT 5`
+
+    db.query(query, (err, data) => {
+        if (err) {
+            res.send(err);
+        }
+
+        res.send(data);
+    })
 });
 
 module.exports = router;

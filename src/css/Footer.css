@@ -2,3 +2,18 @@
     height:100px;
     background-color: gray;
 }
+
+#Footer .content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#Footer .logo-link {
+    background: url("https://fontmeme.com/permalink/240626/2cc27132657daa24cd6375b25b976e10.png") no-repeat center;
+    background-size: contain;
+    width: 200px;
+    height: 50px;
+}
