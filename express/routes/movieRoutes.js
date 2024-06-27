@@ -35,4 +35,8 @@ router.get('/:date1/:date2', (req, res) => {
     })
 });
 
+router.get('/topRate', (req, res) => {
+    console.log('hi');
+});
+
 module.exports = router;

@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-// import { Cookies } from "react-cookie";
-// import axios from 'axios';
+import axios from 'axios';
 
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
@@ -20,7 +19,6 @@ function Home() {
 
     playBtns.forEach((playBtn, index) => {
       playBtn.addEventListener('click', function () {
-        console.log(trailerContainers[index - 1]);
         trailerContainers[index - 1].classList.add('visible');
         dialog.classList.add('visible');
       })
@@ -31,6 +29,14 @@ function Home() {
         trailerContainers[index].classList.remove('visible');
         dialog.classList.remove('visible');
       })
+    })
+
+    axios.get('/movie/topRate?nowScreeningFlag=true')
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.log(err);
     })
   }, []);
 
@@ -89,6 +95,10 @@ function Home() {
           </div>
         </div>
         <div className="content-container">
+          <h2>현재 상영작 TOP 5</h2>
+          <div>
+            
+          </div>
         </div>
       </main>
     </>
