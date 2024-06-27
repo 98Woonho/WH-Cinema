@@ -24,9 +24,13 @@ function Login() {
         setRememberMe(e.target.checked);
     }
 
-    const login = () => {
-        const userObj = { userId: userId, password: password, rememberMe: rememberMe };
-        axios.post('/user/login', userObj)
+    const handleSubmitLogin = (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.target);
+        formData.append('rememberMe', e.target.rememberMe.checked);
+
+        axios.post('/user/login', formData)
             .then(res => {
                 isJoinPage ? navigate('/') : navigate(-1);
             })
@@ -44,7 +48,7 @@ function Login() {
             <div className="content-container">
                 <h1>로그인</h1>
                 <div className="login-container">
-                    <form id='loginForm'>
+                    <form onSubmit={handleSubmitLogin} id='loginForm'>
                         <div>
                             <input className="common-input" type='text' name='userId' value={userId} onChange={handleUserId} placeholder="아이디" />
                         </div>
@@ -52,7 +56,7 @@ function Login() {
                             <input className="common-input" type='password' name='password' value={password} onChange={handlePassword} placeholder="비밀번호" />
                         </div>
                         <div>
-                            <input type="checkbox" onChange={handleRememberMe} />
+                            <input type="checkbox" name='rememberMe' onChange={handleRememberMe} />
                             <span>로그인 유지</span>
                         </div>
                         <div>

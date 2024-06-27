@@ -17,7 +17,11 @@
     width: 350px;
     border-radius: 5px;
     border: 1px solid #e2e2e2;
-    padding: 2rem;
+    padding: 2rem 2rem;
+}
+
+#loginForm div {
+    padding: 0.25rem 0;
 }
 
 #loginForm .login-btn {
@@ -26,4 +30,8 @@
     border-radius: 5px;
     width: 100%;
     padding: 0.5rem 0;
+}
+
+#loginForm .login-btn:hover {
+    background-color: #ff5050;
 }
