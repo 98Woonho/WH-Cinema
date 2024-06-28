@@ -7,6 +7,11 @@
     justify-content: stretch;
 }
 
+#ticketingMain .section {
+    display: flex;
+    flex-direction: column;
+}
+
 #ticketingMain .section:not(:last-child) {
     border-right: 1px solid #666;
 }
@@ -19,8 +24,7 @@
 }
 
 #ticketingMain .movie-section {
-    display: flex;
-    flex-direction: column;
+    width: 300px;
 }
 
 #ticketingMain .movie-list {
@@ -60,15 +64,8 @@
     text-overflow: ellipsis;
 }
 
-#ticketingMain .movie-section {
-    width: 300px;
-}
-
 #ticketingMain .region-container {
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     background-color: #e1e1e1;
 }
 

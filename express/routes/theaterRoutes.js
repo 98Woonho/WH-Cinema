@@ -12,8 +12,8 @@ router.get('/', (req, res) => {
     })
 })
 
-router.get('/screenInfo/:title/:date/:theaterName', (req, res) => {
-    const { title, date, theaterName } = req.params;
+router.get('/screenInfo', (req, res) => {
+    const { title, date, theaterName } = req.query;
     db.query(`SELECT si.time AS time,
                      si.date AS date,
                      si.movie_title AS title,

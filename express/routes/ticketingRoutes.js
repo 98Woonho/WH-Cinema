@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db.js');
 
-router.get('/:title/:theaterName/:screenHallName/:time', (req, res) => {
-    const { title, theaterName, screenHallName, time } = req.params;
+router.get('/', (req, res) => {
+    const { title, theaterName, screenHallName, time } = req.query;
 
     db.query(`SELECT seat FROM ticketing WHERE movie_title='${title}' AND theater_name='${theaterName}' AND screen_hall_name='${screenHallName}' AND screen_time='${time}'`, (err, data) => {
         if (err) {

@@ -581,7 +581,7 @@ function Ticketing() {
     // 영화, 극장, 날짜 모두 선택 했을 때, 상영시간 및 좌석 정보 set
     useEffect(() => {
         if (selectedMovieTitle !== null && selectedDate !== null && selectedTheaterName !== null) {
-            axios.get(`/theater/screenInfo/${selectedMovieTitle}/${selectedDate}/${selectedTheaterName}`)
+            axios.get(`/theater/screenInfo?title=${selectedMovieTitle}&date=${selectedDate}&theaterName=${selectedTheaterName}`)
                 .then(res => {
                     setScreenInfoList(res.data);
                 })
@@ -596,22 +596,20 @@ function Ticketing() {
             const reservedSeatCountList = [];
 
             for (const screenInfo of screenInfoList) {
-                for (const time of screenInfo.time.split(',')) {
-                    try {
-                        const res = await axios.get(`/ticketing/${screenInfo.title}/${screenInfo.theater_name}/${screenInfo.screen_hall_name}/${time}`);
-                        let reservedSeatCount = 0;
+                try {
+                    const res = await axios.get(`/ticketing?title=${screenInfo.title}&theaterName=${screenInfo.theater_name}&screenHallName=${screenInfo.screen_hall_name}&time=${screenInfo.time}`);
+                    let reservedSeatCount = 0;
 
-                        if (res.data.length === 0) {
-                            reservedSeatCountList.push(0);
-                        } else {
-                            res.data.forEach(data => {
-                                reservedSeatCount += data.seat.split(',').length;
-                            });
-                            reservedSeatCountList.push(reservedSeatCount);
-                        }
-                    } catch (err) {
-                        console.error(err);
+                    if (res.data.length === 0) {
+                        reservedSeatCountList.push(0);
+                    } else {
+                        res.data.forEach(data => {
+                            reservedSeatCount += data.seat.split(',').length;
+                        });
+                        reservedSeatCountList.push(reservedSeatCount);
                     }
+                } catch (err) {
+                    console.error(err);
                 }
             }
 
@@ -623,6 +621,7 @@ function Ticketing() {
 
     // 예매 된 좌석수를 뺀 후에 상영정보 set
     useEffect(() => {
+        console.log(screenInfoList);
         let idx = -1;
         if (screenInfoList.length === 0) {
             setScreenInfoMap(<div className='screen-info-warning'>
@@ -856,7 +855,7 @@ function Ticketing() {
                         </div>
                         <div className='section theater-section flex-1'>
                             <h2 className='section-title'>영화관</h2>
-                            <div class='theater-container'>
+                            <div class='theater-container flex-1'>
                                 <div class='region-container'>
                                     {regionMap}
                                 </div>
