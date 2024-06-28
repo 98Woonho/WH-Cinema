@@ -37,26 +37,24 @@ function Login() {
         <main id='loginMain' className='main'>
             <div className='content-container'>
                 <h1 className='main-title'>로그인</h1>
-                <div className='login-container'>
-                    <form onSubmit={handleSubmitLogin} id='loginForm'>
-                        <div>
-                            <input className='common-input' type='text' name='userId' placeholder='아이디' />
-                        </div>
-                        <div>
-                            <input className='common-input' type='password' name='password' placeholder='비밀번호' />
-                        </div>
-                        <div className={`warning ${isWarning ? 'visible' : ''}`}>
-                            아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.
-                        </div>
-                        <div>
-                            <input type='checkbox' name='rememberMe' />
-                            <span>로그인 유지</span>
-                        </div>
-                        <div>
-                            <button className='login-btn'>Login</button>
-                        </div>
-                    </form>
-                </div>
+                <form onSubmit={handleSubmitLogin} id='loginForm'>
+                    <div>
+                        <input className='common-input' type='text' name='userId' placeholder='아이디' />
+                    </div>
+                    <div>
+                        <input className='common-input' type='password' name='password' placeholder='비밀번호' />
+                    </div>
+                    <div className={`warning ${isWarning ? 'visible' : ''}`}>
+                        아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.
+                    </div>
+                    <div>
+                        <input type='checkbox' name='rememberMe' />
+                        <span>로그인 유지</span>
+                    </div>
+                    <div>
+                        <button className='login-btn'>Login</button>
+                    </div>
+                </form>
             </div>
         </main>
     )

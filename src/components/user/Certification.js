@@ -37,7 +37,7 @@ function Certification() {
                                     }
                                 }
                                 navigate('/user/join', { state });
-                            // 가입되어 있는 유저가 있으면 문구 출력 후 로그인 페이지로 이동
+                                // 가입되어 있는 유저가 있으면 문구 출력 후 로그인 페이지로 이동
                             } else {
                                 const state = {
                                     isJoinPage: true
@@ -65,7 +65,16 @@ function Certification() {
             <div className='content-container'>
                 <h1 className='main-title'>본인인증</h1>
             </div>
-            <button className='certification-btn' onClick={certification}>본인인증</button>
+            <button className='certification-btn' onClick={certification}>
+                <span className='certification-btn-text'>본인인증</span>
+                <div className="app-container">
+                    <img src="../app_KAKAO.png" alt="" />
+                    <img src="../app_KAKAOBANK.png" alt="" />
+                    <img src="../app_PASS.png" alt="" />
+                    <img src="../app_PAYCO.png" alt="" />
+                    <img src="../app_TOSS.png" alt="" />
+                </div>
+            </button>
         </main>
     );
 }

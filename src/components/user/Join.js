@@ -6,21 +6,16 @@ import axios from 'axios';
 function Join() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [userId, setuserId] = useState('');
-    const [password, setPassword] = useState('');
 
     const { certificationInfo } = location.state;
     const { name, birthday, phone } = certificationInfo;
 
-    const handleuserId = (e) => {
-        setuserId(e.target.value);
-    }
+    const handleSubmitJoin = (e) => {
+        e.preventDefault();
+        
+        const userId = e.target.userId.value;
+        const password = e.target.password.value;
 
-    const handlePassword = (e) => {
-        setPassword(e.target.value);
-    }
-
-    const join = () => {
         const userIdRegex = /^[a-z0-9]+$/;
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
 
@@ -44,39 +39,42 @@ function Join() {
             return;
         }
 
-        const userObj = {userId:userId, password:password, name:name, birthday:birthday, phone:phone};
+        const formData = new FormData(e.target);
+        formData.append('name', name);
+        formData.append('birthday', birthday);
+        formData.append('phone', phone);
 
-        axios.post('/user/join', userObj)
-        .then(res => {
-            const state = {
-                isJoinPage: true
-            }
+        axios.post('/user/join', formData)
+            .then(res => {
+                const state = {
+                    isJoinPage: true
+                }
 
-            alert(res.data.msg);
-            navigate('/user/login', { state });
-        })
-        .catch(err => {
-            if (err.response.status === 409) {
-                alert(err.response.data.msg);
-            } else {
-                alert('알 수 없는 이유로 회원가입에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
-            }
-        })
+                alert(res.data.msg);
+                navigate('/user/login', { state });
+            })
+            .catch(err => {
+                if (err.response.status === 409) {
+                    alert(err.response.data.msg);
+                } else {
+                    alert('알 수 없는 이유로 회원가입에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
+                }
+            })
     }
 
-    return(
+    return (
         <main id='joinMain' className='main'>
-            <h2 className='main-title'>회원가입</h2>
-            <div>
-                <label>아이디 : </label>
-                <input type='text' name='userId' value={userId} onChange={handleuserId} />
-            </div>
-            <div>
-                <label>비밀번호 : </label>
-                <input type='password' name='password' placeholder="비밀번호 (영문, 숫자, 특수문자를 포함한 8~15자)" value={password} onChange={handlePassword} />
-            </div>
-            <div>
-                <button type='button' onClick={join}>회원가입</button>
+            <div className="content-container">
+                <h1 className='main-title'>회원가입</h1>
+                <form onSubmit={handleSubmitJoin} id="joinForm">
+                    <label>아이디</label>
+                    <input className='common-input' type='text' name='userId' placeholder='아이디' />
+
+                    <label>비밀번호</label>
+                    <input className='common-input' type='password' name='password' placeholder="비밀번호 (영문, 숫자, 특수문자를 포함한 8~15자)"/>
+
+                    <button className='join-btn'>회원가입</button>
+                </form>
             </div>
         </main>
     )

@@ -2,3 +2,26 @@
     height: 85vh;
 }
 
+#certificationMain .certification-btn {
+    margin: 0 auto;
+    margin-top: 10rem;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    background-color: #2278be;
+}
+
+#certificationMain .app-container {
+    display: flex;
+    gap: 0.25rem;
+    margin-top: 1rem;
+}
+
+#certificationMain .certification-btn-text {
+    font-size: 1.1rem;
+    color: rgb(238, 238, 238);
+}
+
+#certificationMain .app-container img {
+    width: 35px;
+    border-radius: 10px;
+}

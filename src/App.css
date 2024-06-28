@@ -24,6 +24,7 @@ body {
   border-radius: 5px;
   padding: 0.5rem 1.25rem;
   width: 100%;
+  border: 1px solid #c9c9c9;
 }
 
 .main-title {

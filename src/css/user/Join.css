@@ -1,0 +1,27 @@
+#joinMain {
+    height: 85vh;
+}
+
+#joinForm {
+    width: 450px;
+    margin: 0 auto;
+    border-radius: 5px;
+    border: 1px solid #e2e2e2;
+    padding: 2rem 2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#joinForm .join-btn {
+    background-color: #ff6c6c;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+    padding: 0.5rem 0;
+}
+
+#joinForm .join-btn:hover {
+    background-color: #ff5050;
+}
