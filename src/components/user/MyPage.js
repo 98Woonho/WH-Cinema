@@ -139,11 +139,19 @@ function MyPage() {
                     // 통합인증 정보에서 필요한 정보 set
                     const { name, phone } = certificationInfo.data.response;
 
-                    const userObj = { name: name, phone: phone };
+                    const userObj = { newName: name, newPhone: phone, currentUserId: user.user_id };
 
                     axios.patch('/user', userObj)
                         .then(res => {
-                            console.log(res);
+                            alert(res.data.msg);
+
+                            axios.post('/user/logout', { withCredentials: true })
+                                .then(res => {
+                                    navigate('/user/login');
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                })
                         })
                         .catch(err => {
                             console.log(err);
@@ -159,19 +167,19 @@ function MyPage() {
     const handleSubmitSecession = () => {
         if (window.confirm('정말로 회원 탈퇴를 하시겠습니까?\n탈퇴한 계정은 복구가 불가능합니다.')) {
             axios.delete(`/user/${user.user_id}`)
-            .then(res => {
-                axios.post('/user/logout', { withCredentials: true })
-                    .then(res => {
-                        alert('회원탈퇴가 완료 되었습니다.\n로그인 화면으로 이동합니다.')
-                        navigate('/user/login');
-                    })
-                    .catch(err => {
-                        console.log(err);
-                    })
-            })
-            .catch(err => {
-                console.log(err);
-            })
+                .then(res => {
+                    axios.post('/user/logout', { withCredentials: true })
+                        .then(res => {
+                            alert('회원탈퇴가 완료 되었습니다.\n로그인 화면으로 이동합니다.')
+                            navigate('/user/login');
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
         }
     }
 
@@ -180,7 +188,7 @@ function MyPage() {
             .then(res => {
                 const userId = res.data.userId;
 
-                axios.get(`/user/${userId}`)
+                axios.get(`/user?userId=${userId}`)
                     .then(res => {
                         setUser(res.data[0]);
                     })
@@ -204,70 +212,77 @@ function MyPage() {
     }, [user])
 
     return (
-        <div id='myPage'>
-            <div className="my-page-left">
-                <div className='menu-container'>
-                    <h2 className='menu-title'>회원</h2>
-                    <p className='menu selected' onClick={handleInfo}>회원정보</p>
-                    <p className='menu' onClick={handleUpdateInfo}>회원정보수정</p>
-                    <p className='menu' onClick={handleSecession}>회원탈퇴</p>
-                </div>
-                <div className='menu-container'>
-                    <h2 className='menu-title'>예매</h2>
-                    <p className='menu' onClick={handleTicketingInfo}>예매현황</p>
-                </div>
-            </div>
-            <div className="my-page-right">
-                {menu === 'info' ?
-                    <div className='user-info'>
-                        <span>아이디 : {user.user_id}</span>
-                        <span>이름 : {user.name}</span>
-                        <span>휴대폰 번호 : {user.phone}</span>
+        <main id='myPageMain'>
+            <div className="content-container">
+                <h1 class='main-title'>마이 페이지</h1>
+                <div className="my-page-container">
+                    <div className="my-page-left">
+                        <div className='menu-container'>
+                            <h2 className='menu-title'>회원</h2>
+                            <ul>
+                                <li className='menu selected' onClick={handleInfo}>회원정보</li>
+                                <li className='menu' onClick={handleUpdateInfo}>회원정보수정</li>
+                                <li className='menu' onClick={handleSecession}>회원탈퇴</li>
+                            </ul>
+                        </div>
+                        <div className='menu-container'>
+                            <h2 className='menu-title'>예매</h2>
+                            <ul>
+                                <li className='menu' onClick={handleTicketingInfo}>예매현황</li>
+                            </ul>
+                        </div>
                     </div>
-                    : menu === 'infoUpdate' ?
-                        <table className='user-info-update-table'>
-                            <tbody>
-                                <tr>
-                                    <td className='row-title'>아이디</td>
-                                    <td>
-                                        <input type='text' name='userId' value={newUserId} onChange={changeNewUserId} />
-                                        <button className='update-btn' onClick={handleUpdateId}>아이디 변경</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className='row-title'>비밀번호</td>
-                                    <td>
-                                        <div>
-                                            <label>현재 비밀번호</label>
-                                            <input type='password' name='currentPassword' onChange={changeCurrentPassword} />
-                                        </div>
-                                        <div>
-                                            <label>새 비밀번호</label>
-                                            <input type='password' name='newPassword' onChange={changeNewPassword} />
-                                        </div>
-                                        <button className='update-btn' onClick={handleUpdatePassword}>비밀번호 변경</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td className='row-title'>이름 및 휴대폰 번호</td>
-                                    <td>
-                                        {user.name}
-                                        {user.phone}
-                                        <button className='update-btn' onClick={certification}>본인인증</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        : menu === 'secession' ?
-                            <div>
-                                <button className='secession-btn' onClick={handleSubmitSecession}>회원탈퇴</button>
+                    <div className="my-page-right">
+                        {menu === 'info' ?
+                            <div className='user-info'>
+                                <span>아이디 : {user.user_id}</span>
+                                <span>이름 : {user.name}</span>
+                                <span>휴대폰 번호 : {user.phone}</span>
                             </div>
-                            : <div>
-
-                            </div>
-                }
+                            : menu === 'infoUpdate' ?
+                                <table className='user-info-update-table'>
+                                    <tbody>
+                                        <tr>
+                                            <td className='row-title'>아이디</td>
+                                            <td>
+                                                <input type='text' className='common-input' name='userId' value={newUserId} onChange={changeNewUserId} />
+                                                <button className='update-btn' onClick={handleUpdateId}>아이디 변경</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className='row-title'>비밀번호</td>
+                                            <td>
+                                                <div>
+                                                    <label>현재 비밀번호</label>
+                                                    <input type='password' className='common-input' name='currentPassword' placeholder='현재 비밀번호' onChange={changeCurrentPassword} />
+                                                </div>
+                                                <div>
+                                                    <label>새 비밀번호</label>
+                                                    <input type='password' className='common-input' name='newPassword' placeholder='새 비밀번호 (영문, 숫자, 특수문자로 구성된 8~15자리)' onChange={changeNewPassword} />
+                                                </div>
+                                                <button className='update-btn' onClick={handleUpdatePassword}>비밀번호 변경</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className='row-title'>이름 및 휴대폰 번호</td>
+                                            <td>
+                                                {user.name}
+                                                {user.phone}
+                                                <button className='update-btn' onClick={certification}>본인인증</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                : menu === 'secession' ?
+                                    <div>
+                                        <button className='secession-btn' onClick={handleSubmitSecession}>회원탈퇴</button>
+                                    </div>
+                                    : <></>
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
+        </main>
     );
 }
 

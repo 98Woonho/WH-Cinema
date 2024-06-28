@@ -325,7 +325,7 @@ function Ticketing() {
     const handlePrevStepBtn = () => {
         if (step === 2) {
             setStep(1);
-        } 
+        }
 
         if (step === 3) {
             axios.delete(`/ticketing/${ticketingId}`)
@@ -335,7 +335,7 @@ function Ticketing() {
                 .catch(err => {
                     console.log(err);
                 })
-                
+
             setStep(2);
         }
     }
@@ -563,9 +563,15 @@ function Ticketing() {
             date = new Date(date.getTime());
             return (
                 <button className={selectedDate === date.toISOString().slice(0, 10) ? 'selected day-btn' : 'day-btn'} onClick={() => handleDate(date)}>
-                    <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
-                    <p className={date.getDay() === 6 ? 'blue' : date.getDay() === 0 ? 'red' : ''}>{date.getDate()}</p>
-                    <p>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
+                    <div className='day-btn-text-container'>
+                        <p>{date.getDate() === 1 ? date.getMonth() + 1 + '월' : ''}</p>
+                        <div>
+                            <div className='day-container'>
+                                <p className={`day ${date.getDay() === 6 ? 'blue' : date.getDay() === 0 ? 'red' : ''}`}>{date.getDate()}</p>
+                            </div>
+                            <p className='day-of-week'>{today.toDateString() === date.toDateString() ? '오늘' : daysOfWeek[date.getDay()]}</p>
+                        </div>
+                    </div>
                 </button>
             )
         })
@@ -834,141 +840,148 @@ function Ticketing() {
     const settings = {
         slidesToShow: 8,
         slidesToScroll: 8,
-        infinite: false
+        infinite: false,
     }
 
     return (
         <div id='ticketingMain' className='main'>
-            {step === 1 ? (
-                <div className='ticketing-option-container'>
-                    <div className='section movie-section'>
+            <div className="content-container">
+                {step === 1 ? (
+                    <div className='ticketing-option-container'>
+                        <div className='section movie-section'>
+                            <h2 className='section-title'>영화</h2>
+                            <ul class='movie-list'>
+                                {movieMap}
+                            </ul>
+                        </div>
+                        <div className='section theater-section flex-1'>
+                            <h2 className='section-title'>영화관</h2>
+                            <div class='theater-container'>
+                                <div class='region-container'>
+                                    {regionMap}
+                                </div>
+                                <div class='theater-name-container'>
+                                    {theaterNameMap}
+                                </div>
+                            </div>
+                        </div>
+                        <div className='section screen-info-section'>
+                            <h2 className='section-title'>날짜</h2>
+                            <Slider {...settings}>
+                                {dateMap}
+                            </Slider>
+                            <div className='screen-info-container'>
+                                {screenInfoMap}
+                            </div>
+                        </div>
+                    </div>
+                ) : step === 2 ? (<div className='select-seat-container'>
+                    <div className='people'>
                         <ul>
-                            {movieMap}
+                            <li>
+                                <span className='people-type'>일반</span>
+                                <span>
+                                    {adultMap}
+                                </span>
+                            </li>
+                            <li>
+                                <span className='people-type'>청소년</span>
+                                <span>
+                                    {youthMap}
+                                </span>
+                            </li>
                         </ul>
                     </div>
-                    <div className='section theater-section'>
-                        <div class='region-container'>
-                            {regionMap}
+
+                    <div className='seat-info'>
+                        <div className='filter'></div>
+                        <div className='seat-left'>
+                            <div className='screen'>
+                                스크린
+                            </div>
+                            <div className='seat-box'>
+                                {seatMap}
+                            </div>
                         </div>
-                        <div class='theater-name-container'>
-                            {theaterNameMap}
-                        </div>
-                    </div>
-                    <div className='section screen-info-section'>
-                        <Slider {...settings}>
-                            {dateMap}
-                        </Slider>
-                        <div className='screen-info-container'>
-                            {screenInfoMap}
+                        <div className='seat-right'>
+                            <div>
+                                <span className='select-icon'></span>
+                                <span>선택</span>
+                            </div>
+                            <div>
+                                <span className='reserved-seat-icon'></span>
+                                <span>예매 완료</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            ) : step === 2 ? (<div className='select-seat-container'>
-                <div className='people'>
-                    <ul>
-                        <li>
-                            <span className='people-type'>일반</span>
-                            <span>
-                                {adultMap}
-                            </span>
-                        </li>
-                        <li>
-                            <span className='people-type'>청소년</span>
-                            <span>
-                                {youthMap}
-                            </span>
-                        </li>
-                    </ul>
+                ) : (<div className='payment-container'>
+                    <div className='payment-left'>
+                        <div className='payment-method-box'>
+                            <button id='card' onClick={handlePaymentMethodBtn}>신용/체크 카드</button>
+                            <button id='kakaoPay' onClick={handlePaymentMethodBtn}>카카오페이</button>
+                            <button id='payco' onClick={handlePaymentMethodBtn}>페이코</button>
+                            <button id='phone' onClick={handlePaymentMethodBtn}>휴대폰 결제</button>
+                        </div>
+                    </div>
+                    <div className='payment-right'>
+
+                    </div>
                 </div>
 
-                <div className='seat-info'>
-                    <div className='filter'></div>
-                    <div className='seat-left'>
-                        <div className='screen'>
-                            스크린
-                        </div>
-                        <div className='seat-box'>
-                            {seatMap}
-                        </div>
-                    </div>
-                    <div className='seat-right'>
-                        <div>
-                            <span className='select-icon'></span>
-                            <span>선택</span>
-                        </div>
-                        <div>
-                            <span className='reserved-seat-icon'></span>
-                            <span>예매 완료</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            ) : (<div className='payment-container'>
-                <div className='payment-left'>
-                    <div className='payment-method-box'>
-                        <button id='card' onClick={handlePaymentMethodBtn}>신용/체크 카드</button>
-                        <button id='kakaoPay' onClick={handlePaymentMethodBtn}>카카오페이</button>
-                        <button id='payco' onClick={handlePaymentMethodBtn}>페이코</button>
-                        <button id='phone' onClick={handlePaymentMethodBtn}>휴대폰 결제</button>
-                    </div>
-                </div>
-                <div className='payment-right'>
-
-                </div>
-            </div>
-
-            )
-            }
-            <div className='ticketing-info-container'>
-                {step === 2 ?
-                    <button onClick={handlePrevStepBtn}>영화 선택</button>
-                    : step === 3 ? 
-                    <button onClick={handlePrevStepBtn}>좌석 선택</button>
-                    : ''
+                )
                 }
+                <div className='ticketing-info-container'>
+                    {step === 2 ?
+                        <button onClick={handlePrevStepBtn}>영화 선택</button>
+                        : step === 3 ?
+                            <button onClick={handlePrevStepBtn}>좌석 선택</button>
+                            : ''
+                    }
 
-                <div className='movie'>
-                    {moviePoster === null ? <p>영화선택</p> : <img className='poster' src={moviePoster} />}
-                </div>
-                <div className='theater'>
-                    <div className='info name'>
-                        <span>극장</span>
-                        <span>{selectedTheaterName}</span>
+                    <div className='movie'>
+                        {moviePoster === null ? <p>영화선택</p> : <img className='poster' src={moviePoster} />}
                     </div>
-                    <div className='info date'>
-                        <span>일시</span>
-                        <span>{selectedDate} {selectedScreenTime}</span>
+                    <div className='theater'>
+                        <div className='info name'>
+                            <span>극장</span>
+                            <span>{selectedTheaterName}</span>
+                        </div>
+                        <div className='info date'>
+                            <span>일시</span>
+                            <span>{selectedDate} {selectedScreenTime}</span>
+                        </div>
+                        <div className='info screen-hall'>
+                            <span>상영관</span>
+                            <span>{selectedScreenHallName}</span>
+                        </div>
+                        <div className='info'>
+                            <span>인원</span>
+                            <span>{`일반 ${adult}명, 청소년 ${youth}명`}</span>
+                        </div>
                     </div>
-                    <div className='info screen-hall'>
-                        <span>상영관</span>
-                        <span>{selectedScreenHallName}</span>
+                    <div>
+                        <span>좌석</span>
+                        {selectedSeatMap}
                     </div>
-                    <div className='info'>
-                        <span>인원</span>
-                        <span>{`일반 ${adult}명, 청소년 ${youth}명`}</span>
+                    <div className='payment'>
+                        결제
+                        {adultCostDiv}
+                        {youthCostDiv}
+                        {totalCostDiv}
                     </div>
-                </div>
-                <div>
-                    <span>좌석</span>
-                    {selectedSeatMap}
-                </div>
-                <div className='payment'>
-                    결제
-                    {adultCostDiv}
-                    {youthCostDiv}
-                    {totalCostDiv}
-                </div>
-                {step === 1 ? (<button className='next-step-btn' onClick={handleNextStepBtn}>
-                    <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
-                    <p>좌석선택</p>
-                </button>
-                ) : step === 2 ? (<button className='next-step-btn' onClick={handleNextStepBtn}>
-                    <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
-                    <p>결제선택</p>
-                </button>
-                ) : (<button className='payment-btn' onClick={handlePayment}>결제하기</button>
-                )}
+                    {step === 1 ? (<button className='next-step-btn' onClick={handleNextStepBtn}>
+                        <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
+                        <p>좌석선택</p>
+                    </button>
+                    ) : step === 2 ? (<button className='next-step-btn' onClick={handleNextStepBtn}>
+                        <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAtElEQVR4nO3YPQrCQBRF4VPpfiytLSyMC1BSGLNVK7GwcQFWgrV/hUYCU4hoIYGY+7gfvAUcZpiZBMzMzMzMOmgIbNKMELYDqjQ3IEPU/iVEOmYG3D/ETBC0+BIzRZBj1FYmQ5BjfpEDx7elb3MuwJiGesD5jxFVmmvTe6YPnCKE1ObAQX1rtamI8HQpItwlS0d0RBnhBVxGiMiBh/rpFOpTdxshojYAVsBa/XeQmZmZmaHlCeC06ncEGe4qAAAAAElFTkSuQmCC' />
+                        <p>결제선택</p>
+                    </button>
+                    ) : (<button className='payment-btn' onClick={handlePayment}>결제하기</button>
+                    )}
 
+                </div>
             </div>
         </div>
     )

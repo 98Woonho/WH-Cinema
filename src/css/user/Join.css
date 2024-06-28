@@ -25,3 +25,29 @@
 #joinForm .join-btn:hover {
     background-color: #ff5050;
 }
+
+#joinForm .condition {
+    display: flex;
+    flex-direction: low;
+    align-items: center;
+}
+
+#joinForm .condition-container {
+    display: none;
+}
+
+#joinForm .condition-container.visible {
+    display: block;
+}
+
+#joinForm .condition-text {
+    color: #ff5050;
+}
+
+#joinForm .condition-text.success {
+    color: #20DA36;
+}
+
+#joinForm .condition-icon {
+    width: 25px;
+}

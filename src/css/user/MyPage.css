@@ -1,78 +1,90 @@
-#myPage {
+#myPageMain .my-page-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-
-    height: 500px;
-    background-color: antiquewhite;
+    justify-content: space-between;
 }
 
-.my-page-left {
+#myPageMain .my-page-left,
+#myPageMain .my-page-right {
     padding: 1.5rem;
+    border: 1px solid #b7b7b7;
+    border-radius: 10px;
+}
 
+#myPageMain .my-page-left {
     width: 20%;
-    border: 1px solid black;
 }
 
-.my-page-right {
-    width: 60%;
-    border: 1px solid black;
+#myPageMain .my-page-right {
+    width: 75%;
 }
 
-.menu-container {
+#myPageMain .menu-container {
     margin-bottom: 1.25rem;
 }
 
-.menu-title {
+#myPageMain .menu-container ul {
+    margin-top: 1rem;
+}
+
+#myPageMain .menu-container ul li {
+    cursor: pointer;
+    margin-top: 0.5rem;
+}
+
+#myPageMain .menu-title {
     font-size: 1.5rem;
     font-weight: 600;
 }
 
-.menu-container p {
+#myPageMain .menu-container p {
     cursor: pointer;
 }
 
-.menu-container p:hover {
+#myPageMain .menu-container p:hover {
     color: blue;
 }
 
-.menu-container p.selected {
+#myPageMain .menu-container p.selected {
     color: blue;
 }
 
-.user-info {
+#myPageMain .user-info {
     display: flex;
     flex-direction: column;
     gap: 1.25rem;
 }
 
-.user-info-update-table {
+#myPageMain .user-info-update-table {
     width: 80%;
     margin: 2rem auto;
 
     border-top: 2px solid black;
 }
 
-.user-info-update-table td {
+#myPageMain .user-info-update-table td {
     padding: 1rem;
 }
 
-.user-info-update-table td.row-title {
+#myPageMain .user-info-update-table td.row-title {
     border-right: 1px solid rgb(112, 112, 112);
 }
 
-.user-info-update-table tr {
+#myPageMain .user-info-update-table tr {
     border-bottom: 1px solid rgb(129, 129, 129);
 }
 
-.user-info-update-table label {
+#myPageMain .user-info-update-table label {
     display: inline-block;
     width: 120px;
 }
 
-.update-btn {
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+#myPageMain .update-btn {
     border-radius: 10px;
     padding: 0.5rem;
-    background-color: aliceblue;
+    background-color: rgb(233, 233, 233);
+}
+
+#myPageMain .update-btn:hover {
+    background-color: #cfcfcf;
 }

@@ -10,6 +10,28 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const upload = multer();
 
+router.get('/', (req, res) => {
+  const { name, birthday, phone, userId } = req.query;
+
+  let query = 'SELECT user_id, name, birthday, phone, role FROM user';
+
+  if (userId) {
+    query += ` WHERE user_id = '${userId}'`;
+  }
+
+  if (!userId) {
+    query += ` WHERE name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`;
+  }
+
+  db.query(query, (err, data) => {
+    if (err) {
+      res.send(err);
+    }
+
+    res.send(data);
+  });
+})
+
 router.get('/verify', (req, res) => {
   const cookies = req.cookies;
 
@@ -133,7 +155,7 @@ router.post('/login', upload.none(), (req, res) => {
   })
 });
 
-router.post('/join',  upload.none(), (req, res) => {
+router.post('/join', upload.none(), (req, res) => {
   console.log(req.body);
   const { userId, password, name, birthday, phone } = req.body;
   db.query(`SELECT * FROM user WHERE user_id='${userId}'`, (err, data) => {
@@ -185,30 +207,8 @@ router.post('/certification', async (req, res) => {
   }
 });
 
-router.get('/:name/:birthday/:phone', (req, res) => {
-  const { name, birthday, phone } = req.params;
-  db.query(`SELECT * FROM user WHERE name = '${name}' and birthday = '${birthday}' and phone = '${phone}'`, (err, data) => {
-    if (err) {
-      res.send(err);
-    }
-
-    res.send(data);
-  })
-})
-
-router.get('/:userId', (req, res) => {
-  const userId = req.params.userId;
-  db.query(`SELECT user_id, name, birthday, phone, role FROM user WHERE user_id = '${userId}'`, (err, data) => {
-    if (err) {
-      res.send(err);
-    }
-
-    res.send(data);
-  })
-})
-
 router.patch('/', (req, res) => {
-  const { newUserId, currentUserId, newPassword, currentPassword } = req.body;
+  const { newUserId, currentUserId, newPassword, currentPassword, newName, newPhone } = req.body;
 
   // 아이디 변경 시
   if (newUserId) {
@@ -257,9 +257,19 @@ router.patch('/', (req, res) => {
           res.send(err);
         }
 
-        res.status(200).json({ msg: '비밀번호가 변경 되었습니다. 로그인을 다시 해주세요.' })
+        res.status(200).json({ msg: '비밀번호가 변경 되었습니다. 로그인을 다시 해주세요.' });
       })
     })
+  }
+
+  if (newName && newPhone) {
+     db.query(`UPDATE user SET name='${newName}', phone='${newPhone}' WHERE user_id='${currentUserId}'`, (err, data) => {
+      if (err) {
+        res.send(err);
+      }
+
+      res.status(200).json({ msg: '이름 및 휴대폰 번호가 변경 되었습니다. 로그인을 다시 해주세요.'});
+     })
   }
 })
 

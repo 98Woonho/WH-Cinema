@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -8,6 +15,7 @@
 }
 
 body {
+  font-family: 'Pretendard-Regular' !important;
   position: relative;
 }
 
@@ -30,4 +38,27 @@ body {
 .main-title {
   font-size: 2rem;
   font-weight: 600;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
 }

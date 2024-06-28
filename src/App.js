@@ -13,29 +13,6 @@ import axios from 'axios';
 
 const GlobalStyle = createGlobalStyle`
 ${reset}
-
-button {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  outline: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-}
 `;
 
 function App() {

@@ -1,109 +1,132 @@
-.ticketing-option-container {
-    margin-top: 5rem;
+#ticketingMain .ticketing-option-container {
     background-color: aliceblue;
 
+    height: 750px;
     display: flex;
     flex-direction: row;
     justify-content: stretch;
 }
 
-.section {
-    border: 1px solid black;
-    padding: 1rem;
+#ticketingMain .section:not(:last-child) {
+    border-right: 1px solid #666;
 }
 
-.theater-section {
-    display: flex;
-    flex-direction: row;
+#ticketingMain .section-title {
+    padding: 1rem 0;
+    text-align: center;
+    color: white;
+    background-color: black;
 }
 
-.movie-section {
-    width: 300px;
-}
-
-.region-container {
-    width: 100%;
+#ticketingMain .movie-section {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
 }
 
-.region-container button {
-    padding: 1rem 0.5rem;
-    width: 100%;
-    text-align: right;
+#ticketingMain .movie-list {
+    margin-right: 12px;
+    overflow: auto;
 }
 
-.region-container button.selected {
-    background-color: rgb(66, 66, 66);
-    color: white;
+.movie-list::-webkit-scrollbar {
+    width: 6px;
 }
 
-.theater-name-container {
-    width: 100%;
+.movie-list::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 6px;
+}
+
+#ticketingMain .movie-list li {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.theater-name-container button {
-    padding: 1rem 0.5rem;
-    width: 100%;
-    text-align: left;
-}
-
-.theater-name-container button.selected {
-    background-color: rgb(66, 66, 66);
-    color: white;
-}
-
-.ticketing-option-container ul li {
-    display: flex;
-    flex-direction: row;
     align-items: center;
     gap: 1rem;
 
     cursor: pointer;
-    margin-bottom: 0.5rem;
+    padding: 0.5rem 1rem;
 }
 
-.ticketing-option-container ul li.selected {
+#ticketingMain .movie-list li.selected {
     background-color: rgb(83, 83, 83);
 }
 
-.ticketing-option-container ul li.selected .title {
+#ticketingMain .movie-list li.selected .title {
     color: white;
 }
 
-.ticketing-option-container ul li .title {
+#ticketingMain .movie-list li .title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.screen-info-section {
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-
-    width: 500px;
+#ticketingMain .movie-section {
+    width: 300px;
 }
 
-.screen-info-container {
+#ticketingMain .region-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #e1e1e1;
+}
+
+#ticketingMain .region-container button {
+    padding: 1rem 0.5rem;
+    width: 100%;
+    text-align: right;
+}
+
+#ticketingMain .region-container button.selected {
+    background-color: rgb(83, 83, 83);
+    color: white;
+}
+
+#ticketingMain .theater-container {
+    display: flex;
+    flex-direction: row;
+}
+
+#ticketingMain .theater-name-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#ticketingMain .theater-name-container button {
+    padding: 1rem 0.5rem;
+    width: 100%;
+    text-align: left;
+}
+
+#ticketingMain .theater-name-container button.selected {
+    background-color: rgb(83, 83, 83);
+    color: white;
+}
+
+#ticketingMain .screen-info-section {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+}
+
+#ticketingMain .screen-info-container {
     width: 100%;
 }
 
-.screen-hall-name {
+#ticketingMain .screen-hall-name {
     font-size: 1.5rem;
     font-weight: 600;
 }
 
-.screen-time-container {
+#ticketingMain .screen-time-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
 }
 
-.screen-time-btn {
+#ticketingMain .screen-time-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -115,35 +138,60 @@
     padding: 0.5rem 0;
 }
 
-.screen-time-btn.selected {
+#ticketingMain .screen-time-btn.selected {
     background-color: rgb(83, 83, 83);
 }
 
-.screen-time-btn.full-reservation {
+#ticketingMain .screen-time-btn.full-reservation {
     opacity: 0.5;
     cursor: default;
 }
 
-.day-btn {
-    height: 100px;
-    border: 1px solid black;
-    border-radius: 5px;
+#ticketingMain .day-btn-text-container {
+    position: relative;
+}
 
-    display: flex !important;
+#ticketingMain .day-btn-text-container > p {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#ticketingMain .day-btn-text-container > div {
+    padding-top: 30px;
+    position: relative;
+
+    display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+#ticketingMain .day-of-week {
+    padding-top: 15px;
+}
+
+#ticketingMain .day-btn {
+    height: 100px;
+}
+
+#ticketingMain .day-container {
+    width: 30px;
+    height: 30px;
+    display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
 }
 
-.day-btn.selected {
-    background-color: rgb(83, 83, 83);
+#ticketingMain .day-btn.selected .day-container {
+    color: white;
+    background-color: #666;
+    border-radius: 50%;
 }
 
-.rating-icon-all,
-.rating-icon-12,
-.rating-icon-15,
-.rating-icon-19 {
+#ticketingMain .rating-icon-all,
+#ticketingMain .rating-icon-12,
+#ticketingMain .rating-icon-15,
+#ticketingMain .rating-icon-19 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -155,31 +203,31 @@
     font-weight: 600;
 }
 
-.rating-icon-all {
+#ticketingMain .rating-icon-all {
     background-color: rgb(104, 248, 99);
 }
 
-.rating-icon-12 {
+#ticketingMain .rating-icon-12 {
     background-color: rgb(246, 238, 121);
 }
 
-.rating-icon-15 {
+#ticketingMain .rating-icon-15 {
     background-color: rgb(255, 204, 85);
 }
 
-.rating-icon-19 {
+#ticketingMain .rating-icon-19 {
     background-color: rgb(255, 89, 89);
 }
 
-.blue {
+#ticketingMain .blue {
     color: blue;
 }
 
-.red {
+#ticketingMain .red {
     color: red;
 }
 
-.ticketing-info-container {
+#ticketingMain .ticketing-info-container {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -191,7 +239,7 @@
     background-color: bisque;
 }
 
-.next-step-btn {
+#ticketingMain .next-step-btn {
     width: 100px;
     height: 100px;
 
@@ -200,21 +248,21 @@
     background-color: red;
 }
 
-.select-seat-container {
+#ticketingMain .select-seat-container {
     display: flex;
     flex-direction: column;
 
     height: 700px;
 }
 
-.people {
+#ticketingMain .people {
     position: relative;
     background-color: blanchedalmond;
     border-bottom: 1px solid rgb(175, 150, 114);
     height: 30%;
 }
 
-.people ul {
+#ticketingMain .people ul {
     position: absolute;
 
     top: 50%;
@@ -222,33 +270,33 @@
     transform: translate(-50%, -50%);
 }
 
-.people-type {
+#ticketingMain .people-type {
     display: inline-block;
     width: 80px;
     font-size: 1.3rem;
     font-weight: 600;
 }
 
-.people-count {
+#ticketingMain .people-count {
     width: 30px;
     height: 30px;
 
     border: 1px solid rgb(191, 173, 173);
 }
 
-.people-count.selected {
+#ticketingMain .people-count.selected {
     background-color: rgb(101, 101, 101);
     color: white;
 }
 
-.seat-info {
+#ticketingMain .seat-info {
     position: relative;
     height: 70%;
     display: flex;
     flex-direction: row;
 }
 
-.filter {
+#ticketingMain .filter {
     z-index: 1;
     position: absolute;
     width: 100%;
@@ -257,13 +305,13 @@
     opacity: 0.4;
 }
 
-.seat-left {
+#ticketingMain .seat-left {
     position: relative;
     width: 80%;
     background-color: #f2f0e5;
 }
 
-.seat-right {
+#ticketingMain .seat-right {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -275,7 +323,7 @@
     background-color: #f2f0e5;
 }
 
-.seat-box {
+#ticketingMain .seat-box {
     position: absolute;
 
     top: 50%;
@@ -283,7 +331,7 @@
     transform: translate(-50%, -50%);
 }
 
-.screen {
+#ticketingMain .screen {
     position: relative;
     top: 60px;
     margin: 0 auto;
@@ -292,7 +340,7 @@
     background-color: rgb(204, 204, 204);
 }
 
-.seat-row {
+#ticketingMain .seat-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -301,14 +349,14 @@
     margin-bottom: 0.25rem;
 }
 
-.column {
+#ticketingMain .column {
     text-align: center;
 
     width: 15px;
     height: 15px;
 }
 
-.seat {
+#ticketingMain .seat {
     position: relative;
     font-size: 0.75rem;
     width: 15px;
@@ -317,47 +365,47 @@
     color: white;
 }
 
-.seat.empty {
+#ticketingMain .seat.empty {
     background-color: inherit;
 }
 
-.seat.selected {
+#ticketingMain .seat.selected {
     background-color: #f81e1e;
 }
 
 
-.seat.column {
+#ticketingMain .seat.column {
     background-color: unset;
     color: black;
 }
 
-.seat.reserved {
+#ticketingMain .seat.reserved {
     background-color: #bbb;
     pointer-events: none;
 }
 
-.seat-number {
+#ticketingMain .seat-number {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.select-icon {
+#ticketingMain .select-icon {
     display: inline-block;
     width: 20px;
     height: 20px;
     background-color: #f81e1e;
 }
 
-.reserved-seat-icon {
+#ticketingMain .reserved-seat-icon {
     display: inline-block;
     width: 20px;
     height: 20px;
     background-color: #bbb;
 }
 
-.payment-container {
+#ticketingMain .payment-container {
     display: flex;
     flex-direction: row;
     background-color: #f2f0e5;
@@ -365,34 +413,34 @@
     height: 400px;
 }
 
-.payment-left {
+#ticketingMain .payment-left {
     width: 70%;
     height: 100%;
 }
 
-.payment-right {
+#ticketingMain .payment-right {
     width: 30%;
     height: 100%;
 }
 
-.payment-method-box {
+#ticketingMain .payment-method-box {
     border: 1px solid black;
     border-radius: 5px;
     padding: 3rem;
 }
 
-.payment-method-box button {
+#ticketingMain .payment-method-box button {
     border: 1px solid black;
     border-radius: 10px;
     padding: 1.5rem;
     margin-right: 1rem;
 }
 
-.payment-method-box button.selected {
+#ticketingMain .payment-method-box button.selected {
     background-color: aquamarine;
 }
 
-.payment-btn {
+#ticketingMain .payment-btn {
     width: 100px;
     height: 100px;
 
@@ -400,4 +448,10 @@
     border: 1px solid black;
     border-radius: 5px;
     background-color: red;
+}
+
+#ticketingMain .slick-slider {
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 0.5rem;
 }
