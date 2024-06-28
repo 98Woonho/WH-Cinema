@@ -2,11 +2,6 @@
     height: 85vh;
 }
 
-#loginMain h1 {
-    font-size: 2rem;
-    font-weight: 600;
-}
-
 #loginMain .login-container {
     display: flex;
     flex-direction: column;
@@ -22,6 +17,18 @@
 
 #loginForm div {
     padding: 0.25rem 0;
+}
+
+#loginForm .warning {
+    border-radius: 5px;
+    background-color: #ff6c6c;
+    color: white;
+    padding: 0.5rem 1rem;
+    display: none;
+}
+
+#loginForm .warning.visible {
+    display: block;
 }
 
 #loginForm .login-btn {

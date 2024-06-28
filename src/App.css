@@ -17,7 +17,6 @@ body {
 
 .content-container {
   width: 1100px;
-  height: 100%;
   margin: 0 auto;
 }
 
@@ -27,3 +26,7 @@ body {
   width: 100%;
 }
 
+.main-title {
+  font-size: 2rem;
+  font-weight: 600;
+}

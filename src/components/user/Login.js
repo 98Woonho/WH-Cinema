@@ -6,23 +6,9 @@ import axios from 'axios';
 function Login() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [userId, setUserId] = useState('');
-    const [password, setPassword] = useState('');
-    const [rememberMe, setRememberMe] = useState(false);
+    const [isWarning, setIsWarning] = useState(false);
 
     const { isJoinPage } = location.state === null ? '' : location.state;
-
-    const handleUserId = (e) => {
-        setUserId(e.target.value);
-    }
-
-    const handlePassword = (e) => {
-        setPassword(e.target.value);
-    }
-
-    const handleRememberMe = (e) => {
-        setRememberMe(e.target.checked);
-    }
 
     const handleSubmitLogin = (e) => {
         e.preventDefault();
@@ -30,13 +16,17 @@ function Login() {
         const formData = new FormData(e.target);
         formData.append('rememberMe', e.target.rememberMe.checked);
 
-        axios.post('/user/login', formData)
+        axios.post('/user/login', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
             .then(res => {
                 isJoinPage ? navigate('/') : navigate(-1);
             })
             .catch(err => {
                 if (err.response.status === 400) {
-                    alert(err.response.data.msg);
+                    setIsWarning(true);
                 } else {
                     alert('알 수 없는 이유로 로그인에 실패 하였습니다. 잠시 후 다시 시도해 주세요.');
                 }
@@ -44,19 +34,22 @@ function Login() {
     }
 
     return (
-        <div id='loginMain' className='main'>
-            <div className="content-container">
-                <h1>로그인</h1>
-                <div className="login-container">
+        <main id='loginMain' className='main'>
+            <div className='content-container'>
+                <h1 className='main-title'>로그인</h1>
+                <div className='login-container'>
                     <form onSubmit={handleSubmitLogin} id='loginForm'>
                         <div>
-                            <input className="common-input" type='text' name='userId' value={userId} onChange={handleUserId} placeholder="아이디" />
+                            <input className='common-input' type='text' name='userId' placeholder='아이디' />
                         </div>
                         <div>
-                            <input className="common-input" type='password' name='password' value={password} onChange={handlePassword} placeholder="비밀번호" />
+                            <input className='common-input' type='password' name='password' placeholder='비밀번호' />
+                        </div>
+                        <div className={`warning ${isWarning ? 'visible' : ''}`}>
+                            아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.
                         </div>
                         <div>
-                            <input type="checkbox" name='rememberMe' onChange={handleRememberMe} />
+                            <input type='checkbox' name='rememberMe' />
                             <span>로그인 유지</span>
                         </div>
                         <div>
@@ -65,7 +58,7 @@ function Login() {
                     </form>
                 </div>
             </div>
-        </div>
+        </main>
     )
 }
 

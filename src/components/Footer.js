@@ -8,7 +8,7 @@ function Footer() {
     <footer id='Footer'>
       <div className="content">
         <a className="logo-link" href="/"></a>
-        <span>&copy; 2024 MOVIEFOLIO All Rights Reserved.</span>
+        <span>&copy; 2024 WHCinema All Rights Reserved.</span>
       </div>
     </footer>
   )

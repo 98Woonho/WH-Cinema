@@ -65,8 +65,8 @@ function Join() {
     }
 
     return(
-        <div id='join'>
-            <h2>회원가입</h2>
+        <main id='joinMain' className='main'>
+            <h2 className='main-title'>회원가입</h2>
             <div>
                 <label>아이디 : </label>
                 <input type='text' name='userId' value={userId} onChange={handleuserId} />
@@ -78,7 +78,7 @@ function Join() {
             <div>
                 <button type='button' onClick={join}>회원가입</button>
             </div>
-        </div>
+        </main>
     )
 }
 

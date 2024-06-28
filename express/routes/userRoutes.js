@@ -6,6 +6,10 @@ const bcrypt = require('bcrypt');
 const tokenUtils = require('../../src/utils/tokenUtils.js');
 const jwt = require('jsonwebtoken');
 
+// formData 요청을 위한 모듈
+const multer = require('multer');
+const upload = multer();
+
 router.get('/verify', (req, res) => {
   const cookies = req.cookies;
 
@@ -101,13 +105,13 @@ router.get('/accessTokenPayload', (req, res) => {
   res.send(result);
 })
 
-router.post('/login', (req, res) => {
+router.post('/login', upload.none(), (req, res) => {
   const { userId, password, rememberMe } = req.body;
 
   db.query(`SELECT * FROM user WHERE user_id='${userId}'`, (err, data) => {
     if (!err) {
       if (data.length == 0 || !bcrypt.compareSync(password, data[0].password)) {
-        res.status(400).json({ msg: '아이디 혹은 비밀번호가 올바르지 않습니다. 다시 한 번 확인해 주세요.' });
+        res.status(400).send();
       } else {
         const accessToken = tokenUtils.makeAccessToken({ userId: userId });
         const refreshToken = tokenUtils.makeRefreshToken({ userId: userId }, rememberMe ? '7d' : '1d');

@@ -106,7 +106,7 @@ function Movie() {
   }, [movieList])
 
   return (
-    <div className='main' id='movieMain'>
+    <main className='main' id='movieMain'>
       <div className="content-container">
         <div className="button-container">
           <div className="flex-1"></div>
@@ -125,7 +125,7 @@ function Movie() {
           {movieMap}
         </div>
       </div>
-    </div>
+    </main>
   );
 
 }

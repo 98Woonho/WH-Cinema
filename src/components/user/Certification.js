@@ -1,4 +1,5 @@
 import axios from 'axios';
+import '../../css/user/Certification.css';
 import { useNavigate } from 'react-router-dom';
 
 function Certification() {
@@ -53,16 +54,19 @@ function Certification() {
 
 
                 } else {
-                    alert("인증에 실패하였습니다. 에러 내용: " + res.error_msg);
+                    alert('인증에 실패하였습니다. 에러 내용: ' + res.error_msg);
                 }
             }
         )
     }
 
     return (
-        <div>
+        <main className='main' id='certificationMain'>
+            <div className='content-container'>
+                <h1 className='main-title'>본인인증</h1>
+            </div>
             <button className='certification-btn' onClick={certification}>본인인증</button>
-        </div>
+        </main>
     );
 }
 

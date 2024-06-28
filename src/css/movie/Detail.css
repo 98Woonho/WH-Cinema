@@ -1,7 +1,3 @@
-#detailMain {
-    gap: 4rem;
-}
-
 #detailMain .detail-container {
     display: flex;
     flex-direction: row;

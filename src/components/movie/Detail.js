@@ -25,7 +25,7 @@ function Detail() {
     }, []);
 
     return (
-        <div id='detailMain' className='main'>
+        <main id='detailMain' className='main'>
             <div className="content-container">
                 <div className='detail-container'>
                     <img src={movie.poster} alt='영화 포스터' />
@@ -60,7 +60,7 @@ function Detail() {
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
 
