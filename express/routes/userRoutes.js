@@ -156,7 +156,6 @@ router.post('/login', upload.none(), (req, res) => {
 });
 
 router.post('/join', upload.none(), (req, res) => {
-  console.log(req.body);
   const { userId, password, name, birthday, phone } = req.body;
   db.query(`SELECT * FROM user WHERE user_id='${userId}'`, (err, data) => {
     if (!err) {

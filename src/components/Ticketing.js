@@ -281,7 +281,7 @@ function Ticketing() {
                 return;
             }
 
-            axios.get(`/ticketing/${selectedMovieTitle}/${selectedTheaterName}/${selectedScreenHallName}/${selectedScreenTime}`)
+            axios.get(`/ticketing?title={selectedMovieTitle}&theaterName={selectedTheaterName}&screenHallName={selectedScreenHallName}&time={selectedScreenTime}`)
                 .then(res => {
                     const reservedSeatList = res.data.map(data =>
                         data.seat.split(', ')
@@ -621,28 +621,30 @@ function Ticketing() {
 
     // 예매 된 좌석수를 뺀 후에 상영정보 set
     useEffect(() => {
-        console.log(screenInfoList);
+        const screenHallNames = [...new Set(screenInfoList.map(item => item.screen_hall_name))];
+
         let idx = -1;
         if (screenInfoList.length === 0) {
-            setScreenInfoMap(<div className='screen-info-warning'>
-                <p>영화, 극장, 날짜를 선택해 주세요</p>
-            </div>);
+            setScreenInfoMap(<span className='screen-info-warning'>
+                영화, 극장, 날짜를 선택해 주세요
+            </span>);
         } else {
-            const screenInfoMap = screenInfoList.map(screenInfo =>
+            const screenInfoMap = screenHallNames.map(screenHallName =>
                 <div>
-                    <p className='screen-hall-name'>{screenInfo.screen_hall_name}</p>
-                    <div class='screen-time-container'>
-                        {screenInfo.time.split(',').map(time =>
-                            // className 조건 두 개 이상 하는 법 -> {` `}
-                            <button onClick={() => handleScreenTimeAndHall(time, screenInfo.screen_hall_name)} className={`${screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-btn' : 'screen-time-btn'} ${time === selectedScreenTime ? 'selected' : ''}`}>
-                                <p>{time}</p>
-                                <p className={screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? 'red' : ''}>{screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? '매진' : screenInfo.seat_count - reservedSeatCountList[idx] + ' / ' + screenInfo.seat_count}</p>
-                            </button>
+                    <p className="screen-hall-name">{screenHallName}</p>
+                    <div className="screen-time-container">
+                        {screenInfoList.map(screenInfo =>
+                            screenInfo.screen_hall_name === screenHallName && (
+                                <button onClick={() => handleScreenTimeAndHall(screenInfo.time, screenInfo.screen_hall_name)} className={`${screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-btn' : 'screen-time-btn'} ${screenInfo.time === selectedScreenTime && screenInfo.screen_hall_name === selectedScreenHallName ? 'selected' : ''}`}>
+                                    <p>{screenInfo.time}</p>
+                                    <p className={screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? 'red' : ''}>{screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? '매진' : screenInfo.seat_count - reservedSeatCountList[idx] + ' / ' + screenInfo.seat_count}</p>
+                                </button>
+                            )
                         )}
                     </div>
                 </div>
-
             )
+
             setScreenInfoMap(screenInfoMap);
         }
     }, [reservedSeatCountList, selectedScreenTime])
@@ -670,7 +672,7 @@ function Ticketing() {
             // 일반 인원을 늘렸을 때
             // ex) 일반2, 청소년2 인 상황에서 일반을 3명으로 선택하면, 요금 정보가 
             // 일반2, 청소년2 -> 일반3, 청소년1 으로 변경됨.
-            if (adult > adultCount) {
+            if (adult > adultCount && selectedSeatList.length >= adult) {
                 adultCount = adult;
 
                 const adultCostDiv = <div>
@@ -684,7 +686,7 @@ function Ticketing() {
 
                 youthCount = selectedSeatList.length - adult;
 
-                const youthCostDiv = youthCount === 0 ? null : <div>
+                const youthCostDiv = youthCount <= 0 ? null : <div>
                     <span>청소년</span>
                     <span>{youthCost} X {youthCount}</span>
                 </div>;
@@ -866,9 +868,11 @@ function Ticketing() {
                         </div>
                         <div className='section screen-info-section'>
                             <h2 className='section-title'>날짜</h2>
+                            <div className='slider-container'>
                             <Slider {...settings}>
                                 {dateMap}
                             </Slider>
+                            </div>
                             <div className='screen-info-container'>
                                 {screenInfoMap}
                             </div>
