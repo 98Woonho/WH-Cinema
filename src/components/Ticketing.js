@@ -17,7 +17,6 @@ let adultCount = 0; // 좌석 선택 시 요금에 표시할 일반 count
 let youthCount = 0; // 좌석 선택 시 요금에 표시할 청소년 count
 let adultCost; // 일반 요금
 let youthCost; // 청소년 요금
-let totalCost; // 총 요금
 let isFullSelectedSeat = false; // 선택 좌석이 인원을 초과하는가에 대한 여부
 let isDeletedSelectedSeat = false; // 선택한 좌석을 취소했는가에 대한 여부
 
@@ -47,6 +46,7 @@ function Ticketing() {
     const [step, setStep] = useState(1);
     const [adult, setAdult] = useState(0);
     const [youth, setYouth] = useState(0);
+    const [totalCost, setTotalCost] = useState(0);
     const [adultMap, setAdultMap] = useState(null);
     const [youthMap, setYouthMap] = useState(null);
     const [adultCostDiv, setAdultCostDiv] = useState(null);
@@ -754,7 +754,7 @@ function Ticketing() {
             filter.style.zIndex = adult === 0 && youth === 0 ? '1' : 'unset';
         }
 
-        totalCost = adultCost * adultCount + youthCost * youthCount;
+        const totalCost = adultCost * adultCount + youthCost * youthCount;
 
         if (totalCost > 0) {
             const totalCostDiv = <div>
@@ -764,6 +764,8 @@ function Ticketing() {
 
             setTotalCostDiv(totalCostDiv);
         }
+
+        setTotalCost(totalCost);
     }, [adult, youth])
 
     useEffect(() => {
@@ -909,7 +911,7 @@ function Ticketing() {
                     </div>
                     <div className='event-text'>
                         <p>결제 금액의 최대 2% 적립</p>
-                        <p>3만원 이상, 10% 할인 (최대 10000원)</p>
+                        <p>3만원 이상, 5% 할인 (최대 5000원)</p>
                     </div>
                 </div>;
         }
@@ -924,7 +926,7 @@ function Ticketing() {
                     </div>
                     <div className='event-text'>
                         <p>현대카드 M포인트 10% 사용, 0.5% 적립</p>
-                        <p>우리카드 3% 즉시 할인</p>
+                        <p>우리카드 5% 즉시 할인</p>
                     </div>
                 </div>;
         }
@@ -1053,8 +1055,25 @@ function Ticketing() {
                             {paymentEventMap}
                         </div>
                         <div className='payment-right'>
+                            <div className='payment-terms-container'>
+
+                            </div>
                             <div className='cost-container'>
-                                <div className='total-co'></div>
+                                <div>
+                                    <span>상품 금액</span>
+                                    <span className='flex-1'></span>
+                                    <span>{totalCost} 원</span>
+                                </div>
+                                <div>
+                                    <span>할인 금액</span>
+                                    <span className='flex-1'></span>
+                                    <span>0 원</span>
+                                </div>
+                                <div>
+                                    <span>결제 금액</span>
+                                    <span className='flex-1'></span>
+                                    <span>0 원</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1103,14 +1122,14 @@ function Ticketing() {
                     </div>
                     {step !== 3 ?
                         (<>
-                        <div className="line"></div>
+                            <div className="line"></div>
                             <div className='info'>
                                 결제
                                 {adultCostDiv}
                                 {youthCostDiv}
                                 {totalCostDiv}
                             </div>
-                            </>) : <></>
+                        </>) : <></>
                     }
 
                     <div className="flex-1"></div>

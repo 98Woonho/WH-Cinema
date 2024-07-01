@@ -511,8 +511,20 @@
 #ticketingMain .cost-container {
     background-color: #eaeaea;
     box-shadow: 0px 2px 3px #CCC;
+    border-radius: 5px;
 }
 
+#ticketingMain .cost-container {
+}
+
+#ticketingMain .cost-container div {
+    padding: 0.5rem;
+    display: flex;
+}
+
+#ticketingMain .cost-container div:not(:last-child) {
+    border-bottom: 1px solid #666;
+}
 
 #ticketingMain .payment-method-box {
     display: flex;
