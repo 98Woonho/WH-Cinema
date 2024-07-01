@@ -23,6 +23,11 @@ body {
   flex: 1;
 }
 
+.horizontal {
+  display: flex;
+  flex-direction: row;
+}
+
 .content-container {
   width: 1100px;
   margin: 0 auto;

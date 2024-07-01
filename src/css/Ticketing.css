@@ -4,6 +4,7 @@
     flex-direction: row;
     justify-content: stretch;
     border: 1px solid #666;
+    background-color: #f2f0e5;
 }
 
 #ticketingMain .section {
@@ -173,6 +174,7 @@
 
 #ticketingMain .screen-time-btn.selected {
     background-color: rgb(83, 83, 83);
+    color: white;
 }
 
 #ticketingMain .screen-time-btn.full-reservation {
@@ -264,34 +266,55 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 3rem;
 
-    padding: 0 2rem;
+    color: white;
+
     height: 350px;
-    border: 1px solid black;
-    background-color: bisque;
+    border: 1px solid #666;
+    border-top: none;
+    background-color: rgb(52, 52, 52);
 }
 
-#ticketingMain .next-step-btn {
+#ticketingMain .ticketing-info-container .info {
+    padding: 1rem;
+}
+
+#ticketingMain .ticketing-info-container .poster-info {
+    text-align: center;
+    width: 250px;
+} 
+
+#ticketingMain .ticketing-info-container .seat-info {
+    width: 200px;
+}
+
+#ticketingMain .ticketing-info-container .line {
+    height: 200px;
+    border-left: 0.0625rem solid #666;
+}
+
+#ticketingMain .ticketing-info-container button {
     width: 100px;
     height: 100px;
-
-    border: 1px solid black;
+    
     border-radius: 5px;
-    background-color: red;
+    background-color: rgb(255, 94, 94);
+    margin: 0 1rem;
 }
 
 #ticketingMain .select-seat-container {
     display: flex;
     flex-direction: column;
+    border: 1px solid #666;
 
     height: 700px;
 }
 
 #ticketingMain .people {
     position: relative;
-    background-color: blanchedalmond;
-    border-bottom: 1px solid rgb(175, 150, 114);
+    color: white;
+    background-color: rgb(52, 52, 52);
+    border-bottom: 1px solid #666;
     height: 30%;
 }
 
@@ -313,8 +336,8 @@
 #ticketingMain .people-count {
     width: 30px;
     height: 30px;
-
-    border: 1px solid rgb(191, 173, 173);
+    margin: 0.025rem;
+    border: 1px solid #666;
 }
 
 #ticketingMain .people-count.selected {
@@ -322,11 +345,12 @@
     color: white;
 }
 
-#ticketingMain .seat-info {
+#ticketingMain .seat-map {
     position: relative;
     height: 70%;
     display: flex;
     flex-direction: row;
+    background-color: #f2f0e5;
 }
 
 #ticketingMain .filter {
@@ -341,7 +365,7 @@
 #ticketingMain .seat-left {
     position: relative;
     width: 80%;
-    background-color: #f2f0e5;
+
 }
 
 #ticketingMain .seat-right {
@@ -353,7 +377,13 @@
 
     position: relative;
     width: 20%;
-    background-color: #f2f0e5;
+}
+
+#ticketingMain .seat-right div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 #ticketingMain .seat-box {
@@ -440,47 +470,69 @@
 
 #ticketingMain .payment-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     background-color: #f2f0e5;
+    border: 1px solid #666;
 
     height: 400px;
 }
 
+#ticketingMain .payment-container h1 {
+    font-size: 1.75rem;
+    color: white;
+    padding: 1rem 0;
+    text-align: center;
+    background-color: rgb(52, 52, 52);
+}
+
+#ticketingMain .payment-left,
+#ticketingMain .payment-right {
+    height: 100%;
+    padding: 1.5rem;
+}
+
 #ticketingMain .payment-left {
     width: 70%;
-    height: 100%;
+}
+
+#ticketingMain .payment-left h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+}
+
+#ticketingMain .payment-left img {
+    width: 50px;
 }
 
 #ticketingMain .payment-right {
     width: 30%;
-    height: 100%;
 }
 
+#ticketingMain .cost-container {
+    background-color: #eaeaea;
+    box-shadow: 0px 2px 3px #CCC;
+}
+
+
 #ticketingMain .payment-method-box {
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 3rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-top: 1.5rem;
 }
 
 #ticketingMain .payment-method-box button {
-    border: 1px solid black;
+    width: 120px;
+    height: 55px;
+    border: 1px solid #666;
     border-radius: 10px;
-    padding: 1.5rem;
     margin-right: 1rem;
 }
 
 #ticketingMain .payment-method-box button.selected {
-    background-color: aquamarine;
-}
-
-#ticketingMain .payment-btn {
-    width: 100px;
-    height: 100px;
-
-    color: #f0eeee;
-    border: 1px solid black;
-    border-radius: 5px;
-    background-color: red;
+    background-color: rgb(255, 211, 211);
+    border: 1px solid #ff9292;
 }
 
 #ticketingMain .slider-container {
@@ -492,4 +544,77 @@
     margin: 0 auto;
     margin-top: 0.5rem;
     border-bottom: 1px solid #ffffff;
+}
+
+#ticketingMain .slick-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 4px;
+    font-size: 24px;
+    color: #000;
+    border: none;
+    outline: 0;
+    z-index: 1;
+    cursor: pointer;
+}
+
+#ticketingMain .slick-prev {
+    left: -20px;
+}
+
+#ticketingMain .slick-next {
+    right: -20px;
+}
+
+#ticketingMain .slick-prev:hover,
+#ticketingMain .slick-next:hover {
+    color: #b0b0b0;
+}
+
+#ticketingMain .slick-prev:before,
+#ticketingMain .slick-next:before {
+    display: none;
+}
+
+#ticketingMain .slick-prev.slick-disabled,
+#ticketingMain .slick-next.slick-disabled {
+    color: #b0b0b0;
+    pointer-events: none;
+}
+
+#ticketingMain .theater-info div {
+    margin-bottom: 0.5rem;
+}
+
+#ticketingMain .theater-info .text {
+    display: inline-block;
+    width: 50px;
+}
+
+#ticketingMain .payment-event-container {
+    margin-top: 1.75rem;
+}
+
+#ticketingMain .payment-event-container h3 {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+#ticketingMain .payment-event-container .benefit {
+    margin-right: 0.35rem;
+    color: #ff0000;
+    background-color: #ffbebe;
+    padding: 0.25rem 0.25rem;
+    text-align: center;
+    border-radius: 5px;
+}
+
+#ticketingMain .payment-event-container .event-text {
+    line-height: 120%;
+    margin-top: 0.75rem;
+    background-color: #e1e1e1;
+    border-radius: 5px;
+    padding: 1.25rem;
 }
