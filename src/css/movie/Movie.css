@@ -15,23 +15,35 @@
     text-overflow: ellipsis;
 }
 
-#movieMain .button-container {
-    display: flex;
-}
-
 #movieMain .sort-container {
     display: flex;
+    margin-bottom: 2rem;
 }
 
-#movieMain .button-container button {
+#movieMain .sort-select {
+    border: 1px solid #666;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+#movieMain .main-top-container {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+#movieMain .main-top-container h1 {
+    
+}
+
+#movieMain .main-top-container button {
     padding: 0 0.75rem;
     font-weight: 600;
 }
 
-#movieMain .button-container button.selected {
+#movieMain .main-top-container button.selected {
     color: #ff3434;
 }
 
-#movieMain .button-container button:last-child {
+#movieMain .main-top-container button:last-child {
     border-left: 1px solid black;
 }

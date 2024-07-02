@@ -12,11 +12,17 @@
 }
 
 #myPageMain .my-page-left {
+    background-color: #f7f7f7;
     width: 20%;
 }
 
 #myPageMain .my-page-right {
     width: 75%;
+}
+
+#myPageMain .my-page-right h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
 #myPageMain .menu-container {
@@ -30,6 +36,10 @@
 #myPageMain .menu-container ul li {
     cursor: pointer;
     margin-top: 0.5rem;
+}
+
+#myPageMain .menu-container ul li.selected {
+    color: #ff2323;
 }
 
 #myPageMain .menu-title {
@@ -56,18 +66,29 @@
 }
 
 #myPageMain .user-info-update-table {
-    width: 80%;
-    margin: 2rem auto;
+    width: 100%;
+    margin-top: 2rem;
 
     border-top: 2px solid black;
 }
 
 #myPageMain .user-info-update-table td {
-    padding: 1rem;
+    border-left: 1px solid rgb(112, 112, 112);
+    padding: 0.5rem 1rem;
 }
 
-#myPageMain .user-info-update-table td.row-title {
-    border-right: 1px solid rgb(112, 112, 112);
+#myPageMain .user-info-update-table td > * {
+    margin: 0.5rem 0;
+}
+
+#myPageMain .user-info-update-table td label {
+    margin-bottom: 0.5rem;
+}
+
+#myPageMain .user-info-update-table th {
+    padding-left: 1rem;
+    text-align: left;
+    vertical-align: middle;
 }
 
 #myPageMain .user-info-update-table tr {
@@ -79,12 +100,40 @@
     width: 120px;
 }
 
-#myPageMain .update-btn {
+#myPageMain .my-page-btn {
     border-radius: 10px;
     padding: 0.5rem;
     background-color: rgb(233, 233, 233);
 }
 
+#myPageMain .update-id-btn {
+    margin-left: 2rem;
+}
+
+#myPageMain .update-password-btn {
+    float: right;
+}
+
+#myPageMain .certification-btn {
+    margin-left: 2rem;
+}
+
+#myPageMain .id-input {
+    width: 70%;
+}
+
+#myPageMain .name {
+    margin-right: 1.5rem;
+}
+
 #myPageMain .update-btn:hover {
     background-color: #cfcfcf;
+}
+
+#myPageMain .secession-text-container {
+    margin: 1rem 0;
+}
+
+#myPageMain .secession-btn {
+    float: right;
 }

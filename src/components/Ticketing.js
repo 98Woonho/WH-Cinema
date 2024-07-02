@@ -991,7 +991,7 @@ function Ticketing() {
     }
 
     return (
-        <div id='ticketingMain' className='main'>
+        <main id='ticketingMain' className='main'>
             <Loading isVisible={isLoading} />
             <div className="content-container">
                 {step === 1 ? (
@@ -1177,7 +1177,7 @@ function Ticketing() {
 
                 </div>
             </div>
-        </div>
+        </main>
     )
 }
 

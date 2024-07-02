@@ -9,7 +9,7 @@ function MyPage() {
     const [password, setPassword] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
-    const [menu, setMenu] = useState('info');
+    const [menu, setMenu] = useState('infoUpdate');
 
     const navigate = useNavigate();
 
@@ -34,12 +34,6 @@ function MyPage() {
                 menu.classList.remove('selected');
             }
         })
-    }
-
-    const handleInfo = (e) => {
-        handleMenu(e);
-
-        setMenu('info');
     }
 
     const handleUpdateInfo = (e) => {
@@ -220,8 +214,7 @@ function MyPage() {
                         <div className='menu-container'>
                             <h2 className='menu-title'>회원</h2>
                             <ul>
-                                <li className='menu selected' onClick={handleInfo}>회원정보</li>
-                                <li className='menu' onClick={handleUpdateInfo}>회원정보수정</li>
+                                <li className='menu selected' onClick={handleUpdateInfo}>회원정보확인/수정</li>
                                 <li className='menu' onClick={handleSecession}>회원탈퇴</li>
                             </ul>
                         </div>
@@ -233,24 +226,22 @@ function MyPage() {
                         </div>
                     </div>
                     <div className="my-page-right">
-                        {menu === 'info' ?
-                            <div className='user-info'>
-                                <span>아이디 : {user.user_id}</span>
-                                <span>이름 : {user.name}</span>
-                                <span>휴대폰 번호 : {user.phone}</span>
-                            </div>
-                            : menu === 'infoUpdate' ?
+                        {menu === 'infoUpdate' ?
+                            <>
+                                <h2>회원정보확인/수정</h2>
                                 <table className='user-info-update-table'>
                                     <tbody>
                                         <tr>
-                                            <td className='row-title'>아이디</td>
+                                            <th>아이디</th>
                                             <td>
-                                                <input type='text' className='common-input' name='userId' value={newUserId} onChange={changeNewUserId} />
-                                                <button className='update-btn' onClick={handleUpdateId}>아이디 변경</button>
+                                                <div>
+                                                    <input type='text' className='common-input id-input' name='userId' value={newUserId} onChange={changeNewUserId} />
+                                                    <button className='my-page-btn update-id-btn' onClick={handleUpdateId}>아이디 변경</button>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className='row-title'>비밀번호</td>
+                                            <th>비밀번호</th>
                                             <td>
                                                 <div>
                                                     <label>현재 비밀번호</label>
@@ -260,24 +251,46 @@ function MyPage() {
                                                     <label>새 비밀번호</label>
                                                     <input type='password' className='common-input' name='newPassword' placeholder='새 비밀번호 (영문, 숫자, 특수문자로 구성된 8~15자리)' onChange={changeNewPassword} />
                                                 </div>
-                                                <button className='update-btn' onClick={handleUpdatePassword}>비밀번호 변경</button>
+                                                <button className='my-page-btn update-password-btn' onClick={handleUpdatePassword}>비밀번호 변경</button>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td className='row-title'>이름 및 휴대폰 번호</td>
+                                            <th>이름 및 휴대폰 번호</th>
                                             <td>
-                                                {user.name}
-                                                {user.phone}
-                                                <button className='update-btn' onClick={certification}>본인인증</button>
+                                                <div>
+                                                    <span class='name'>
+                                                        {user.name}
+                                                    </span>
+                                                    <span>
+                                                        {user.phone}
+                                                    </span>
+                                                    <button className='my-page-btn certification-btn' onClick={certification}>본인인증</button>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                : menu === 'secession' ?
-                                    <div>
-                                        <button className='secession-btn' onClick={handleSubmitSecession}>회원탈퇴</button>
+                            </>
+                            : menu === 'secession' ?
+                                <div className='secession-container'>
+                                    <h2>회원 탈퇴 확인 안내</h2>
+                                    <div className='secession-text-container'>
+                                        안녕하세요, {user.name}님. <br></br>
+                                        귀하의 회원 탈퇴 요청을 받았습니다. 귀하께서 소중한 회원으로서 보낸 시간에 감사드립니다. <br></br>
+                                        다음 사항에 유의하시기 바랍니다. <br></br>
+                                        <div style={{margin: '0.5rem 0 0.5rem 0.5rem'}}>
+                                            - 회원 탈퇴는 1시간 내에 공식적으로 완료 됩니다.<br></br>
+                                            - 회원 탈퇴 시, 작성한 게시글이나 댓글은 모두 삭제 됩니다.<br></br>
+                                            - 회원 전용 기능 및 혜택은 탈퇴 후에는 더 이상 이용할 수 없습니다. <br></br>
+                                        </div>
+                                        탈퇴와 관련하여 궁금한 사항이 있으시면 언제든지 고객지원팀에 연락 주시기 바랍니다. <br></br>
+                                        탈퇴를 원하시면 오른쪽 하단의 회원탈퇴 버튼을 클릭해 주시기 바랍니다.
                                     </div>
-                                    : <></>
+                                    <div>
+                                        <button className='my-page-btn secession-btn' onClick={handleSubmitSecession}>회원탈퇴</button>
+                                    </div>
+                                </div>
+                                : <></>
                         }
                     </div>
                 </div>

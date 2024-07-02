@@ -33,6 +33,11 @@ body {
   margin: 0 auto;
 }
 
+main > .content-container {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
 .common-input {
   border-radius: 5px;
   padding: 0.5rem 1.25rem;
@@ -63,7 +68,6 @@ a {
   color: inherit;
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
+main {
+  min-height: 900px;
 }
