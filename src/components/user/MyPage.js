@@ -6,9 +6,10 @@ import axios from 'axios';
 function MyPage() {
     const [user, setUser] = useState([]);
     const [newUserId, setNewUserId] = useState('');
-    const [password, setPassword] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
+    const [ticketingList, setTicketingList] = useState([]);
+    const [ticketingMap, setTicketingMap] = useState(null);
     const [menu, setMenu] = useState('infoUpdate');
 
     const navigate = useNavigate();
@@ -50,6 +51,14 @@ function MyPage() {
 
     const handleTicketingInfo = (e) => {
         handleMenu(e);
+
+        axios.get(`/ticketing?userId=${newUserId}`)
+        .then(res => {
+            setTicketingList(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
 
         setMenu('ticketingInfo');
     }
@@ -205,10 +214,25 @@ function MyPage() {
         setNewUserId(user.user_id);
     }, [user])
 
+    useEffect(() => {
+        const ticketingMap = ticketingList.map(ticketing =>
+            <tr>
+                <td>{ticketing.created_at}</td>
+                <td>{ticketing.movie_title}</td>
+                <td>{ticketing.theater_name}</td>
+                <td>{ticketing.screen_hall_name}</td>
+                <td>{ticketing.screen_time}</td>
+                <td>{ticketing.seat}</td>
+                <td>{ticketing.status}</td>
+            </tr>
+        );
+
+        setTicketingMap(ticketingMap);
+    }, [ticketingList])
+
     return (
         <main id='myPageMain'>
             <div className="content-container">
-                <h1 class='main-title'>마이 페이지</h1>
                 <div className="my-page-container">
                     <div className="my-page-left">
                         <div className='menu-container'>
@@ -272,13 +296,13 @@ function MyPage() {
                                 </table>
                             </>
                             : menu === 'secession' ?
-                                <div className='secession-container'>
+                                <>
                                     <h2>회원 탈퇴 확인 안내</h2>
                                     <div className='secession-text-container'>
                                         안녕하세요, {user.name}님. <br></br>
                                         귀하의 회원 탈퇴 요청을 받았습니다. 귀하께서 소중한 회원으로서 보낸 시간에 감사드립니다. <br></br>
                                         다음 사항에 유의하시기 바랍니다. <br></br>
-                                        <div style={{margin: '0.5rem 0 0.5rem 0.5rem'}}>
+                                        <div style={{ margin: '0.5rem 0 0.5rem 0.5rem' }}>
                                             - 회원 탈퇴는 1시간 내에 공식적으로 완료 됩니다.<br></br>
                                             - 회원 탈퇴 시, 작성한 게시글이나 댓글은 모두 삭제 됩니다.<br></br>
                                             - 회원 전용 기능 및 혜택은 탈퇴 후에는 더 이상 이용할 수 없습니다. <br></br>
@@ -286,11 +310,25 @@ function MyPage() {
                                         탈퇴와 관련하여 궁금한 사항이 있으시면 언제든지 고객지원팀에 연락 주시기 바랍니다. <br></br>
                                         탈퇴를 원하시면 오른쪽 하단의 회원탈퇴 버튼을 클릭해 주시기 바랍니다.
                                     </div>
-                                    <div>
-                                        <button className='my-page-btn secession-btn' onClick={handleSubmitSecession}>회원탈퇴</button>
-                                    </div>
-                                </div>
-                                : <></>
+                                    <button className='my-page-btn secession-btn' onClick={handleSubmitSecession}>회원탈퇴</button>
+                                </>
+                                :
+                                <>
+                                    <table class='ticketing-table'>
+                                        <thead>
+                                            <th>결제일</th>
+                                            <th>영화명</th>
+                                            <th>영화관</th>
+                                            <th>상영관</th>
+                                            <th>상영시간</th>
+                                            <th>좌석</th>
+                                            <th>상태</th>
+                                        </thead>
+                                        <tbody>
+                                            {ticketingMap}
+                                        </tbody>
+                                    </table>
+                                </>
                         }
                     </div>
                 </div>

@@ -64,8 +64,7 @@ function Certification() {
         <main className='main' id='certificationMain'>
             <div className='content-container'>
                 <h1 className='main-title'>본인인증</h1>
-            </div>
-            <button className='certification-btn' onClick={certification}>
+                <button className='certification-btn' onClick={certification}>
                 <span className='certification-btn-text'>본인인증</span>
                 <div className="app-container">
                     <img src="../app_KAKAO.png" alt="" />
@@ -75,6 +74,7 @@ function Certification() {
                     <img src="../app_TOSS.png" alt="" />
                 </div>
             </button>
+            </div>
         </main>
     );
 }

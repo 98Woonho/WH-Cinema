@@ -288,18 +288,31 @@ function Ticketing() {
                 return;
             }
 
-            axios.get(`/ticketing?title=${selectedMovieTitle}&theaterName=${selectedTheaterName}&screenHallName=${selectedScreenHallName}&time=${selectedScreenTime}`)
+            axios.get('/user/accessTokenPayload', { withCredentials: true })
+            .then(res => {
+                setUserId(res.data.userId);
+
+                axios.get(`/ticketing?title=${selectedMovieTitle}&theaterName=${selectedTheaterName}&screenHallName=${selectedScreenHallName}&time=${selectedScreenTime}`)
                 .then(res => {
                     const reservedSeatList = res.data.map(data =>
                         data.seat.split(', ')
                     ).flat();
-                    console.log(reservedSeatList);
                     setReservedSeatList(reservedSeatList);
                     setStep(2);
                 })
                 .catch(err => {
                     console.log(err);
                 })
+            })
+            .catch(err => {
+                if (err.response.status === 401) {
+                    if (window.confirm('로그인 후 이용 가능한 서비스 입니다.\n로그인 하시겠습니까?')) {
+                        navigate('/user/login');
+                    } else {
+                        return;
+                    }
+                }
+            })
         }
 
         if (step === 2) {
@@ -313,20 +326,7 @@ function Ticketing() {
                 return;
             }
 
-            axios.get('/user/accessTokenPayload', { withCredentials: true })
-                .then(res => {
-                    setUserId(res.data.userId);
-                    setStep(3);
-                })
-                .catch(err => {
-                    if (err.response.status === 401) {
-                        if (window.confirm('로그인 후 이용 가능한 서비스 입니다.\n로그인 하시겠습니까?')) {
-                            navigate('/user/login');
-                        } else {
-                            return;
-                        }
-                    }
-                })
+            setStep(3);
         }
     }
 
@@ -1098,7 +1098,7 @@ function Ticketing() {
                                 <div>
                                     <span>할인 금액</span>
                                     <span className='flex-1'></span>
-                                    <span>{discountCost} 원</span>
+                                    <span>- {discountCost} 원</span>
                                 </div>
                                 <div>
                                     <span>결제 금액</span>

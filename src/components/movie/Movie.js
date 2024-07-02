@@ -111,8 +111,8 @@ function Movie() {
         <div className="main-top-container">
           <h1 className='main-title'>영화 목록</h1>
           <div className="flex-1"></div>
-          <button className={num == 1 ? 'selected' : ''} onClick={handleCurrentMovieList}>현재 상영작</button>
-          <button className={num == 0 ? 'selected' : ''} onClick={handleScheduledMovieList}>상영 예정작</button>
+          <button className={num === 1 ? 'selected' : ''} onClick={handleCurrentMovieList}>현재 상영작</button>
+          <button className={num === 0 ? 'selected' : ''} onClick={handleScheduledMovieList}>상영 예정작</button>
         </div>
         <div className="sort-container">
           <div className="flex-1"></div>

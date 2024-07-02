@@ -1,3 +1,8 @@
+
+
+
+
+
 import { useState, useEffect } from 'react';
 import { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
@@ -25,8 +30,6 @@ function App() {
   //   })
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-
 
   // accessToken, refreshToken 검증
   axios.get('/user/verify', { withCredentials: true })

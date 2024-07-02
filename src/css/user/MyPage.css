@@ -14,6 +14,7 @@
 #myPageMain .my-page-left {
     background-color: #f7f7f7;
     width: 20%;
+    height: 100%;
 }
 
 #myPageMain .my-page-right {
@@ -131,9 +132,20 @@
 }
 
 #myPageMain .secession-text-container {
+    line-height: 150%;
     margin: 1rem 0;
 }
 
 #myPageMain .secession-btn {
     float: right;
+}
+
+#myPageMain .ticketing-table {
+    width: 100%;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+}
+
+#myPageMain .ticketing-table tbody td {
+    text-align: center;
 }
