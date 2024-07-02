@@ -47,11 +47,12 @@ function Ticketing() {
     const [adult, setAdult] = useState(0);
     const [youth, setYouth] = useState(0);
     const [totalCost, setTotalCost] = useState(0);
+    const [discountCost, setDiscountCost] = useState(0);
     const [adultMap, setAdultMap] = useState(null);
     const [youthMap, setYouthMap] = useState(null);
-    const [adultCostDiv, setAdultCostDiv] = useState(null);
-    const [youthCostDiv, setYouthCostDiv] = useState(null);
-    const [totalCostDiv, setTotalCostDiv] = useState(null);
+    const [adultCostMap, setAdultCostMap] = useState(null);
+    const [youthCostMap, setYouthCostMap] = useState(null);
+    const [totalCostMap, setTotalCostMap] = useState(null);
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     const [userId, setUserId] = useState(null);
     const [ticketingId, setTicketingId] = useState(null);
@@ -103,7 +104,7 @@ function Ticketing() {
         let pg;
         let pay_method;
 
-        axios.get(`/user/${userId}`)
+        axios.get(`/user?userId=${userId}`)
             .then(res => {
                 const phone = res.data[0].phone;
                 if (selectedPaymentMethod === 'card') {
@@ -287,11 +288,12 @@ function Ticketing() {
                 return;
             }
 
-            axios.get(`/ticketing?title={selectedMovieTitle}&theaterName={selectedTheaterName}&screenHallName={selectedScreenHallName}&time={selectedScreenTime}`)
+            axios.get(`/ticketing?title=${selectedMovieTitle}&theaterName=${selectedTheaterName}&screenHallName=${selectedScreenHallName}&time=${selectedScreenTime}`)
                 .then(res => {
                     const reservedSeatList = res.data.map(data =>
                         data.seat.split(', ')
                     ).flat();
+                    console.log(reservedSeatList);
                     setReservedSeatList(reservedSeatList);
                     setStep(2);
                 })
@@ -341,15 +343,7 @@ function Ticketing() {
                 .catch(err => {
                     console.log(err);
                 })
-
-            adultCount = 0;
-            youthCount = 0;
             setStep(2);
-            setAdult(0);
-            setYouth(0);
-            setAdultCostDiv(null);
-            setYouthCostDiv(null);
-            setTotalCostDiv(null);
         }
     }
 
@@ -463,6 +457,14 @@ function Ticketing() {
                 <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
             )
             setRegionMap(regionMap);
+
+            adultCount = 0;
+            youthCount = 0;
+            setAdult(0);
+            setYouth(0);
+            setAdultCostMap(null);
+            setYouthCostMap(null);
+            setTotalCostMap(null);
         }
 
         if (step === 2) {
@@ -510,6 +512,14 @@ function Ticketing() {
                 })
                 setSeatMap(seatMap);
             }
+
+            adultCount = 0;
+            youthCount = 0;
+            setAdult(0);
+            setYouth(0);
+            setAdultCostMap(null);
+            setYouthCostMap(null);
+            setTotalCostMap(null);
         }
 
         if (step === 3) {
@@ -528,21 +538,6 @@ function Ticketing() {
                 .catch(err => {
                     console.log(err);
                 })
-
-
-            // 결제 수단 혜택 초기 map
-            const defaultPaymentEventMap = <div className='payment-event-container'>
-                <div>
-                    <span class='benefit'>혜택</span>
-                    <h3>카카오페이</h3>
-                </div>
-                <div className='event-text'>
-                    <p>결제 금액의 최대 2% 적립</p>
-                    <p>4만원 이상, 5% 할인 (최대 5000원)</p>
-                </div>
-            </div>;
-
-            setPaymentEventMap(defaultPaymentEventMap);
         }
     }, [step])
 
@@ -581,6 +576,7 @@ function Ticketing() {
         })
     }, [selectedTheaterName])
 
+    // 날짜 선택 map
     useEffect(() => {
         const today = new Date();
 
@@ -705,45 +701,45 @@ function Ticketing() {
             if (adult > adultCount && selectedSeatList.length >= adult) {
                 adultCount = adult;
 
-                const adultCostDiv = <div>
+                const adultCostMap = <div>
                     <span>일반</span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
 
-                setAdultCostDiv(adultCostDiv);
+                setAdultCostMap(adultCostMap);
 
 
 
                 youthCount = selectedSeatList.length - adult;
 
-                const youthCostDiv = youthCount <= 0 ? null : <div>
+                const youthCostMap = youthCount <= 0 ? null : <div>
                     <span>청소년</span>
                     <span>{youthCost} X {youthCount}</span>
                 </div>;
 
-                setYouthCostDiv(youthCostDiv);
+                setYouthCostMap(youthCostMap);
             }
 
             // 일반 인원을 줄였을 때
             if (adult < adultCount) {
                 adultCount = adult;
 
-                const adultCostDiv = adultCount === 0 ? null : <div>
+                const adultCostMap = adultCount === 0 ? null : <div>
                     <span>일반</span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
 
-                setAdultCostDiv(adultCostDiv);
+                setAdultCostMap(adultCostMap);
 
 
                 youthCount = selectedSeatList.length - adult;
 
-                const youthCostDiv = youthCount === 0 ? null : <div>
+                const youthCostMap = youthCount === 0 ? null : <div>
                     <span>청소년</span>
                     <span>{youthCost} X {youthCount}</span>
                 </div>;
 
-                setYouthCostDiv(youthCostDiv);
+                setYouthCostMap(youthCostMap);
             }
         }
 
@@ -757,12 +753,12 @@ function Ticketing() {
         const totalCost = adultCost * adultCount + youthCost * youthCount;
 
         if (totalCost > 0) {
-            const totalCostDiv = <div>
+            const totalCostMap = <div>
                 <span>총금액</span>
                 <span>{totalCost}</span>
             </div>
 
-            setTotalCostDiv(totalCostDiv);
+            setTotalCostMap(totalCostMap);
         }
 
         setTotalCost(totalCost);
@@ -783,17 +779,17 @@ function Ticketing() {
         // 좌석을 선택 했을 때, 일반 요금 우선 카운트 후, 청소년 요금 카운트
         if (!isFullSelectedSeat && !isDeletedSelectedSeat && selectedSeatList.length !== 0) {
             if (adult > adultCount) {
-                const adultCostDiv = <div>
+                const adultCostMap = <div>
                     <span>일반</span>
                     <span>{adultCost} X {++adultCount}</span>
                 </div>;
-                setAdultCostDiv(adultCostDiv);
+                setAdultCostMap(adultCostMap);
             } else {
-                const youthCostDiv = <div>
+                const youthCostMap = <div>
                     <span>청소년</span>
                     <span>{youthCost} X {++youthCount}</span>
                 </div>;
-                setYouthCostDiv(youthCostDiv);
+                setYouthCostMap(youthCostMap);
             }
         }
 
@@ -803,12 +799,12 @@ function Ticketing() {
             if (adult > selectedSeatList.length) {
                 adultCount = selectedSeatList.length
 
-                const adultCostDiv = adultCount === 0 ? null : <div>
+                const adultCostMap = adultCount === 0 ? null : <div>
                     <span>일반</span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
 
-                setAdultCostDiv(adultCostDiv);
+                setAdultCostMap(adultCostMap);
 
                 isDeletedSelectedSeat = false;
                 isFullSelectedSeat = false;
@@ -817,12 +813,12 @@ function Ticketing() {
             } else {
                 youthCount = selectedSeatList.length - adult;
 
-                const youthCostDiv = youthCount === 0 ? null : <div>
+                const youthCostMap = youthCount === 0 ? null : <div>
                     <span>청소년</span>
                     <span>{youthCost} X {youthCount}</span>
                 </div>;
 
-                setYouthCostDiv(youthCostDiv);
+                setYouthCostMap(youthCostMap);
 
                 isDeletedSelectedSeat = false;
                 isFullSelectedSeat = false;
@@ -859,18 +855,21 @@ function Ticketing() {
 
         setSelectedSeatMap(selectedSeatMap);
 
+        const totalCost = adultCost * adultCount + youthCost * youthCount;
 
-        const totalCostDiv = selectedSeatList <= 0 ? null : <div>
+        const totalCostMap = selectedSeatList <= 0 ? null : <div>
             <span>총금액</span>
-            <span>{adultCost * adultCount + youthCost * youthCount}</span>
+            <span>{totalCost}</span>
         </div>
 
-        setTotalCostDiv(totalCostDiv);
+        setTotalCostMap(totalCostMap);
+        setTotalCost(totalCost);
 
     }, [selectedSeatList])
 
     useEffect(() => {
         let paymentEventMap;
+        let discountCost;
 
         if (selectedPaymentMethod === 'kakaoPay') {
             paymentEventMap =
@@ -884,6 +883,16 @@ function Ticketing() {
                         <p>4만원 이상, 5% 할인 (최대 5000원)</p>
                     </div>
                 </div>;
+
+            if (totalCost >= 40000) {
+                discountCost = totalCost * 0.05;
+
+                if (discountCost > 5000) {
+                    discountCost = 5000;
+                }
+
+                setDiscountCost(discountCost);
+            }
         }
 
 
@@ -899,6 +908,12 @@ function Ticketing() {
                         <p>3만원 이상, 2천원 할인</p>
                     </div>
                 </div>;
+
+            if (totalCost >= 30000) {
+                discountCost = 2000;
+
+                setDiscountCost(discountCost);
+            }
         }
 
 
@@ -914,6 +929,16 @@ function Ticketing() {
                         <p>3만원 이상, 5% 할인 (최대 5000원)</p>
                     </div>
                 </div>;
+
+            if (totalCost >= 30000) {
+                discountCost = totalCost * 0.05;
+
+                if (discountCost > 5000) {
+                    discountCost = 5000;
+                }
+
+                setDiscountCost(discountCost);
+            }
         }
 
 
@@ -929,6 +954,10 @@ function Ticketing() {
                         <p>우리카드 5% 즉시 할인</p>
                     </div>
                 </div>;
+
+            discountCost = totalCost * 0.05;
+
+            setDiscountCost(discountCost);   
         }
 
 
@@ -945,6 +974,8 @@ function Ticketing() {
                         <p>LG 포인트 5% 적립</p>
                     </div>
                 </div>;
+
+            setDiscountCost(0);
         }
 
         setPaymentEventMap(paymentEventMap);
@@ -1040,7 +1071,7 @@ function Ticketing() {
                         <div className='payment-left'>
                             <h2>결제 수단을 선택해 주세요.</h2>
                             <div className='payment-method-box'>
-                                <button id='kakaoPay' className='selected' onClick={handlePaymentMethodBtn}>
+                                <button id='kakaoPay' onClick={handlePaymentMethodBtn}>
                                     <img src="https://i.namu.wiki/i/DRTBUHA314XYTx-pkzY4XSmQ0Job0j10vQhiETotjLCGUULQemriSC67Yh9UCsYq7Dw7WyvK0GkP9f3jP8r8gA.svg" alt="" />
                                 </button>
                                 <button id='payco' onClick={handlePaymentMethodBtn}>
@@ -1067,12 +1098,12 @@ function Ticketing() {
                                 <div>
                                     <span>할인 금액</span>
                                     <span className='flex-1'></span>
-                                    <span>0 원</span>
+                                    <span>{discountCost} 원</span>
                                 </div>
                                 <div>
                                     <span>결제 금액</span>
                                     <span className='flex-1'></span>
-                                    <span>0 원</span>
+                                    <span>{totalCost - discountCost} 원</span>
                                 </div>
                             </div>
                         </div>
@@ -1125,9 +1156,9 @@ function Ticketing() {
                             <div className="line"></div>
                             <div className='info'>
                                 결제
-                                {adultCostDiv}
-                                {youthCostDiv}
-                                {totalCostDiv}
+                                {adultCostMap}
+                                {youthCostMap}
+                                {totalCostMap}
                             </div>
                         </>) : <></>
                     }
