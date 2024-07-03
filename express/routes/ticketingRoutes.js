@@ -6,7 +6,7 @@ router.get('/', (req, res) => {
     const { title, theaterName, screenHallName, time, userId } = req.query;
 
     if (userId) {
-        db.query(`SELECT * FROM ticketing WHERE user_id='${userId}'`, (err, data) => {
+        db.query(`SELECT * FROM ticketing WHERE user_id='${userId}' ORDER BY created_at DESC`, (err, data) => {
             if (err) {
                 return res.send(err);
             }

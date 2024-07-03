@@ -1,16 +1,21 @@
 import '../../css/user/MyPage.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../Pagination.js';
 import axios from 'axios';
 
 function MyPage() {
+
     const [user, setUser] = useState([]);
     const [newUserId, setNewUserId] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [ticketingList, setTicketingList] = useState([]);
+    const [perTicketingList, setPerTicketingList] = useState([]);
     const [ticketingMap, setTicketingMap] = useState(null);
     const [menu, setMenu] = useState('infoUpdate');
+    const [boardPerPage, setBoardPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const navigate = useNavigate();
 
@@ -53,12 +58,12 @@ function MyPage() {
         handleMenu(e);
 
         axios.get(`/ticketing?userId=${newUserId}`)
-        .then(res => {
-            setTicketingList(res.data);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+            .then(res => {
+                setTicketingList(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
 
         setMenu('ticketingInfo');
     }
@@ -215,7 +220,11 @@ function MyPage() {
     }, [user])
 
     useEffect(() => {
-        const ticketingMap = ticketingList.map(ticketing =>
+        // const startIndex = (currentPage - 1) * boardPerPage;
+        // const endIndex = startIndex + boardPerPage;
+        // setPerTicketingList(ticketingList.slice(startIndex, endIndex));
+
+        const ticketingMap = perTicketingList.map(ticketing =>
             <tr>
                 <td>{ticketing.created_at}</td>
                 <td>{ticketing.movie_title}</td>
@@ -328,6 +337,7 @@ function MyPage() {
                                             {ticketingMap}
                                         </tbody>
                                     </table>
+                                    <Pagination total={ticketingMap.length} boardPerPage={10} currentPage={1} setCurrentPage={setCurrentPage} />
                                 </>
                         }
                     </div>

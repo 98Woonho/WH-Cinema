@@ -141,11 +141,21 @@
 }
 
 #myPageMain .ticketing-table {
+    border-collapse: collapse;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
     width: 100%;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
 }
 
-#myPageMain .ticketing-table tbody td {
+#myPageMain .ticketing-table tr {
+    border-top: 1px solid #666;
+}
+
+#myPageMain .ticketing-table th {
+    padding: 1rem 0;
+}
+
+#myPageMain .ticketing-table td {
+    padding: 1rem 0;
     text-align: center;
 }
