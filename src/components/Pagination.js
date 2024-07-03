@@ -38,18 +38,14 @@ function Pagination(props) {
 
     const pageMap = pageNumbers.map(
         // (page) => (<span id='page' onClick={pageClick(page)}>{page}</span>) 이렇게 하면 클릭을 안 해도 함수가 실행이 됨.
-        (page) => (<span id='page' className={currentPage === page ? 'active' : ''} onClick={() => pageClick(page)}>{page}</span>) // 이렇게 함수를 정의해주면 클릭 했을 때 정상적으로 함수가 실행이 됨.
+        (page) => (<span className={`page ${currentPage === page ? 'active' : ''}`} onClick={() => pageClick(page)}>{page}</span>) // 이렇게 함수를 정의해주면 클릭 했을 때 정상적으로 함수가 실행이 됨.
     )
 
     return (
-        <div id="pagination">
-            <div id='display-area'>
-                <div id='display-area-inner'>
-                    <span id='page' onClick={prevPage}>&lt;</span>
-                    {pageMap}
-                    <span id='page' onClick={nextPage}>&gt;</span>
-                </div>
-            </div>
+        <div class="pagination">
+            <span class='page' onClick={prevPage}>&lt;</span>
+            {pageMap}
+            <span class='page' onClick={nextPage}>&gt;</span>
         </div>
     )
 

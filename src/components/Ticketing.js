@@ -147,8 +147,6 @@ function Ticketing() {
                             let payDate = new Date();
                             payDate.setHours(payDate.getHours() + 9);
 
-                            payDate = payDate.toISOString().slice(0, 19).replace('T', ' ');
-
                             const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId, userId: userId, payDate: payDate };
 
                             axios.post('/payment', paymentObj)
@@ -292,7 +290,7 @@ function Ticketing() {
             .then(res => {
                 setUserId(res.data.userId);
 
-                axios.get(`/ticketing?title=${selectedMovieTitle}&theaterName=${selectedTheaterName}&screenHallName=${selectedScreenHallName}&time=${selectedScreenTime}`)
+                axios.get(`/ticketing?title=${selectedMovieTitle}&theaterName=${selectedTheaterName}&screenHallName=${selectedScreenHallName}&time=${selectedScreenTime}&screenDate=${selectedDate}`)
                 .then(res => {
                     const reservedSeatList = res.data.map(data =>
                         data.seat.split(', ')
@@ -523,12 +521,7 @@ function Ticketing() {
         }
 
         if (step === 3) {
-            let createdAt = new Date();
-            createdAt.setHours(createdAt.getHours() + 9);
-
-            createdAt = createdAt.toISOString().slice(0, 19).replace('T', ' ');
-
-            const ticketingObj = { theaterName: selectedTheaterName, screenHallName: selectedScreenHallName, movieTitle: selectedMovieTitle, screenTime: selectedScreenTime, seat: selectedSeatList.join(', '), status: '예약중', createdAt: createdAt, userId: userId };
+            const ticketingObj = { theaterName: selectedTheaterName, screenHallName: selectedScreenHallName, movieTitle: selectedMovieTitle, screenTime: selectedScreenTime, seat: selectedSeatList.join(', '), status: '예약중', screenDate: selectedDate, userId: userId };
 
             axios.post('/ticketing', ticketingObj)
                 .then(res => {
@@ -603,6 +596,7 @@ function Ticketing() {
 
     // 영화, 극장, 날짜 모두 선택 했을 때, 상영시간 및 좌석 정보 set
     useEffect(() => {
+        console.log(selectedDate);
         if (selectedMovieTitle !== null && selectedDate !== null && selectedTheaterName !== null) {
             setIsLoading(true);
             axios.get(`/theater/screenInfo?title=${selectedMovieTitle}&date=${selectedDate}&theaterName=${selectedTheaterName}`)
@@ -621,7 +615,7 @@ function Ticketing() {
 
             for (const screenInfo of screenInfoList) {
                 try {
-                    const res = await axios.get(`/ticketing?title=${screenInfo.title}&theaterName=${screenInfo.theater_name}&screenHallName=${screenInfo.screen_hall_name}&time=${screenInfo.time}`);
+                    const res = await axios.get(`/ticketing?title=${screenInfo.title}&theaterName=${screenInfo.theater_name}&screenHallName=${screenInfo.screen_hall_name}&time=${screenInfo.time}&screenDate=${selectedDate}`);
                     let reservedSeatCount = 0;
 
                     if (res.data.length === 0) {

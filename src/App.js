@@ -30,8 +30,6 @@ function App() {
 
 
   useEffect(() => {
-    console.log('hi');
-
     const script1 = document.createElement('script');
     script1.src = 'https://code.jquery.com/jquery-1.12.4.min.js';
     script1.async = true;

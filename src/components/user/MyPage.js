@@ -228,10 +228,10 @@ function MyPage() {
     useEffect(() => {
         const ticketingMap = perTicketingList.map(ticketing =>
             <tr>
-                <td>{ticketing.created_at}</td>
                 <td>{ticketing.movie_title}</td>
                 <td>{ticketing.theater_name}</td>
                 <td>{ticketing.screen_hall_name}</td>
+                <td>{ticketing.screen_date}</td>
                 <td>{ticketing.screen_time}</td>
                 <td>{ticketing.seat}</td>
                 <td>{ticketing.status}</td>
@@ -328,10 +328,10 @@ function MyPage() {
                                     <h2>예매현황</h2>
                                     <table class='ticketing-table'>
                                         <thead>
-                                            <th>결제일</th>
                                             <th>영화명</th>
                                             <th>영화관</th>
                                             <th>상영관</th>
+                                            <th>상영날짜</th>
                                             <th>상영시간</th>
                                             <th>좌석</th>
                                             <th>상태</th>

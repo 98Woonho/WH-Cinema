@@ -3,10 +3,10 @@ const router = express.Router();
 const db = require('../config/db.js');
 
 router.get('/', (req, res) => {
-    const { title, theaterName, screenHallName, time, userId } = req.query;
+    const { title, theaterName, screenHallName, time, userId, screenDate } = req.query;
 
     if (userId) {
-        db.query(`SELECT * FROM ticketing WHERE user_id='${userId}' ORDER BY created_at DESC`, (err, data) => {
+        db.query(`SELECT * FROM ticketing WHERE user_id='${userId}' ORDER BY screen_date`, (err, data) => {
             if (err) {
                 return res.send(err);
             }
@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
             res.status(200).send(data);
         })
     } else {
-        db.query(`SELECT seat FROM ticketing WHERE movie_title='${title}' AND theater_name='${theaterName}' AND screen_hall_name='${screenHallName}' AND screen_time='${time}'`, (err, data) => {
+        db.query(`SELECT seat FROM ticketing WHERE movie_title='${title}' AND theater_name='${theaterName}' AND screen_hall_name='${screenHallName}' AND screen_time='${time}' AND screen_date='${screenDate}'`, (err, data) => {
             if (err) {
                 return res.send(err);
             }
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const { theaterName, screenHallName, movieTitle, screenTime, seat, status, createdAt, userId } = req.body;
+    const { theaterName, screenHallName, movieTitle, screenTime, seat, status, screenDate, userId } = req.body;
 
     // 현재 로그인한 계정으로 예약중인 영화가 있는지 확인
     db.query(`SELECT * FROM ticketing WHERE user_id = '${userId}' AND status = '${status}'`, (err, data) => {
@@ -36,8 +36,8 @@ router.post('/', (req, res) => {
         // data.length === 0 : 현재 로그인 한 계정으로 예약중인 영화가 없으면
         // data.length !== 0 : 현재 로그인 한 계정으로 예약중인 영화가 있으면
         const query = data.length === 0
-            ? `INSERT INTO ticketing (theater_name, screen_hall_name, movie_title, screen_time, seat, status, created_at, user_id) VALUES ('${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${createdAt}', '${userId}')`
-            : `INSERT INTO ticketing VALUES ('${data[0].id}', '${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${createdAt}', '${userId}') on duplicate key update theater_name='${theaterName}' , screen_hall_name='${screenHallName}', movie_title='${movieTitle}', screen_time='${screenTime}', seat='${seat}', status='${status}', created_at='${createdAt}', user_id='${userId}'`;
+            ? `INSERT INTO ticketing (theater_name, screen_hall_name, movie_title, screen_time, seat, status, screen_date, user_id) VALUES ('${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${screenDate}', '${userId}')`
+            : `INSERT INTO ticketing VALUES ('${data[0].id}', '${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${screenDate}', '${userId}') on duplicate key update theater_name='${theaterName}' , screen_hall_name='${screenHallName}', movie_title='${movieTitle}', screen_time='${screenTime}', seat='${seat}', status='${status}', screen_date='${screenDate}', user_id='${userId}'`;
 
         db.query(query, (err, data) => {
             if (err) {

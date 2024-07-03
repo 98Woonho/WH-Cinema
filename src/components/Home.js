@@ -57,7 +57,9 @@ function Home() {
     const topRateScreeningMovieMap = topRateScreeningMovieList.map(
       data =>
         <li>
-          <img src={data.poster} />
+          <a href={`/movie/detail?title=${data.title}`}>
+            <img src={data.poster} />
+          </a>
           <p className="title">{data.title}</p>
         </li>
     );
@@ -69,7 +71,9 @@ function Home() {
     const topRateScheduledMovieMap = topRateScheduledMovieList.map(
       data =>
         <li>
-          <img src={data.poster} />
+          <a href={`/movie/detail?title=${data.title}`}>
+            <img src={data.poster} />
+          </a>
           <p className="title">{data.title}</p>
         </li>
     );

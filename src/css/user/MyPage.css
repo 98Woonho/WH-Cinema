@@ -148,6 +148,10 @@
     width: 100%;
 }
 
+#myPageMain .ticketing-table thead {
+    background-color: #d5d5d5;
+}
+
 #myPageMain .ticketing-table tr {
     border-top: 1px solid #666;
 }
