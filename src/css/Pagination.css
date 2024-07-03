@@ -1,13 +1,11 @@
 #pagination {
     width: 100%;
     height: 20%;
-    background-color: antiquewhite;
 }
 
 #info {
     width: 100%;
     height: 50px;
-    background-color: burlywood;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -16,26 +14,22 @@
     font-size: 24px;
     font-weight: bold;
     margin-right: 20px;
-    background-color: paleturquoise;
 }
 
 #display-area {
     width: 100%;
     height: 80px;
-    background-color: chartreuse;
     text-align: center;
 }
 
 #display-area-inner {
     display: inline-block;
-    background-color: darkorchid;
 }
 
 #page {
     display: inline-block;
     width: 40px;
     height: 40px;
-    background-color: coral;
     margin: 10px;
     text-align: center;
     padding-top: 10px;

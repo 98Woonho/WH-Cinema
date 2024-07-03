@@ -220,10 +220,12 @@ function MyPage() {
     }, [user])
 
     useEffect(() => {
-        // const startIndex = (currentPage - 1) * boardPerPage;
-        // const endIndex = startIndex + boardPerPage;
-        // setPerTicketingList(ticketingList.slice(startIndex, endIndex));
+        const startIndex = (currentPage - 1) * boardPerPage;
+        const endIndex = startIndex + boardPerPage;
+        setPerTicketingList(ticketingList.slice(startIndex, endIndex));
+    }, [ticketingList, currentPage])
 
+    useEffect(() => {
         const ticketingMap = perTicketingList.map(ticketing =>
             <tr>
                 <td>{ticketing.created_at}</td>
@@ -237,7 +239,7 @@ function MyPage() {
         );
 
         setTicketingMap(ticketingMap);
-    }, [ticketingList])
+    }, [perTicketingList])
 
     return (
         <main id='myPageMain'>
@@ -323,6 +325,7 @@ function MyPage() {
                                 </>
                                 :
                                 <>
+                                    <h2>예매현황</h2>
                                     <table class='ticketing-table'>
                                         <thead>
                                             <th>결제일</th>
@@ -337,7 +340,7 @@ function MyPage() {
                                             {ticketingMap}
                                         </tbody>
                                     </table>
-                                    <Pagination total={ticketingMap.length} boardPerPage={10} currentPage={1} setCurrentPage={setCurrentPage} />
+                                    <Pagination total={ticketingList.length} boardPerPage={boardPerPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
                                 </>
                         }
                     </div>
