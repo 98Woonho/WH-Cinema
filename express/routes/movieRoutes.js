@@ -4,15 +4,20 @@ const db = require('../config/db.js');
 
 
 router.get('/', (req, res) => {
-    const { title, screeningFlag, sort } = req.query;
+    const { title, isScreening, sort, date } = req.query;
+
     let query = 'SELECT * FROM movie';
 
     if (title) {
         query += ` WHERE title = '${title}'`;
     }
 
-    if (screeningFlag) {
-        query += ` WHERE screening_flag = '${screeningFlag}'`;
+    if (isScreening === 'true' && date) {
+        query += ` WHERE release_date <= '${date}'`;
+    }
+
+    if (isScreening === 'false' && date) {
+        query += ` WHERE release_date > '${date}'`;
     }
 
     if (sort === '평점순') {
@@ -38,9 +43,17 @@ router.get('/', (req, res) => {
 });
 
 router.get('/topRate', (req, res) => {
-    const { screeningFlag } = req.query;
+    const { date, isScreening } = req.query;
 
-    const query = `SELECT * FROM movie WHERE screening_flag = '${screeningFlag}' ORDER BY vote_average DESC LIMIT 5`
+    let query = 'SELECT * FROM movie';
+
+    if (isScreening === 'true' && date) {
+        query += ` WHERE release_date <= '${date}' ORDER BY vote_average DESC LIMIT 5`;
+    }
+
+    if (isScreening === 'false' && date) {
+        query += ` WHERE release_date > '${date}' ORDER BY vote_average DESC LIMIT 5`;
+    }
 
     db.query(query, (err, data) => {
         if (err) {

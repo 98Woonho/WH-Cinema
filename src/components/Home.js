@@ -36,7 +36,10 @@ function Home() {
       })
     })
 
-    axios.get('/movie/topRate?screeningFlag=1')
+    let date = new Date();
+    date = date.toISOString().slice(0, 10);
+
+    axios.get(`/movie/topRate?date=${date}&isScreening=true`)
       .then(res => {
         setTopRateScreeningMovieList(res.data);
       })
@@ -44,7 +47,7 @@ function Home() {
         console.log(err);
       })
 
-    axios.get('/movie/topRate?screeningFlag=0')
+    axios.get(`/movie/topRate?date=${date}&isScreening=false`)
       .then(res => {
         setTopRateScheduledMovieList(res.data);
       })

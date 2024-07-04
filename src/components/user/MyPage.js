@@ -63,6 +63,25 @@ function MyPage() {
         setMenu('ticketingInfo');
     }
 
+    const handleClickTicketingCancel = (e) => {
+        if (window.confirm('정말로 예약을 취소하시겠습니까?')) {
+            const status = '예약완료';
+            axios.delete(`/ticketing/${e.target.dataset.id}/${status}`)
+                .then(res => {
+                    alert('예약이 취소 되었습니다.');
+
+                    const state = {
+                        menuState: 'ticketingInfo'
+                    }
+                    navigate('/user/myPage', { state });
+                    window.location.reload();
+                })
+                .catch(err => {
+                    alert('알 수 없는 이유로 예약 취소에 실패하였습니다. 잠시 후 다시 시도해 주세요.');
+                })
+        }
+    }
+
     const handleUpdateId = (e) => {
         e.preventDefault();
 
@@ -242,17 +261,25 @@ function MyPage() {
     }, [ticketingList, currentPage])
 
     useEffect(() => {
-        const ticketingMap = perTicketingList.map(ticketing =>
-            <tr>
-                <td>{ticketing.movie_title}</td>
-                <td>{ticketing.theater_name}</td>
-                <td>{ticketing.screen_hall_name}</td>
-                <td>{ticketing.screen_date}</td>
-                <td>{ticketing.screen_time}</td>
-                <td>{ticketing.seat}</td>
-                <td>{ticketing.status}</td>
-            </tr>
-        );
+        const ticketingMap = perTicketingList.map(ticketing => {
+            let screenDate = new Date(ticketing.screen_date);
+            screenDate = screenDate.toISOString().slice(0, 10);
+
+            return (
+                <tr>
+                    <td>{ticketing.movie_title}</td>
+                    <td>{ticketing.theater_name}</td>
+                    <td>{ticketing.screen_hall_name}</td>
+                    <td>{screenDate}</td>
+                    <td>{ticketing.screen_time}</td>
+                    <td>{ticketing.seat}</td>
+                    <td>{ticketing.status}</td>
+                    <td>
+                        <button data-id={ticketing.id} onClick={handleClickTicketingCancel} className='ticketing-cancel-btn'>예약취소</button>
+                    </td>
+                </tr>
+            )
+        });
 
         setTicketingMap(ticketingMap);
 
@@ -351,6 +378,7 @@ function MyPage() {
                                             <th>상영시간</th>
                                             <th>좌석</th>
                                             <th>상태</th>
+                                            <th></th>
                                         </thead>
                                         <tbody>
                                             {ticketingMap}

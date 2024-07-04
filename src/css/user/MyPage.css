@@ -164,3 +164,13 @@
     padding: 1rem 0;
     text-align: center;
 }
+
+#myPageMain .ticketing-cancel-btn {
+    background-color: #ff9696;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+#myPageMain .ticketing-cancel-btn:hover {
+    background-color: #ff6666;
+}

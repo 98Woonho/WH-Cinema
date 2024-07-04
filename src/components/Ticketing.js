@@ -65,7 +65,8 @@ function Ticketing() {
     if (step === 3) {
         // 결제 페이지에서 다른 페이지로 이동 시, 예약 데이터 삭제
         window.addEventListener('beforeunload', function (e) {
-            axios.delete(`/ticketing/${ticketingId}`)
+            const status = '예약중'
+            axios.delete(`/ticketing/${ticketingId}/${status}}`)
                 .then(res => {
                     console.log(res);
                 })
@@ -145,7 +146,10 @@ function Ticketing() {
                     function (resp) {
                         if (resp.success) {
                             let payDate = new Date();
+
                             payDate.setHours(payDate.getHours() + 9);
+                            
+                            payDate = payDate.toISOString().slice(0, 19).replace('T', ' ');
 
                             const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId, userId: userId, payDate: payDate };
 

@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
             if (err) {
                 return res.send(err);
             }
-    
+
             res.status(200).send(data);
         })
     }
@@ -49,10 +49,12 @@ router.post('/', (req, res) => {
     })
 });
 
-router.delete('/:id', (req, res) => {
-    const { id } = req.params;
+router.delete('/:id/:status', (req, res) => {
+    const { id, status } = req.params;
 
-    db.query(`DELETE FROM ticketing WHERE id = '${id}' AND status='예약중'`, (err, data) => {
+    console.log(req.params);
+
+    db.query(`DELETE FROM ticketing WHERE id = '${id}' AND status='${status}'`, (err, data) => {
         if (err) {
             res.send(err);
         }

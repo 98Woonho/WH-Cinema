@@ -1,18 +1,29 @@
 #movieMain .movie-container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
+    gap: 25px;
 }
 
 #movieMain .movie-container img {
+    margin-bottom: 0.25rem;
     border-radius: 5px;
     width: 100%;
 }
 
-#movieMain .movie-container .title {
+#movieMain .movie {
+    width: 250px;
+}
+
+#movieMain .movie-title {
+    font-size: 1.2rem;
+    font-weight: 600;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+#movieMain .release-date {
+    margin-top: 0.25rem;
 }
 
 #movieMain .sort-container {
@@ -29,10 +40,6 @@
 #movieMain .main-top-container {
     display: flex;
     margin-bottom: 2rem;
-}
-
-#movieMain .main-top-container h1 {
-    
 }
 
 #movieMain .main-top-container button {
