@@ -152,7 +152,10 @@ function Ticketing() {
                             axios.post('/payment', paymentObj)
                                 .then(res => {
                                     alert('예매가 완료 되었습니다. 예매확인 페이지로 이동합니다.');
-                                    navigate('/user/myPage?menuState=ticketingInfo');
+                                    const state = {
+                                        menuState: 'ticketingInfo'
+                                    }
+                                    navigate('/user/myPage', {state});
                                 })
                                 .catch(err => {
                                     console.log(err);

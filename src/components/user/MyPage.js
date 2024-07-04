@@ -20,9 +20,7 @@ function MyPage() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    if (location.state && location.state.menuState) {
-        setMenu(location.state.menuState);
-    }
+    const { menuState } = location.state === null ? '' : location.state;
 
     const changeNewUserId = (e) => {
         setNewUserId(e.target.value);
@@ -197,6 +195,10 @@ function MyPage() {
     }
 
     useEffect(() => {
+        if (menuState) {
+            setMenu(menuState);
+        }
+        
         axios.get('/user/accessTokenPayload', { withCredentials: true })
             .then(res => {
                 const userId = res.data.userId;
