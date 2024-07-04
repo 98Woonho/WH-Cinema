@@ -10,6 +10,7 @@ function Login() {
 
     const { isJoinPage } = location.state === null ? '' : location.state;
 
+    // 로그인 버튼 click 함수
     const handleSubmitLogin = (e) => {
         e.preventDefault();
 

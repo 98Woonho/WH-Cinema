@@ -22,6 +22,7 @@ function Home() {
     const dialog = document.getElementById('dialog');
     const closeDialogBtns = document.querySelectorAll('.close-dialog-btn');
 
+    // 홈페이지 슬라이더 영상 재생 버튼 click event 추가
     playBtns.forEach((playBtn, index) => {
       playBtn.addEventListener('click', function () {
         trailerContainers[index - 1].classList.add('visible');
@@ -29,6 +30,7 @@ function Home() {
       })
     })
 
+    // 영상 닫기 버튼 click event 추가
     closeDialogBtns.forEach((closeDialogBtn, index) => {
       closeDialogBtn.addEventListener('click', function () {
         trailerContainers[index].classList.remove('visible');
@@ -39,6 +41,7 @@ function Home() {
     let date = new Date();
     date = date.toISOString().slice(0, 10);
 
+    // 현재 상영중인 TOP5 영화 가져오기
     axios.get(`/movie/topRate?date=${date}&isScreening=true`)
       .then(res => {
         setTopRateScreeningMovieList(res.data);
@@ -47,6 +50,7 @@ function Home() {
         console.log(err);
       })
 
+    // 상영 예정 TOP5 영화 가져오기
     axios.get(`/movie/topRate?date=${date}&isScreening=false`)
       .then(res => {
         setTopRateScheduledMovieList(res.data);
@@ -57,6 +61,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
+    // 현재 상영중인 TOP5 영화 map
     const topRateScreeningMovieMap = topRateScreeningMovieList.map(
       data =>
         <li>
@@ -71,6 +76,7 @@ function Home() {
   }, [topRateScreeningMovieList])
 
   useEffect(() => {
+    // 상영 예정 TOP5 영화 map
     const topRateScheduledMovieMap = topRateScheduledMovieList.map(
       data =>
         <li>
@@ -84,6 +90,7 @@ function Home() {
     setTopRateScheduledMovieMap(topRateScheduledMovieMap);
   }, [topRateScheduledMovieList])
 
+  // react-slick setting
   const settings = {
     slidesToShow: 1,
     slidesToScroll: 1,

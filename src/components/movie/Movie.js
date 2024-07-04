@@ -20,6 +20,7 @@ function Movie() {
     setNum(0);
   };
 
+  // 정렬 기준 change 함수
   const handleChangeSort = (e) => {
     setSort(e.target.value);
   }
@@ -90,6 +91,7 @@ function Movie() {
       movie.releaseDate = formattedDate;
     })
 
+    // movie list map
     const newMovieMap = movieList.map(
       data =>
         <div className='movie'>

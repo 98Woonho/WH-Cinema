@@ -22,14 +22,17 @@ function MyPage() {
 
     const { menuState } = location.state === null ? '' : location.state;
 
+    // 아이디 input onChange 함수
     const changeNewUserId = (e) => {
         setNewUserId(e.target.value);
     }
 
+    // 현재 비밀번호 input onChange 함수
     const changeCurrentPassword = (e) => {
         setCurrentPassword(e.target.value);
     }
 
+    // 새 비밀번호 input onChange 함수
     const changeNewPassword = (e) => {
         setNewPassword(e.target.value);
     }
@@ -45,24 +48,28 @@ function MyPage() {
         })
     }
 
+    // 회원정보확인/수정 메뉴 선택 함수
     const handleUpdateInfo = (e) => {
         handleMenu(e);
 
         setMenu('infoUpdate');
     }
 
+    // 회원탈퇴 메뉴 선택 함수
     const handleSecession = (e) => {
         handleMenu(e);
 
         setMenu('secession');
     }
 
+    // 예매현황 메뉴 선택 함수
     const handleTicketingInfo = (e) => {
         handleMenu(e);
 
         setMenu('ticketingInfo');
     }
 
+    // 예약 취소 버튼 click 함수
     const handleClickTicketingCancel = (e) => {
         if (window.confirm('정말로 예약을 취소하시겠습니까?')) {
             const status = '예약완료';
@@ -82,6 +89,7 @@ function MyPage() {
         }
     }
 
+    // 아이디 변경 버튼 click 함수
     const handleUpdateId = (e) => {
         e.preventDefault();
 
@@ -111,6 +119,7 @@ function MyPage() {
             })
     }
 
+    // 비밀번호 변경 버튼 click 함수
     const handleUpdatePassword = (e) => {
         e.preventDefault();
 
@@ -142,6 +151,7 @@ function MyPage() {
             })
     }
 
+    // 본인인증 버튼 click 함수
     const certification = (e) => {
         e.preventDefault();
 
@@ -186,6 +196,7 @@ function MyPage() {
         )
     }
 
+    // 회원탈퇴 버튼 click 함수
     const handleSubmitSecession = () => {
         if (window.confirm('정말로 회원 탈퇴를 하시겠습니까?\n탈퇴한 계정은 복구가 불가능합니다.')) {
             axios.delete(`/user/${user.user_id}`)
@@ -206,6 +217,7 @@ function MyPage() {
     }
 
     useEffect(() => {
+        // state가 존재할 때 (결제 완료 후 예매현황 페이지로 이동할 때 state를 같이 요청으로 보냄)
         if (menuState) {
             const menus = document.querySelectorAll('.menu');
             menus.forEach(menu => {
@@ -255,12 +267,14 @@ function MyPage() {
     }, [newUserId])
 
     useEffect(() => {
+        // 현재 페이지에 나타낼 예매현황 set
         const startIndex = (currentPage - 1) * boardPerPage;
         const endIndex = startIndex + boardPerPage;
         setPerTicketingList(ticketingList.slice(startIndex, endIndex));
     }, [ticketingList, currentPage])
 
     useEffect(() => {
+        // 예매 리스트 map
         const ticketingMap = perTicketingList.map(ticketing => {
             let screenDate = new Date(ticketing.screen_date);
             screenDate = screenDate.toISOString().slice(0, 10);

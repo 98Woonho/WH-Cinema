@@ -40,6 +40,7 @@ function Join() {
         setIsSatisfiedPasswordCondition1(passwordRegex.test(e.target.value) ? true : false);
     }
 
+    // 회원가입 버튼 click 함수
     const handleSubmitJoin = (e) => {
         e.preventDefault();
 

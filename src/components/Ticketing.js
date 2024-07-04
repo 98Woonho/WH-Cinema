@@ -148,18 +148,19 @@ function Ticketing() {
                             let payDate = new Date();
 
                             payDate.setHours(payDate.getHours() + 9);
-                            
+
                             payDate = payDate.toISOString().slice(0, 19).replace('T', ' ');
 
                             const paymentObj = { impUid: resp.imp_uid, merchantUid: resp.merchant_uid, payMethod: resp.pay_method, paidAmount: resp.paid_amount, status: resp.status, ticketingId: ticketingId, userId: userId, payDate: payDate };
 
+                            // 결제가 완료되면 payment table에 결제 데이터 추가
                             axios.post('/payment', paymentObj)
                                 .then(res => {
                                     alert('예매가 완료 되었습니다. 예매확인 페이지로 이동합니다.');
                                     const state = {
                                         menuState: 'ticketingInfo'
                                     }
-                                    navigate('/user/myPage', {state});
+                                    navigate('/user/myPage', { state });
                                 })
                                 .catch(err => {
                                     console.log(err);
@@ -336,6 +337,7 @@ function Ticketing() {
         }
     }
 
+    // 예매 이전 버튼 클릭 함수
     const handlePrevStepBtn = () => {
         if (step === 2) {
             setStep(1);
@@ -369,8 +371,26 @@ function Ticketing() {
     }
 
     useEffect(() => {
-        // 2024-05-28 :: 현재 상영중 영화 리스트 가져오기 (구현 예정)
-        axios.get('/movie')
+        // 오늘 기준 한달 뒤 날짜 리스트 생성
+
+        // 오늘 날짜 
+        let today = new Date();
+        // 오늘 기준 30일 뒤 날짜
+        const dateInMonth = new Date(today.getTime() + (30 * 24 * 3600 * 1000));
+
+        const dateList = [];
+
+        while (today <= dateInMonth) {
+            dateList.push(new Date(today));
+            today.setDate(today.getDate() + 1);
+        }
+
+        setDateList(dateList);
+
+        today = today.toISOString().slice(0, 10);
+
+        // 현재 상영중 영화 리스트 가져오기
+        axios.get(`/movie?isScreening=true&date=${today}`)
             .then(res => {
                 setMovieList(res.data);
             })
@@ -386,21 +406,6 @@ function Ticketing() {
             .catch(err => {
                 console.log(err);
             })
-
-        // 오늘 기준 한달 뒤 날짜 리스트 생성
-
-        // 오늘 날짜 
-        const today = new Date();
-        // 오늘 기준 30일 뒤 날짜
-        const dateInMonth = new Date(today.getTime() + (30 * 24 * 3600 * 1000));
-
-        const dateList = [];
-
-        while (today <= dateInMonth) {
-            dateList.push(new Date(today));
-            today.setDate(today.getDate() + 1);
-        }
-        setDateList(dateList);
     }, []);
 
     // 영화 목록 Map set
@@ -448,6 +453,7 @@ function Ticketing() {
 
 
     useEffect(() => {
+        // step 1 : 영화, 상영관, 상영 날짜, 상영 시간 선택
         if (step === 1) {
             const uniqueRegions = [...new Set(theaterList.map(theater => theater.region))];
 
@@ -473,6 +479,7 @@ function Ticketing() {
             setTotalCostMap(null);
         }
 
+        // step 2 : 인원 및 좌석 선택
         if (step === 2) {
             axios.get(`/theater/screenHall/${selectedScreenHallName}/${selectedTheaterName}`)
                 .then(res => {
@@ -528,6 +535,7 @@ function Ticketing() {
             setTotalCostMap(null);
         }
 
+        // step 3 : 결제
         if (step === 3) {
             let createdAt = new Date();
             createdAt.setHours(createdAt.getHours() + 9);
@@ -883,6 +891,7 @@ function Ticketing() {
 
     }, [selectedSeatList])
 
+    // 결제 수단 선택 시, 혜택 map 생성
     useEffect(() => {
         let paymentEventMap;
         let discountCost;

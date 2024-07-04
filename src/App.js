@@ -40,10 +40,6 @@ function App() {
     script2.async = true;
     document.body.appendChild(script2);
 
-    // 1초에 한 번씩 내부 코드 실행
-    setInterval(() => {
-    }, 1000);
-
     return () => {
       document.body.removeChild(script1);
       document.body.removeChild(script2);
