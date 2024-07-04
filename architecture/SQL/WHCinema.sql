@@ -4,7 +4,7 @@ USE `wh_cinema`;
 --
 -- Host: localhost    Database: wh_cinema
 -- ------------------------------------------------------
--- Server version	8.0.36
+-- Server version	8.0.37
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -143,7 +143,7 @@ CREATE TABLE `screen_info` (
 
 LOCK TABLES `screen_info` WRITE;
 /*!40000 ALTER TABLE `screen_info` DISABLE KEYS */;
-INSERT INTO `screen_info` VALUES (3,'00:00','2024-07-03',1,'그녀가 죽었다'),(4,'00:01','2024-07-03',1,'그녀가 죽었다'),(5,'00:02','2024-07-03',1,'그녀가 죽었다'),(6,'00:03','2024-07-03',1,'그녀가 죽었다'),(7,'00:04','2024-07-03',1,'그녀가 죽었다'),(8,'00:05','2024-07-03',1,'그녀가 죽었다'),(9,'00:06','2024-07-03',1,'그녀가 죽었다'),(10,'00:07','2024-07-03',1,'그녀가 죽었다'),(11,'00:08','2024-07-03',1,'그녀가 죽었다'),(12,'00:09','2024-07-03',2,'그녀가 죽었다'),(13,'00:00','2024-07-03',2,'그녀가 죽었다'),(14,'00:01','2024-07-03',2,'그녀가 죽었다'),(15,'00:02','2024-07-03',2,'그녀가 죽었다'),(16,'00:03','2024-07-03',2,'그녀가 죽었다'),(17,'00:03','2024-07-03',2,'그녀가 죽었다'),(18,'00:04','2024-07-03',2,'그녀가 죽었다'),(19,'00:05','2024-07-03',2,'그녀가 죽었다'),(20,'00:06','2024-07-03',2,'그녀가 죽었다'),(21,'00:07','2024-07-03',2,'그녀가 죽었다'),(22,'00:08','2024-07-03',2,'그녀가 죽었다'),(23,'00:09','2024-07-03',2,'그녀가 죽었다'),(24,'00:01','2024-07-04',1,'그녀가 죽었다');
+INSERT INTO `screen_info` VALUES (3,'00:00','2024-07-04',1,'그녀가 죽었다'),(4,'00:01','2024-07-04',1,'그녀가 죽었다'),(5,'00:02','2024-07-04',1,'그녀가 죽었다'),(6,'00:03','2024-07-04',1,'그녀가 죽었다'),(7,'00:04','2024-07-04',1,'그녀가 죽었다'),(8,'00:05','2024-07-04',1,'그녀가 죽었다'),(9,'00:06','2024-07-04',1,'그녀가 죽었다'),(10,'00:07','2024-07-04',1,'그녀가 죽었다'),(11,'00:08','2024-07-04',1,'그녀가 죽었다'),(12,'00:09','2024-07-04',2,'그녀가 죽었다'),(13,'00:00','2024-07-04',2,'그녀가 죽었다'),(14,'00:01','2024-07-04',2,'그녀가 죽었다'),(15,'00:02','2024-07-04',2,'그녀가 죽었다'),(16,'00:03','2024-07-04',2,'그녀가 죽었다'),(17,'00:03','2024-07-04',2,'그녀가 죽었다'),(18,'00:04','2024-07-04',2,'그녀가 죽었다'),(19,'00:05','2024-07-04',2,'그녀가 죽었다'),(20,'00:06','2024-07-04',2,'그녀가 죽었다'),(21,'00:07','2024-07-04',2,'그녀가 죽었다'),(22,'00:08','2024-07-04',2,'그녀가 죽었다'),(23,'00:09','2024-07-04',2,'그녀가 죽었다');
 /*!40000 ALTER TABLE `screen_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +187,8 @@ CREATE TABLE `ticketing` (
   `seat` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   `user_id` varchar(100) DEFAULT NULL,
-  `screen_date` varchar(45) DEFAULT NULL,
+  `screen_date` date DEFAULT NULL,
+  `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `theater_name` (`theater_name`),
   KEY `movie_title` (`movie_title`),
@@ -195,7 +196,7 @@ CREATE TABLE `ticketing` (
   CONSTRAINT `ticketing_ibfk_1` FOREIGN KEY (`theater_name`) REFERENCES `theater` (`name`),
   CONSTRAINT `ticketing_ibfk_2` FOREIGN KEY (`movie_title`) REFERENCES `movie` (`title`),
   CONSTRAINT `ticketing_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -204,6 +205,7 @@ CREATE TABLE `ticketing` (
 
 LOCK TABLES `ticketing` WRITE;
 /*!40000 ALTER TABLE `ticketing` DISABLE KEYS */;
+INSERT INTO `ticketing` VALUES (64,'대구 프리미엄','1관','그녀가 죽었다','00:01','B5','예약완료','lkj1150','2024-07-04','2024-07-04 12:01:46'),(65,'대구 프리미엄','1관','그녀가 죽었다','00:03','A4','예약완료','lkj1150','2024-07-04','2024-07-04 12:06:46'),(66,'대구 프리미엄','1관','그녀가 죽었다','00:02','B5','예약완료','lkj1150','2024-07-04','2024-07-04 12:08:15'),(67,'대구 프리미엄','1관','그녀가 죽었다','00:02','A4, A5','예약완료','lkj1150','2024-07-04','2024-07-04 12:10:51'),(68,'대구 프리미엄','1관','그녀가 죽었다','00:01','B3','예약완료','lkj1150','2024-07-04','2024-07-04 12:12:20'),(69,'대구 프리미엄','1관','그녀가 죽었다','00:03','A3','예약완료','lkj1150','2024-07-04','2024-07-04 12:14:10');
 /*!40000 ALTER TABLE `ticketing` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -227,7 +229,7 @@ CREATE TABLE `token` (
 
 LOCK TABLES `token` WRITE;
 /*!40000 ALTER TABLE `token` DISABLE KEYS */;
-INSERT INTO `token` VALUES ('lkj11111150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTExMTE1MCIsImlhdCI6MTcxODg3MTk2NSwiZXhwIjoxNzE4OTU4MzY1fQ.a2dohAuryXNYIV6s5PAFDwsCZLe5c1YMEEML2-I5mwY'),('lkj1111150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTExMTUwIiwiaWF0IjoxNzE5MjEyODQ3LCJleHAiOjE3MTkyOTkyNDd9.3ZTw1EgNIMhh85feHEJh_InESMZ7w_O6VODTIA38Wps'),('lkj111150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTExNTAiLCJpYXQiOjE3MTg4NzEzMTksImV4cCI6MTcxODk1NzcxOX0.DpFwDwT-zyYNi9_TDkkmW3bR29IAMZgU2kxlk-DreHE'),('lkj11150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTE1MCIsImlhdCI6MTcxODg3MTEyOSwiZXhwIjoxNzE4OTU3NTI5fQ.M-HIF8D9yJsS0BGoIDAFx3gUBkoxsHuXob0c02qub1k'),('lkj1150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTUwIiwiaWF0IjoxNzE5OTg5ODI2LCJleHAiOjE3MjA1OTQ2MjZ9.svdcvbF-yOIp4aJ4u_XoFqnt-Dd1MPV38bV0hIWt7rI');
+INSERT INTO `token` VALUES ('lkj11111150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTExMTE1MCIsImlhdCI6MTcxODg3MTk2NSwiZXhwIjoxNzE4OTU4MzY1fQ.a2dohAuryXNYIV6s5PAFDwsCZLe5c1YMEEML2-I5mwY'),('lkj1111150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTExMTUwIiwiaWF0IjoxNzE5MjEyODQ3LCJleHAiOjE3MTkyOTkyNDd9.3ZTw1EgNIMhh85feHEJh_InESMZ7w_O6VODTIA38Wps'),('lkj111150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTExNTAiLCJpYXQiOjE3MTg4NzEzMTksImV4cCI6MTcxODk1NzcxOX0.DpFwDwT-zyYNi9_TDkkmW3bR29IAMZgU2kxlk-DreHE'),('lkj11150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTE1MCIsImlhdCI6MTcxODg3MTEyOSwiZXhwIjoxNzE4OTU3NTI5fQ.M-HIF8D9yJsS0BGoIDAFx3gUBkoxsHuXob0c02qub1k'),('lkj1150','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJsa2oxMTUwIiwiaWF0IjoxNzIwMDU0NDcxLCJleHAiOjE3MjA2NTkyNzF9.iX6LI4zXnUuo-K1oFfNB9j3IWbOosMfKWqRSoExkQJU');
 /*!40000 ALTER TABLE `token` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,4 +270,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-03 16:17:59
+-- Dump completed on 2024-07-04 13:19:28
