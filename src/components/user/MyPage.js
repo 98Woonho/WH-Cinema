@@ -1,10 +1,11 @@
 import '../../css/user/MyPage.css';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Pagination from '../Pagination.js';
 import axios from 'axios';
 
 function MyPage() {
+    const boardPerPage = 10;
 
     const [user, setUser] = useState([]);
     const [newUserId, setNewUserId] = useState('');
@@ -14,10 +15,14 @@ function MyPage() {
     const [perTicketingList, setPerTicketingList] = useState([]);
     const [ticketingMap, setTicketingMap] = useState(null);
     const [menu, setMenu] = useState('infoUpdate');
-    const [boardPerPage, setBoardPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    if (location.state && location.state.menuState) {
+        setMenu(location.state.menuState);
+    }
 
     const changeNewUserId = (e) => {
         setNewUserId(e.target.value);

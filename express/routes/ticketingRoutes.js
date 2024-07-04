@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const { theaterName, screenHallName, movieTitle, screenTime, seat, status, screenDate, userId } = req.body;
+    const { theaterName, screenHallName, movieTitle, screenTime, seat, status, screenDate, userId, createdAt } = req.body;
 
     // 현재 로그인한 계정으로 예약중인 영화가 있는지 확인
     db.query(`SELECT * FROM ticketing WHERE user_id = '${userId}' AND status = '${status}'`, (err, data) => {
@@ -36,8 +36,8 @@ router.post('/', (req, res) => {
         // data.length === 0 : 현재 로그인 한 계정으로 예약중인 영화가 없으면
         // data.length !== 0 : 현재 로그인 한 계정으로 예약중인 영화가 있으면
         const query = data.length === 0
-            ? `INSERT INTO ticketing (theater_name, screen_hall_name, movie_title, screen_time, seat, status, screen_date, user_id) VALUES ('${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${screenDate}', '${userId}')`
-            : `INSERT INTO ticketing VALUES ('${data[0].id}', '${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${screenDate}', '${userId}') on duplicate key update theater_name='${theaterName}' , screen_hall_name='${screenHallName}', movie_title='${movieTitle}', screen_time='${screenTime}', seat='${seat}', status='${status}', screen_date='${screenDate}', user_id='${userId}'`;
+            ? `INSERT INTO ticketing (theater_name, screen_hall_name, movie_title, screen_time, seat, status, screen_date, user_id, created_at) VALUES ('${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${screenDate}', '${userId}', '${createdAt}')`
+            : `INSERT INTO ticketing VALUES ('${data[0].id}', '${theaterName}', '${screenHallName}', '${movieTitle}', '${screenTime}', '${seat}', '${status}', '${screenDate}', '${userId}', '${createdAt}') on duplicate key update theater_name='${theaterName}' , screen_hall_name='${screenHallName}', movie_title='${movieTitle}', screen_time='${screenTime}', seat='${seat}', status='${status}', screen_date='${screenDate}', user_id='${userId}', created_at='${createdAt}'`;
 
         db.query(query, (err, data) => {
             if (err) {
@@ -52,7 +52,7 @@ router.post('/', (req, res) => {
 router.delete('/:id', (req, res) => {
     const { id } = req.params;
 
-    db.query(`DELETE FROM ticketing WHERE id = '${id}'`, (err, data) => {
+    db.query(`DELETE FROM ticketing WHERE id = '${id}' AND status='예약중'`, (err, data) => {
         if (err) {
             res.send(err);
         }

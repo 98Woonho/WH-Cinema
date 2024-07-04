@@ -630,3 +630,11 @@
     border-radius: 5px;
     padding: 1.25rem;
 }
+
+#ticketingMain .cost-info {
+    line-height: 150%;
+}
+
+#ticketingMain .cost {
+    display: flex;
+}

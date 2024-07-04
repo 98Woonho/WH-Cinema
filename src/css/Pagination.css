@@ -5,20 +5,20 @@
     margin-top: 1rem;
 }
 
-.info {
+.pagination .info {
     width: 100%;
     height: 50px;
     padding: 10px;
     box-sizing: border-box;
 }
 
-.info > span {
+.pagination .info > span {
     font-size: 24px;
     font-weight: bold;
     margin-right: 20px;
 }
 
-.page {
+.pagination .page {
     display: inline-block;
     width: 40px;
     height: 40px;
@@ -29,12 +29,12 @@
     cursor: pointer;
 }
 
-.page:hover {
+.pagination .page:hover {
     color: #fff;
     background-color: #333;
 }
 
-.active {
+.pagination .page.active {
     color: #fff;
     background-color: #333 !important;
 }

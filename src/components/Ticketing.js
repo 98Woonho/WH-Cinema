@@ -152,6 +152,7 @@ function Ticketing() {
                             axios.post('/payment', paymentObj)
                                 .then(res => {
                                     alert('예매가 완료 되었습니다. 예매확인 페이지로 이동합니다.');
+                                    navigate('/user/myPage?menuState=ticketingInfo');
                                 })
                                 .catch(err => {
                                     console.log(err);
@@ -287,30 +288,30 @@ function Ticketing() {
             }
 
             axios.get('/user/accessTokenPayload', { withCredentials: true })
-            .then(res => {
-                setUserId(res.data.userId);
-
-                axios.get(`/ticketing?title=${selectedMovieTitle}&theaterName=${selectedTheaterName}&screenHallName=${selectedScreenHallName}&time=${selectedScreenTime}&screenDate=${selectedDate}`)
                 .then(res => {
-                    const reservedSeatList = res.data.map(data =>
-                        data.seat.split(', ')
-                    ).flat();
-                    setReservedSeatList(reservedSeatList);
-                    setStep(2);
+                    setUserId(res.data.userId);
+
+                    axios.get(`/ticketing?title=${selectedMovieTitle}&theaterName=${selectedTheaterName}&screenHallName=${selectedScreenHallName}&time=${selectedScreenTime}&screenDate=${selectedDate}`)
+                        .then(res => {
+                            const reservedSeatList = res.data.map(data =>
+                                data.seat.split(', ')
+                            ).flat();
+                            setReservedSeatList(reservedSeatList);
+                            setStep(2);
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
                 })
                 .catch(err => {
-                    console.log(err);
-                })
-            })
-            .catch(err => {
-                if (err.response.status === 401) {
-                    if (window.confirm('로그인 후 이용 가능한 서비스 입니다.\n로그인 하시겠습니까?')) {
-                        navigate('/user/login');
-                    } else {
-                        return;
+                    if (err.response.status === 401) {
+                        if (window.confirm('로그인 후 이용 가능한 서비스 입니다.\n로그인 하시겠습니까?')) {
+                            navigate('/user/login');
+                        } else {
+                            return;
+                        }
                     }
-                }
-            })
+                })
         }
 
         if (step === 2) {
@@ -521,7 +522,12 @@ function Ticketing() {
         }
 
         if (step === 3) {
-            const ticketingObj = { theaterName: selectedTheaterName, screenHallName: selectedScreenHallName, movieTitle: selectedMovieTitle, screenTime: selectedScreenTime, seat: selectedSeatList.join(', '), status: '예약중', screenDate: selectedDate, userId: userId };
+            let createdAt = new Date();
+            createdAt.setHours(createdAt.getHours() + 9);
+
+            createdAt = createdAt.toISOString().slice(0, 19).replace('T', ' ');
+
+            const ticketingObj = { theaterName: selectedTheaterName, screenHallName: selectedScreenHallName, movieTitle: selectedMovieTitle, screenTime: selectedScreenTime, seat: selectedSeatList.join(', '), status: '예약중', screenDate: selectedDate, userId: userId, createdAt: createdAt };
 
             axios.post('/ticketing', ticketingObj)
                 .then(res => {
@@ -596,7 +602,6 @@ function Ticketing() {
 
     // 영화, 극장, 날짜 모두 선택 했을 때, 상영시간 및 좌석 정보 set
     useEffect(() => {
-        console.log(selectedDate);
         if (selectedMovieTitle !== null && selectedDate !== null && selectedTheaterName !== null) {
             setIsLoading(true);
             axios.get(`/theater/screenInfo?title=${selectedMovieTitle}&date=${selectedDate}&theaterName=${selectedTheaterName}`)
@@ -695,8 +700,9 @@ function Ticketing() {
             if (adult > adultCount && selectedSeatList.length >= adult) {
                 adultCount = adult;
 
-                const adultCostMap = <div>
+                const adultCostMap = <div className="cost">
                     <span>일반</span>
+                    <span className="flex-1"></span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
 
@@ -706,8 +712,9 @@ function Ticketing() {
 
                 youthCount = selectedSeatList.length - adult;
 
-                const youthCostMap = youthCount <= 0 ? null : <div>
+                const youthCostMap = youthCount <= 0 ? null : <div className="cost">
                     <span>청소년</span>
+                    <span className="flex-1"></span>
                     <span>{youthCost} X {youthCount}</span>
                 </div>;
 
@@ -718,8 +725,9 @@ function Ticketing() {
             if (adult < adultCount) {
                 adultCount = adult;
 
-                const adultCostMap = adultCount === 0 ? null : <div>
+                const adultCostMap = adultCount === 0 ? null : <div className="cost">
                     <span>일반</span>
+                    <span className="flex-1"></span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
 
@@ -728,8 +736,9 @@ function Ticketing() {
 
                 youthCount = selectedSeatList.length - adult;
 
-                const youthCostMap = youthCount === 0 ? null : <div>
+                const youthCostMap = youthCount === 0 ? null : <div className="cost">
                     <span>청소년</span>
+                    <span className="flex-1"></span>
                     <span>{youthCost} X {youthCount}</span>
                 </div>;
 
@@ -747,9 +756,10 @@ function Ticketing() {
         const totalCost = adultCost * adultCount + youthCost * youthCount;
 
         if (totalCost > 0) {
-            const totalCostMap = <div>
+            const totalCostMap = <div className="cost">
                 <span>총금액</span>
-                <span>{totalCost}</span>
+                <span className="flex-1"></span>
+                <span>{totalCost}&nbsp;원</span>
             </div>
 
             setTotalCostMap(totalCostMap);
@@ -773,14 +783,16 @@ function Ticketing() {
         // 좌석을 선택 했을 때, 일반 요금 우선 카운트 후, 청소년 요금 카운트
         if (!isFullSelectedSeat && !isDeletedSelectedSeat && selectedSeatList.length !== 0) {
             if (adult > adultCount) {
-                const adultCostMap = <div>
+                const adultCostMap = <div className='cost'>
                     <span>일반</span>
+                    <span className="flex-1"></span>
                     <span>{adultCost} X {++adultCount}</span>
                 </div>;
                 setAdultCostMap(adultCostMap);
             } else {
-                const youthCostMap = <div>
+                const youthCostMap = <div className='cost'>
                     <span>청소년</span>
+                    <span className="flex-1"></span>
                     <span>{youthCost} X {++youthCount}</span>
                 </div>;
                 setYouthCostMap(youthCostMap);
@@ -793,8 +805,9 @@ function Ticketing() {
             if (adult > selectedSeatList.length) {
                 adultCount = selectedSeatList.length
 
-                const adultCostMap = adultCount === 0 ? null : <div>
+                const adultCostMap = adultCount === 0 ? null : <div className='cost'>
                     <span>일반</span>
+                    <span className="flex-1"></span>
                     <span>{adultCost} X {adultCount}</span>
                 </div>;
 
@@ -807,8 +820,9 @@ function Ticketing() {
             } else {
                 youthCount = selectedSeatList.length - adult;
 
-                const youthCostMap = youthCount === 0 ? null : <div>
+                const youthCostMap = youthCount === 0 ? null : <div className='cost'>
                     <span>청소년</span>
+                    <span className="flex-1"></span>
                     <span>{youthCost} X {youthCount}</span>
                 </div>;
 
@@ -851,9 +865,10 @@ function Ticketing() {
 
         const totalCost = adultCost * adultCount + youthCost * youthCount;
 
-        const totalCostMap = selectedSeatList <= 0 ? null : <div>
+        const totalCostMap = selectedSeatList <= 0 ? null : <div className='cost'>
             <span>총금액</span>
-            <span>{totalCost}</span>
+            <span className="flex-1"></span>
+            <span>{totalCost}&nbsp;원</span>
         </div>
 
         setTotalCostMap(totalCostMap);
@@ -951,7 +966,7 @@ function Ticketing() {
 
             discountCost = totalCost * 0.05;
 
-            setDiscountCost(discountCost);   
+            setDiscountCost(discountCost);
         }
 
 
@@ -1148,7 +1163,7 @@ function Ticketing() {
                     {step !== 3 ?
                         (<>
                             <div className="line"></div>
-                            <div className='info'>
+                            <div className='info cost-info flex-1'>
                                 결제
                                 {adultCostMap}
                                 {youthCostMap}
@@ -1156,8 +1171,6 @@ function Ticketing() {
                             </div>
                         </>) : <></>
                     }
-
-                    <div className="flex-1"></div>
                     {step === 1 ? (<button onClick={handleNextStepBtn}>
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAuElEQVR4nO3YPUqDQRSG0VvF/Vhap7DwcwFKCqNbTSUWNi7AKmBt1CIeCQhaxEAImNzwHpgFPMwwf1UREREREYcGZ3j4HuPqCk9+fGCojvD8K6RvDK6wXBNzUd3g5o+Yy+omMQ1nZqhuErMNTPBif95wvmvECAv7977TOYMTvLYPWcE15q2X1n/CtP3VZUPEUF3gNhGHAHftb8COJGKCz9a707E9dR/bR6zgFDPct/4OioiIiIhq5wvBXAuPqM25zQAAAABJRU5ErkJggg==" />
                         <p>좌석선택</p>
@@ -1166,7 +1179,11 @@ function Ticketing() {
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAuElEQVR4nO3YPUqDQRSG0VvF/Vhap7DwcwFKCqNbTSUWNi7AKmBt1CIeCQhaxEAImNzwHpgFPMwwf1UREREREYcGZ3j4HuPqCk9+fGCojvD8K6RvDK6wXBNzUd3g5o+Yy+omMQ1nZqhuErMNTPBif95wvmvECAv7977TOYMTvLYPWcE15q2X1n/CtP3VZUPEUF3gNhGHAHftb8COJGKCz9a707E9dR/bR6zgFDPct/4OioiIiIhq5wvBXAuPqM25zQAAAABJRU5ErkJggg==" />
                         <p>결제선택</p>
                     </button>
-                    ) : (<button id='paymentBtn' onClick={handlePayment}>결제하기</button>
+                    ) : (
+                        <>
+                            <div className="flex-1"></div>
+                            <button id='paymentBtn' onClick={handlePayment}>결제하기</button>
+                        </>
                     )}
 
                 </div>

@@ -1,7 +1,4 @@
 import '../css/Pagination.css';
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 function Pagination(props) {
     const pageClick = (page) => {
