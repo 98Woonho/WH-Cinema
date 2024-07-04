@@ -26,20 +26,20 @@
     font-weight: 600;
 }
 
-#myPageMain .menu-container {
-    margin-bottom: 1.25rem;
+#myPageMain .menu-title {
+    margin-bottom: 1rem;
 }
 
-#myPageMain .menu-container ul {
-    margin-top: 1rem;
-}
+#myPageMain .menu-title:not(:first-child) {
+    margin-top: 2.5rem;
+} 
 
-#myPageMain .menu-container ul li {
+#myPageMain .menu {
     cursor: pointer;
-    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
 }
 
-#myPageMain .menu-container ul li.selected {
+#myPageMain ul li.selected {
     color: #ff2323;
 }
 

@@ -60,14 +60,6 @@ function MyPage() {
     const handleTicketingInfo = (e) => {
         handleMenu(e);
 
-        axios.get(`/ticketing?userId=${newUserId}`)
-            .then(res => {
-                setTicketingList(res.data);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-
         setMenu('ticketingInfo');
     }
 
@@ -196,9 +188,17 @@ function MyPage() {
 
     useEffect(() => {
         if (menuState) {
+            const menus = document.querySelectorAll('.menu');
+            menus.forEach(menu => {
+                menu.classList.remove('selected');
+                if (menu.innerText === '예매현황') {
+                    menu.classList.add('selected');
+                }
+            })
+
             setMenu(menuState);
         }
-        
+
         axios.get('/user/accessTokenPayload', { withCredentials: true })
             .then(res => {
                 const userId = res.data.userId;
@@ -206,6 +206,7 @@ function MyPage() {
                 axios.get(`/user?userId=${userId}`)
                     .then(res => {
                         setUser(res.data[0]);
+                        setNewUserId(res.data[0].user_id);
                     })
                     .catch(err => {
                         console.log(err);
@@ -223,8 +224,16 @@ function MyPage() {
     }, [])
 
     useEffect(() => {
-        setNewUserId(user.user_id);
-    }, [user])
+        if (newUserId) {
+            axios.get(`/ticketing?userId=${newUserId}`)
+                .then(res => {
+                    setTicketingList(res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }, [newUserId])
 
     useEffect(() => {
         const startIndex = (currentPage - 1) * boardPerPage;
@@ -246,6 +255,7 @@ function MyPage() {
         );
 
         setTicketingMap(ticketingMap);
+
     }, [perTicketingList])
 
     return (
@@ -253,19 +263,18 @@ function MyPage() {
             <div className="content-container">
                 <div className="my-page-container">
                     <div className="my-page-left">
-                        <div className='menu-container'>
-                            <h2 className='menu-title'>회원</h2>
-                            <ul>
-                                <li className='menu selected' onClick={handleUpdateInfo}>회원정보확인/수정</li>
-                                <li className='menu' onClick={handleSecession}>회원탈퇴</li>
-                            </ul>
-                        </div>
-                        <div className='menu-container'>
-                            <h2 className='menu-title'>예매</h2>
-                            <ul>
-                                <li className='menu' onClick={handleTicketingInfo}>예매현황</li>
-                            </ul>
-                        </div>
+                        <ul>
+                            <li className='menu-title'>
+                                <h2>회원</h2>
+                            </li>
+                            <li className='menu selected' onClick={handleUpdateInfo}>회원정보확인/수정</li>
+                            <li className='menu' onClick={handleSecession}>회원탈퇴</li>
+                            <li className='menu-title'>
+                                <h2>예매</h2>
+                            </li>
+                            <li className='menu' onClick={handleTicketingInfo}>예매현황</li>
+                        </ul>
+
                     </div>
                     <div className="my-page-right">
                         {menu === 'infoUpdate' ?
