@@ -1,17 +1,23 @@
 // 영화 상세정보
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import '../../css/movie/Detail.css';
 import axios from 'axios';
 
 function Detail() {
-    const [query, setQuery] = useSearchParams();
+    const [params, setParams] = useSearchParams();
     const [movie, setMovie] = useState({});
     const [stillcuts, setStillcuts] = useState([]);
 
+    const navigate = useNavigate();
+
+    const handleClickTicketingBtn = () => {
+        navigate(`/ticketing?title=${movie.title}`);
+    }
+
     useEffect(() => {
-        axios.get(`/movie?title=${query.get('title')}`)
+        axios.get(`/movie?title=${params.get('title')}`)
             .then(res => {
                 const releaseDate = new Date(res.data[0].release_date);
                 res.data[0].release_date = releaseDate.toISOString().slice(0, 10);
@@ -39,7 +45,7 @@ function Detail() {
                         <div>감독 : {movie.director}</div>
                         <div>배우 : {movie.actor}</div>
                         <div>장르 : {movie.genre} / {movie.nation}</div>
-                        <a className='ticketing' href='/ticketing'>예매하기</a>
+                        <button onClick={handleClickTicketingBtn} className='ticketing-btn'>예매하기</button>
                     </div>
                 </div>
                 <div className='plot-container'>

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import '../css/Ticketing.css';
 import axios from 'axios';
 import seatsData from '../data/seatsData.json';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import Loading from './Loading.js';
 import CustomArrow from './CustomArrow.js';
 
@@ -21,6 +21,7 @@ let isFullSelectedSeat = false; // 선택 좌석이 인원을 초과하는가에
 let isDeletedSelectedSeat = false; // 선택한 좌석을 취소했는가에 대한 여부
 
 function Ticketing() {
+    const [params, setParams] = useSearchParams();
     const [movieMap, setMovieMap] = useState(null);
     const [movieList, setMovieList] = useState([]);
     const [theaterNameList, setTheaterNameList] = useState([]);
@@ -236,7 +237,9 @@ function Ticketing() {
 
         // mapping 후 set
         const filteredTheaterNameMap = filteredTheaterNameList.map(name =>
-            <button onClick={() => handleTheaterName(name)}>{name}</button>
+            <li>
+                <button onClick={() => handleTheaterName(name)}>{name}</button>
+            </li>
         )
 
         setTheaterNameMap(filteredTheaterNameMap);
@@ -260,15 +263,6 @@ function Ticketing() {
 
     // 영화 선택 함수
     const handleMovie = (title) => {
-        // 선택한 영화 포스터 가져오기
-        axios.get(`/movie?title=${title}`)
-            .then(res => {
-                setMoviePoster(res.data[0].poster);
-            })
-            .catch(err => {
-                console.log(err);
-            })
-
         setSelectedMovieTitle(title);
     }
 
@@ -371,8 +365,6 @@ function Ticketing() {
     }
 
     useEffect(() => {
-        // 오늘 기준 한달 뒤 날짜 리스트 생성
-
         // 오늘 날짜 
         let today = new Date();
         // 오늘 기준 30일 뒤 날짜
@@ -406,10 +398,21 @@ function Ticketing() {
             .catch(err => {
                 console.log(err);
             })
+
+        setSelectedMovieTitle(params.get('title'));
     }, []);
 
     // 영화 목록 Map set
     useEffect(() => {
+        // 선택한 영화 포스터 가져오기
+        axios.get(`/movie?title=${selectedMovieTitle}`)
+            .then(res => {
+                setMoviePoster(res.data[0].poster);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+
         const MovieMap = movieList.map(movie =>
             <li onClick={() => handleMovie(movie.title)} className={selectedMovieTitle === movie.title ? 'selected' : ''}>
                 <span className={movie.rating === '전체관람가' ? 'rating-icon-all' : movie.rating === '12세이상관람가' ? 'rating-icon-12' : movie.rating === '15세이상관람가' ? 'rating-icon-15' : 'rating-icon-19'}>{movie.rating === '전체관람가' ? 'All' : movie.rating === '12세이상관람가' ? '12' : movie.rating === '15세이상관람가' ? '15' : '19'}
@@ -436,7 +439,9 @@ function Ticketing() {
 
         // mapping 후 set
         const theaterNameMap = theaterNameList.map(name =>
-            <button onClick={() => handleTheaterName(name)}>{name}</button>
+            <li>               
+                <button onClick={() => handleTheaterName(name)}>{name}</button>
+            </li>
         )
 
         setTheaterNameMap(theaterNameMap);
@@ -446,7 +451,9 @@ function Ticketing() {
         // 맵 생성 후 set
         const regionMap = uniqueRegions.map(region =>
             // onClick = { () => 함수명(매개변수) } --> 함수에 매개변수를 담아서 click 이벤트를 발생시키고 싶을 때 위 형태로 작성해야함.
-            <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
+            <li>
+                <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
+            </li>
         )
         setRegionMap(regionMap);
     }, [theaterList])
@@ -458,7 +465,7 @@ function Ticketing() {
             const uniqueRegions = [...new Set(theaterList.map(theater => theater.region))];
 
             const theaterNameMap = theaterNameList.map(name =>
-                <button className={selectedTheaterName === name ? 'selected' : ''} onClick={() => handleTheaterName(name)}>{name}</button>
+                <li className={selectedTheaterName === name ? 'selected' : ''} onClick={() => handleTheaterName(name)}>{name}</li>
             )
 
             setTheaterNameMap(theaterNameMap);
@@ -466,7 +473,9 @@ function Ticketing() {
             // 맵 생성 후 set
             const regionMap = uniqueRegions.map(region =>
                 // onClick = { () => 함수명(매개변수) } --> 함수에 매개변수를 담아서 click 이벤트를 발생시키고 싶을 때 위 형태로 작성해야함.
-                <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
+                <li>
+                    <button onClick={() => handleRegion(region)} className={region === selectedRegion ? 'selected' : ''}>{region}</button>
+                </li>
             )
             setRegionMap(regionMap);
 
@@ -1029,13 +1038,13 @@ function Ticketing() {
                         </section>
                         <section className='section theater-section flex-1'>
                             <h2 className='section-title'>영화관</h2>
-                            <div class='theater-container flex-1'>
-                                <div class='region-container'>
+                            <div class='theater-container'>
+                                <ul class='region-container'>
                                     {regionMap}
-                                </div>
-                                <div class='theater-name-container'>
+                                </ul>
+                                <ul class='theater-name-container'>
                                     {theaterNameMap}
-                                </div>
+                                </ul>
                             </div>
                         </section>
                         <section className='section screen-info-section'>

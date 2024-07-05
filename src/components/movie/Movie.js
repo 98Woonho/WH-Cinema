@@ -8,7 +8,7 @@ function Movie() {
   const [movieMap, setMovieMap] = useState(null);
   const [movieList, setMovieList] = useState([]);
   const [num, setNum] = useState(1); // 현재상영작과 상영예정작을 가져오는 동작을 구분하기 위한 변수
-  const [sort, setSort] = useState('');
+  const [sort, setSort] = useState('평점순');
 
   // 현재상영작 버튼 클릭 함수
   const handleCurrentMovieList = () => {
@@ -102,7 +102,7 @@ function Movie() {
             {data.title}
           </h2>
           <div className='release-date'>
-            {data.releaseDate} 개봉 {data.Dday}
+            {data.releaseDate} 개봉 <span className='d-day'>{data.Dday}</span>
           </div>
         </div>
     );
