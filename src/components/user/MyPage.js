@@ -2,11 +2,13 @@ import '../../css/user/MyPage.css';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Pagination from '../Pagination.js';
+import Loading from '../Loading.js';
 import axios from 'axios';
 
 function MyPage() {
     const boardPerPage = 10;
 
+    const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState([]);
     const [newUserId, setNewUserId] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
@@ -255,6 +257,10 @@ function MyPage() {
     }, [])
 
     useEffect(() => {
+        if (menuState) {
+            setIsLoading(true);
+        }
+        
         if (newUserId) {
             axios.get(`/ticketing?userId=${newUserId}`)
                 .then(res => {
@@ -296,11 +302,13 @@ function MyPage() {
         });
 
         setTicketingMap(ticketingMap);
+        setIsLoading(false);
 
     }, [perTicketingList])
 
     return (
         <main id='myPageMain'>
+            <Loading isVisible={isLoading} />
             <div className="content-container">
                 <div className="my-page-container">
                     <div className="my-page-left">

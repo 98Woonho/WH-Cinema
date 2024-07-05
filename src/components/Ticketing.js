@@ -696,7 +696,7 @@ function Ticketing() {
         }
         setIsLoading(false);
 
-    }, [reservedSeatCountList, selectedScreenTime])
+    }, [reservedSeatCountList, selectedScreenTime, selectedScreenHallName])
 
     useEffect(() => {
         // 일반

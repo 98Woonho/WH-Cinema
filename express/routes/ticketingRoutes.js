@@ -52,8 +52,6 @@ router.post('/', (req, res) => {
 router.delete('/:id/:status', (req, res) => {
     const { id, status } = req.params;
 
-    console.log(req.params);
-
     db.query(`DELETE FROM ticketing WHERE id = '${id}' AND status='${status}'`, (err, data) => {
         if (err) {
             res.send(err);

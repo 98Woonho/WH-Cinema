@@ -46,7 +46,6 @@ router.get('/verify', (req, res) => {
 
   // 1-1 . accessToken이 만료 되었을 때
   if (!accessVerifyResult) {
-    // console.log("accessToken 만료 됨!!");
 
     // 2. accessToken의 payload에 있는 userId를 가져와서, db에서 해당 유저의 refreshToken을 가져옴.
 
@@ -59,19 +58,15 @@ router.get('/verify', (req, res) => {
         const dbRefreshToken = data[0].token;
 
         if (refreshToken === dbRefreshToken) { // 3-1. 같다! 그러면 refreshToken의 유효성 검증을 함.
-          // console.log("refreshToken 같음!!");
           const refreshVerifyResult = tokenUtils.refreshVerify(refreshToken);
           if (!refreshVerifyResult.ok) { // 4. refreshToken이 만료 되었을 때 로그아웃 처리
-            // console.log("refreshToken 만료 됨!!");
             res.status(401).send();
           } else { // 5. refreshToken이 유효하면 accessToken을 재발급 후 쿠키에 저장
-            // console.log("refreshToken 만료 안 됨!!");
             const newAccessToken = tokenUtils.makeAccessToken({ userId: userId });
             res.cookie('access', `Bearer ${newAccessToken}`, { maxAge: 7 * 24 * 3600 * 1000, httpOnly: true });
             res.status(200).send();
           }
         } else { // 3-2. 다르다? 로그아웃 처리 
-          // console.log("refreshToken 다름!!");
           res.status(401).send();
         }
       } else { // db에서 refreshToken 가져오는데 오류가 발생
@@ -80,7 +75,6 @@ router.get('/verify', (req, res) => {
     })
   } else {
     // 1-2. accessToken이 만료 되지 않았을 때
-    // console.log("accessToken 만료 안 됨!!");
     res.status(200).send();
   }
 })
