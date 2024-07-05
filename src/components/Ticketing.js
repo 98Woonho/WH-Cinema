@@ -683,7 +683,7 @@ function Ticketing() {
                         {screenInfoList.map(screenInfo =>
                             screenInfo.screen_hall_name === screenHallName && (
                                 <button onClick={() => handleScreenTimeAndHall(screenInfo.time, screenInfo.screen_hall_name)} className={`${screenInfo.seat_count - reservedSeatCountList[++idx] === 0 ? 'full-reservation screen-time-btn' : 'screen-time-btn'} ${screenInfo.time === selectedScreenTime && screenInfo.screen_hall_name === selectedScreenHallName ? 'selected' : ''}`}>
-                                    <p>{screenInfo.time}</p>
+                                    <p className='time'>{screenInfo.time}</p>
                                     <p className={screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? 'red' : ''}>{screenInfo.seat_count - reservedSeatCountList[idx] === 0 ? '매진' : screenInfo.seat_count - reservedSeatCountList[idx] + ' / ' + screenInfo.seat_count}</p>
                                 </button>
                             )
