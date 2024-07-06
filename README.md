@@ -56,7 +56,7 @@ WH-Cinema Project
 
 
 ## ▶️ ERD
-![image](https://github.com/pakms980319/ShoppingMall-SpringBoot-Mybatis/assets/114930673/2ee7465b-0b5b-476f-8096-ac8169a02274)
+![WHCinemaERD](https://github.com/98Woonho/WH-Cinema/assets/145889732/436bdc7d-b5e2-40f5-8dc5-3f8335974777)
 <br/>
 ---
 
