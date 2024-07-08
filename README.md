@@ -22,6 +22,9 @@ WH-Cinema Project
 |영화 데이터|TMDB|[링크](https://www.themoviedb.org/?language=ko)|
 <br/>
 
+## ▶️ 시연영상
+https://www.youtube.com/watch?v=uxvdwvAKuI0&t=16s
+
 ## ▶️ SKILLS
 #### BACKEND
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
