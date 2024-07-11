@@ -36,6 +36,7 @@ https://www.youtube.com/watch?v=uxvdwvAKuI0&t=16s
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Axios](https://img.shields.io/badge/Axios-5A29E4?style=for-the-badge&logo=Axios&logoColor=white)
+![React](https://shields.io/badge/react-black?logo=react&style=for-the-badge)
 ---
 
 #### DATABASE
