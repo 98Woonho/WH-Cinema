@@ -6,11 +6,13 @@ WH-Cinema Project
     <p>영화 예매 웹 서비스 개발</p>
 </strong>
 <br/>
+<br/>
 
 ## ▶️ 개발 환경
 ##### IDE : Visual Studio Code
 ##### Mysql Server
 ##### Mysql Workbench
+<br/>
 <br/>
 
 ## ▶️ 사용 API
@@ -21,9 +23,12 @@ WH-Cinema Project
 |영화 데이터|KMDB|[링크](https://www.kmdb.or.kr/eng/main)|
 |영화 데이터|TMDB|[링크](https://www.themoviedb.org/?language=ko)|
 <br/>
+<br/>
 
 ## ▶️ 시연영상
 https://www.youtube.com/watch?v=uxvdwvAKuI0&t=16s
+<br/>
+<br/>
 
 ## ▶️ SKILLS
 #### BACKEND
@@ -48,6 +53,7 @@ https://www.youtube.com/watch?v=uxvdwvAKuI0&t=16s
 ![Github](https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=Github&logoColor=white)
 ![VSCode](https://img.shields.io/badge/VSCode-2C2C32.svg?style=for-the-badge&logo=visual-studio-code&logoColor=22ABF3)
 <br/>
+<br/>
 
 ## ▶️ 주요 기능
 |서비스|주요 기능|
@@ -57,10 +63,11 @@ https://www.youtube.com/watch?v=uxvdwvAKuI0&t=16s
 |예매 서비스|<ul><li>영화 예매</li></ul>|
 |사용자 마이페이지|<ul><li>회원정보 관리</li><li>예약 현황 관리</li></ul>|
 <br/>
-
+<br/>
 
 ## ▶️ ERD
 ![WHCinemaERD](https://github.com/98Woonho/WH-Cinema/assets/145889732/436bdc7d-b5e2-40f5-8dc5-3f8335974777)
+<br/>
 <br/>
 ---
 
