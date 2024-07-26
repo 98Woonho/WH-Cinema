@@ -118,3 +118,143 @@ https://www.youtube.com/watch?v=uxvdwvAKuI0&t=16s
 
 ---
 <br/>
+
+📃: File Tree
+---
+```
+WH-Cinema
+├─ .env
+├─ .git
+│  ├─ config
+│  ├─ description
+│  ├─ fsmonitor--daemon
+│  │  └─ cookies
+│  ├─ HEAD
+│  ├─ hooks
+│  │  ├─ applypatch-msg.sample
+│  │  ├─ commit-msg.sample
+│  │  ├─ fsmonitor-watchman.sample
+│  │  ├─ post-update.sample
+│  │  ├─ pre-applypatch.sample
+│  │  ├─ pre-commit.sample
+│  │  ├─ pre-merge-commit.sample
+│  │  ├─ pre-push.sample
+│  │  ├─ pre-rebase.sample
+│  │  ├─ pre-receive.sample
+│  │  ├─ prepare-commit-msg.sample
+│  │  ├─ push-to-checkout.sample
+│  │  ├─ sendemail-validate.sample
+│  │  └─ update.sample
+│  ├─ index
+│  ├─ info
+│  │  └─ exclude
+│  ├─ logs
+│  │  ├─ HEAD
+│  │  └─ refs
+│  │     ├─ heads
+│  │     │  └─ main
+│  │     └─ remotes
+│  │        └─ origin
+│  │           └─ HEAD
+│  ├─ objects
+│  │  ├─ info
+│  │  └─ pack
+│  │     ├─ pack-817468a2b5e2d63b4013c477eaaea52c8decd06f.idx
+│  │     ├─ pack-817468a2b5e2d63b4013c477eaaea52c8decd06f.pack
+│  │     └─ pack-817468a2b5e2d63b4013c477eaaea52c8decd06f.rev
+│  ├─ packed-refs
+│  └─ refs
+│     ├─ heads
+│     │  └─ main
+│     ├─ remotes
+│     │  └─ origin
+│     │     └─ HEAD
+│     └─ tags
+├─ .gitignore
+├─ .vscode
+│  └─ settings.json
+├─ architecture
+│  └─ SQL
+│     └─ WHCinema.sql
+├─ express
+│  ├─ config
+│  │  └─ db.js
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ routes
+│  │  ├─ movieRoutes.js
+│  │  ├─ paymentRoutes.js
+│  │  ├─ theaterRoutes.js
+│  │  ├─ ticketingRoutes.js
+│  │  └─ userRoutes.js
+│  └─ server.js
+├─ package-lock.json
+├─ package.json
+├─ public
+│  ├─ app_KAKAO.png
+│  ├─ app_KAKAOBANK.png
+│  ├─ app_PASS.png
+│  ├─ app_PAYCO.png
+│  ├─ app_TOSS.png
+│  ├─ check-icon.png
+│  ├─ favicon.ico
+│  ├─ index.html
+│  ├─ loading.png
+│  ├─ logo192.png
+│  ├─ logo512.png
+│  ├─ main-img1.webp
+│  ├─ main-img2.webp
+│  ├─ manifest.json
+│  ├─ payco.png
+│  ├─ robots.txt
+│  ├─ tosspay.png
+│  └─ x-icon.png
+├─ README.md
+└─ src
+   ├─ App.css
+   ├─ App.js
+   ├─ App.test.js
+   ├─ components
+   │  ├─ CustomArrow.js
+   │  ├─ Footer.js
+   │  ├─ Header.js
+   │  ├─ Home.js
+   │  ├─ Loading.js
+   │  ├─ movie
+   │  │  ├─ Detail.js
+   │  │  ├─ Movie.js
+   │  │  └─ MovieRouter.js
+   │  ├─ Pagination.js
+   │  ├─ Ticketing.js
+   │  └─ user
+   │     ├─ Certification.js
+   │     ├─ Join.js
+   │     ├─ Login.js
+   │     ├─ MyPage.js
+   │     └─ UserRouter.js
+   ├─ css
+   │  ├─ Footer.css
+   │  ├─ Header.css
+   │  ├─ Home.css
+   │  ├─ Loading.css
+   │  ├─ movie
+   │  │  ├─ Detail.css
+   │  │  └─ Movie.css
+   │  ├─ Pagination.css
+   │  ├─ Ticketing.css
+   │  └─ user
+   │     ├─ Certification.css
+   │     ├─ Join.css
+   │     ├─ Login.css
+   │     └─ MyPage.css
+   ├─ data
+   │  └─ seatsData.json
+   ├─ index.css
+   ├─ index.js
+   ├─ logo.svg
+   ├─ reportWebVitals.js
+   ├─ setupTests.js
+   └─ utils
+      └─ tokenUtils.js
+
+```
